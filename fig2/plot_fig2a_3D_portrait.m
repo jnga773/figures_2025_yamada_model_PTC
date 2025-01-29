@@ -12,7 +12,7 @@ clear all; close all; clc;
 
 % Read from COCO data
 % Run string identifier
-run_read = 'run08_stable_manifold_close_eps';
+run_read = 'run09_stable_manifold_close_eps';
 
 % Read bd file
 bd_read = coco_bd_read(run_read);

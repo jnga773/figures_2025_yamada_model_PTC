@@ -25,8 +25,10 @@ function prob_out = apply_Wq_conditions(prob_in, bcs_funcs_in, eps_in)
 
   % Read index data for the stable periodic orbit segment
   [data_s, uidx_s] = coco_get_func_data(prob, 'PO_stable.coll', 'data', 'uidx');
+  [data_s_var, uidx_s_var] = coco_get_func_data(prob, 'PO_stable.coll.var', 'data', 'uidx');
   % Index mapping
   maps_s     = data_s.coll_seg.maps;
+  maps_s_var = data_s_var.coll_var;
 
   % Read index data for equilibrium points
   [data_pos, uidx_pos] = coco_get_func_data(prob, 'xpos.ep', 'data', 'uidx');
@@ -103,6 +105,13 @@ function prob_out = apply_Wq_conditions(prob_in, bcs_funcs_in, eps_in)
   prob = coco_add_pars(prob, 'pars_eps', ...
                        uidx_eps(data_out.eps_idx), 'eps', ...
                        'inactive');
+
+  % Define variational problem
+  prob = coco_add_pars(prob, 'pars_var_stable', ...
+                       uidx_s_var(maps_s_var.v0_idx,:), ...
+                       {'vars1', 'vars2', 'vars3', ...
+                        'vars4', 'vars5', 'vars6', ...
+                        'vars7', 'vars8', 'vars9'});
 
   %----------------%
   %     Output     %

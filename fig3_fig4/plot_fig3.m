@@ -5,8 +5,8 @@ clear all; close all; clc;
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
 % Read from data structure file
-load('./data_files/fig3_data.mat');
-load('./data_files/initial_PO.mat');
+load('../plot_mat_files/fig3_data.mat');
+load('../plot_mat_files/initial_PO.mat');
 
 %-------------------------%
 %     Read Parameters     %
@@ -58,8 +58,17 @@ colours = colororder();
 % Setup figure
 fig = figure(1); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
-fig.Units = 'inches'; fig.Position = [3, 3, 3.3, 5]; fig.PaperSize = [3.3, 5];
 
+% Figure dimensions
+fig.Units = 'centimeters';
+fig.Position = [5, 5, 8.5, 12.7];
+
+% Figure pdf settings
+fig.PaperUnits = fig.Units;
+fig.PaperPosition = fig.Position;
+fig.PaperSize = fig.Position(3:4);
+
+% Axis setup
 tiles = tiledlayout(3, 2, Padding='compact', TileSpacing='compact');
 ax1 = nexttile([1, 1]);
 ax2 = nexttile([1, 1]);
@@ -95,8 +104,8 @@ plot(ax1, xpos(1), xpos(3), Marker='diamond', MarkerSize=5, ...
      HandleVisibility='off');
 
 % Marker for theta_old point
-plot(ax1, xbp3_run1(1, 1), xbp3_run1(1, 3), Marker='o', MarkerFaceColor='k', ...
-     MarkerEdgeColor='k');
+plot(ax1, xpos(1), xpos(3), Marker='o', MarkerSize=7.5, LineStyle='none', ...
+      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 % Hold axes
 hold(ax1, 'off');
@@ -121,8 +130,8 @@ plot(ax2, xpos(1), xpos(3), Marker='diamond', MarkerSize=5, ...
      HandleVisibility='off');
 
 % Marker for theta_old point
-plot(ax2, xbp3_run2(1, 1), xbp3_run2(1, 3), Marker='o', MarkerFaceColor='k', ...
-     MarkerEdgeColor='k');
+plot(ax2, xpos(1), xpos(3), Marker='o', MarkerSize=7.5, LineStyle='none', ...
+      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 % Hold axes
 hold(ax2, 'off');
@@ -165,11 +174,11 @@ hold(ax4, 'off');
 %     Axis Limits     %
 %---------------------%
 ax1.XAxis.Limits = [0, 5];
-ax1.YAxis.Limits = [-1, 20];
+ax1.YAxis.Limits = [-0.1, 20];
 ax2.XAxis.Limits = ax1.XAxis.Limits;
 ax2.YAxis.Limits = ax1.YAxis.Limits;
 
-ax3.XAxis.Limits = [-0.2, 12.2];
+ax3.XAxis.Limits = [-0.2, 12];
 ax3.YAxis.Limits = ax1.YAxis.Limits;
 ax4.XAxis.Limits = ax3.XAxis.Limits;
 ax4.YAxis.Limits = ax3.YAxis.Limits;
@@ -195,9 +204,6 @@ ax1.XAxis.MinorTickValues = 0.0 : 0.5 : 5.0;
 ax1.YAxis.TickValues = 0.0 : 5 : 20.0;
 ax1.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 
-% Labels
-ax2.YAxis.TickLabels = {};
-
 % ax2
 ax2.XAxis.TickValues      = ax1.XAxis.TickValues;
 ax2.XAxis.MinorTickValues = ax1.XAxis.MinorTickValues;
@@ -216,9 +222,6 @@ ax3.XAxis.MinorTickValues = 0.0 : 1.0 : 12.0;
 ax3.YAxis.TickValues = ax1.YAxis.TickValues;
 ax3.YAxis.MinorTickValues = ax1.YAxis.MinorTickValues;
 
-% Labels
-ax3.XAxis.TickLabels = {};
-
 ax4.XAxis.TickValues      = ax3.XAxis.TickValues;
 ax4.XAxis.MinorTickValues = ax3.XAxis.MinorTickValues;
 ax4.YAxis.TickValues      = ax3.YAxis.TickValues;
@@ -228,10 +231,23 @@ ax4.YAxis.TickLabels      = ax3.YAxis.TickLabels;
 %--------------------------%
 %     Axis Tick Labels     %
 %--------------------------%
-% Turn off all axis labels\
-for i = 1 : 4
-  ax(i).XAxis.TickLabels = {};
-  ax(i).YAxis.TickLabels = {};
+% % Turn off all axis labels\
+% for i = 1 : 4
+%   ax(i).XAxis.TickLabels = {};
+%   ax(i).YAxis.TickLabels = {};
+% end
+
+%---------------------%
+%     Axis Labels     %
+%---------------------%
+for i = 1 : 2
+  ax(i).XAxis.Label.String = '$G$';
+  ax(i).YAxis.Label.String = '$I$';
+end
+
+for i = 3 : 4
+  ax(i).XAxis.Label.String = '$t / T_{\Gamma}$';
+  ax(i).YAxis.Label.String = '$I$';
 end
 
 %----------------------%
@@ -244,10 +260,5 @@ end
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../images/pdf/fig3_G_reset_phase_and_time.pdf';
+filename_out = '../fig3_G_reset_phase_and_time.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');
-% plot2svg('../images/fig2/testsvg.svg');
-% fig2svg('../images/fig2/testsvg.svg', fig, [3.3, 5]);
-
-
-

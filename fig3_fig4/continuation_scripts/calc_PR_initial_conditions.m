@@ -1,29 +1,58 @@
-function data_out = calc_PR_initial_conditions(k_in, theta_perturb_in, phi_perturb_in)
-  % data_out = calc_initial_conditions(k_in, theta_perturb_in, phi_perturb_in)
+function data_out = calc_PR_initial_conditions(run_in, label_in, k_in, theta_perturb_in, phi_perturb_in)
+  % data_out = calc_initial_conditions(run_old, label_old, phi_perturb_in)
   %
   % Reads data from previous run solution and calculates the 
   % initial conditions for the various different trajectory segments.
 
+  %-----------------------------------------------------------------------%
+  %                            Read Data                                  %
+  %-----------------------------------------------------------------------%
   %-------------------%
   %     Read Data     %
   %-------------------%
-  % Read from .mat
-  load('./data_mat/floquet_solution.mat', 'gamma_read', 'wn_read', ...
-       'p_system', 'T_read', 'mu_s_read', ...
-       'pnames_system', 'mu_s_name', ...
-       'xdim', 'pdim', ...
-       'tbp_read');
+  % Read COCO solution
+  [sol, data] = coll_read_solution('adjoint', run_in, label_in);
+
+  % Original dimension of state space
+  xdim = 0.5 * data.xdim;
+  % Original dimension of parameter space
+  pdim = data.pdim - 3;
+
+  % State space solution
+  xbp_read = sol.xbp;
+  
+  % Periodic orbit solution
+  gamma_read = xbp_read(:, 1:xdim);
+  % Perpendicular solution
+  wn_read    = xbp_read(:, xdim+1:end);
 
   % Initial zero-phase point of the periodic orbit
   gamma_0 = gamma_read(1, :)';
   % Initial perpendicular vector
   wn_0    = wn_read(1, :)';
 
-  %---------------------------%
-  %     Singularity Point     %
-  %---------------------------%
-  % Calculate "positive" non-trivial stationary point
-  [x_pos, ~] = non_trivial_ss(p_system);
+  % Time data
+  tbp_read = sol.tbp;
+
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
+  p_read      = sol.p;
+  pnames_read = data.pnames;
+
+  % System parameters
+  p_system      = p_read(1:pdim);
+  pnames_system = {};
+  for i = 1 : pdim
+    pnames_system{i} = pnames_read{i};
+  end
+
+  % Stable eigenvalue
+  mu_s_read = p_read(end-2);
+  mu_s_name = pnames_read{end-2};
+
+  % Period of segment
+  T_read    = p_read(end);
 
   %----------------------------%
   %     Initial Parameters     %
@@ -110,30 +139,6 @@ function data_out = calc_PR_initial_conditions(k_in, theta_perturb_in, phi_pertu
   % pnames_PR{p_maps.d_y}           = 'd_y';
   % pnames_PR{p_maps.d_z}           = 'd_z';
 
-  % %----------------------------------------------%
-  % %     Segment Initial Conditions: Periodic     %
-  % %----------------------------------------------%
-  % % Segment 4
-  % % If only one period, i.e., k = 1, then the
-  % % input solutions remain unchanged
-  % t_seg4 = tbp_read;
-  % x_seg4 = gamma_read;
-
-  % % Otherwise, keep appending periodic solutions
-  % if k > 1
-  %   % Cycle through k integers
-  %   for j = 1 : k-1
-  %     % Append another period of time data
-  %     t_seg4 = [tbp_read    ; max(tbp_read) + t_seg4(2:end)];
-
-  %     x_seg4 = [gamma_read; x_seg4(2:end, :)];
-
-  %   end
-  %   % Normalise time data by integer
-  %   t_seg4 = t_seg4 / k;
-
-  % end
-
   %----------------------------------------------%
   %     Segment Initial Conditions: Periodic     %
   %----------------------------------------------%
@@ -172,25 +177,6 @@ function data_out = calc_PR_initial_conditions(k_in, theta_perturb_in, phi_pertu
   t_seg3 = [0.0; max(tbp_read)];
   x_seg3 = [gamma_0'; gamma_0'];
 
-  %-------------------------------------------------%
-  %     Segment Initial Conditions: Interpolate     %
-  %-------------------------------------------------%
-  % % Ones array
-  % ones_mat = ones(length(t_seg4), xdim);
-
-  % % Segment 1
-  % t_seg1 = t_seg4;
-  % x_seg1 = [interp1(tbp_read, gamma_read, t_seg4), ...
-  %           interp1(tbp_read, wn_read, t_seg4)];
-
-  % % Segment 2
-  % t_seg2 = t_seg4;
-  % x_seg2 = [gamma_0' .* ones_mat, wn_0' .* ones_mat];
-
-  % % Segment 3
-  % t_seg3 = t_seg4;
-  % x_seg3 = gamma_0' .* ones_mat;
-
   %----------------%
   %     Output     %
   %----------------%
@@ -214,8 +200,5 @@ function data_out = calc_PR_initial_conditions(k_in, theta_perturb_in, phi_pertu
   data_out.x_seg2     = x_seg2;
   data_out.x_seg3     = x_seg3;
   data_out.x_seg4     = x_seg4;
-
-  % Equilibrium point
-  data_out.xpos       = x_pos;
 
 end
