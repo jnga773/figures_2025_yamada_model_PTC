@@ -428,7 +428,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma'}, A_range);
 
 %=========================================================================%
 %%            Compute Floquet Bundle at Zero Phase Point (mu)            %%
-%-------------------------------------------------------------------------%
+%=========================================================================%
 % We now add the adjoint function and Floquet boundary conditions to
 % compute the adjoint (left or right idk) eigenvectors and eigenvalues.
 % This will give us the perpendicular vector to the tangent of the periodic
