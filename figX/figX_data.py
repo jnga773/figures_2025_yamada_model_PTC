@@ -6,8 +6,8 @@
 # Load extra functions
 import auto
 import continuation_scripts.data_functions as data_funcs
-import continuation_scripts.initial_PO.initial_PO_functions as initial_PO
-import continuation_scripts.phase_reset.PTC_functions as phase_reset
+import continuation_scripts.initial_PO_functions as initial_PO
+import continuation_scripts.PTC_functions as phase_reset
 
 #==============================================================================#
 ##                            INITIAL CONTINUATION                            ##
@@ -186,9 +186,6 @@ run_new = auto.run(run_old(label_old), ISW=-1, IPS=2, LAB=1,
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)
 
-# Write periodic orbit data to run06_initial_solution.dat
-initial_PO.write_initial_solution_PO(run_new('UZ1'))
-
 # Print clear line
 print('\n')
 
@@ -242,6 +239,9 @@ def read_parameters_PO(sol_in):
 # Read parameters from previous run
 par_PO, pnames_PO = read_parameters_PO(run_old(label_old))
 
+# Read old solution
+x_init = initial_PO.write_initial_solution_PO(run_old(label_old))
+
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
@@ -249,7 +249,7 @@ par_PO, pnames_PO = read_parameters_PO(run_old(label_old))
 auto.copy('./continuation_scripts/initial_PO/', 'initial_PO')
 
 # Run continuation
-run_new = auto.run(c='initial_PO', PAR=par_PO, parnames=pnames_PO)
+run_new = auto.run(x_init, c='initial_PO', PAR=par_PO, parnames=pnames_PO)
 
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)
@@ -491,10 +491,14 @@ phase_reset.write_initial_solution_phase_reset(par_PR[6])
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Set saved points
-from numpy import linspace, concatenate, arange
+from numpy import linspace, concatenate, unique
 
 # Saved points for large scan of I perturbation
-SP_points = concatenate((linspace(0.0, 1.0, 35), linspace(0.30, 25.0, 35)))
+SP_points = concatenate((linspace(0.0, 1.0, 20), 
+                         linspace(1.0, 10.0, 15),
+                         linspace(10.0, 13.0, 15),
+                         linspace(13.0, 25.0, 20)))
+SP_points = unique(SP_points)
 
 # Copy continuation script
 auto.copy('./continuation_scripts/phase_reset/', 'PTC_initial')
@@ -548,6 +552,8 @@ def calculate_PTC(i):
     """
     Run PTC continuation run for label 'i' in run_old.
     """
+    from numpy import arange
+    
     # This label
     this_label = label_old[i]
 
