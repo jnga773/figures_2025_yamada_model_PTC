@@ -14,7 +14,7 @@ load('../plot_mat_files/fig3_data.mat');
 % %     Read Initial Periodic Orbit Data     %
 % %------------------------------------------%
 % % Run string identifier
-% run_PO = 'run06_initial_periodic_orbit';
+% run_PO = 'run05_initial_periodic_orbit';
 % % Bifurcation data
 % bd_PO = coco_bd_read(run_PO);
 % 
@@ -48,7 +48,7 @@ load('../plot_mat_files/fig3_data.mat');
 % %     Read Data: Phase Reset     %
 % %--------------------------------%
 % % Run string indentifier
-% run_PR = 'run10_phase_reset_PTC_single';
+% run_PR = 'run09_phase_reset_PTC_single';
 % 
 % % Bifurcation data
 % bd_PR = coco_bd_read(run_PR);

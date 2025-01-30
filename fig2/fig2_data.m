@@ -241,7 +241,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma'}, A_range);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.hopf_to_PO = 'run05_hopf_to_PO';
+run_names.hopf_to_PO = 'run04_hopf_to_PO';
 run_new = run_names.hopf_to_PO;
 % Which run this continuation continues from
 run_old = run_names.move_hopf;
@@ -324,7 +324,7 @@ coco(prob, run_new, [], 1, {'gamma', 'A'}, gamma_range);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.initial_PO = 'run06_initial_periodic_orbit';
+run_names.initial_PO = 'run05_initial_periodic_orbit';
 run_new = run_names.initial_PO;
 % Which run this continuation continues from
 run_old = run_names.hopf_to_PO;
@@ -414,7 +414,7 @@ label_plot = label_plot(1);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.stable_manifold1 = 'run07_stable_manifold_seg1';
+run_names.stable_manifold1 = 'run06_stable_manifold_seg1';
 run_new = run_names.stable_manifold1;
 % Which run this continuation continues from
 run_old = run_names.initial_PO;
@@ -501,7 +501,7 @@ coco(prob, run_new, [], 1, {'W_seg1', 'T1', 'W_seg2'}, prange);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.stable_manifold2 = 'run08_stable_manifold_seg2';
+run_names.stable_manifold2 = 'run07_stable_manifold_seg2';
 run_new = run_names.stable_manifold2;
 run_old = run_names.stable_manifold1;
 
@@ -583,7 +583,7 @@ coco(prob, run_new, [], 1, {'W_seg2', 'T2', 'W_seg1'}, prange);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.close_eps = 'run09_stable_manifold_close_eps';
+run_names.close_eps = 'run08_stable_manifold_close_eps';
 run_new = run_names.close_eps;
 run_old = run_names.stable_manifold2;
 

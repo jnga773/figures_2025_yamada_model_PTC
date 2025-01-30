@@ -267,7 +267,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma'}, A_range);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.hopf_to_PO = 'run05_hopf_to_PO';
+run_names.hopf_to_PO = 'run04_hopf_to_PO';
 run_new = run_names.hopf_to_PO;
 % Which run this continuation continues from
 run_old = run_names.move_hopf;
@@ -356,7 +356,7 @@ coco(prob, run_new, [], 1, {'gamma', 'A', 'po.orb.NTST'}, gamma_range);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.initial_PO = 'run06_initial_periodic_orbit';
+run_names.initial_PO = 'run05_initial_periodic_orbit';
 run_new = run_names.initial_PO;
 % Which run this continuation continues from
 run_old = run_names.hopf_to_PO;
@@ -440,7 +440,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma'}, A_range);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.compute_floquet_1 = 'run07_compute_floquet_bundle_1_mu';
+run_names.compute_floquet_1 = 'run06_compute_floquet_bundle_1_mu';
 run_new = run_names.compute_floquet_1;
 % Which run this continuation continues from
 run_old = run_names.initial_PO;
@@ -516,7 +516,7 @@ coco(prob, run_new, [], 1, {'mu_s', 'w_norm', 'T'} , [0.0, 1.1]);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.compute_floquet_2 = 'run08_compute_floquet_bundle_2_w';
+run_names.compute_floquet_2 = 'run07_compute_floquet_bundle_2_w';
 run_new = run_names.compute_floquet_2;
 % Which run this continuation continues from
 run_old = run_names.compute_floquet_1;
@@ -580,7 +580,7 @@ coco(prob, run_new, [], 1, {'w_norm', 'mu_s', 'T'}, {[-1e-4, 1.1], [], []});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_reset_perturbation = 'run09_phase_reset_perturbation';
+run_names.phase_reset_perturbation = 'run08_phase_reset_perturbation';
 run_new = run_names.phase_reset_perturbation;
 % Which run this continuation continues from
 run_old = run_names.compute_floquet_2;
@@ -713,7 +713,7 @@ bdtest = coco(prob, run_new, [], 1, ...
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_transition_curve = 'run10_phase_reset_PTC_single';
+run_names.phase_transition_curve = 'run09_phase_reset_PTC_single';
 run_new = run_names.phase_transition_curve;
 % Which run this continuation continues from
 run_old = run_names.phase_reset_perturbation;

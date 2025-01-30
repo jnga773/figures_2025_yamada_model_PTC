@@ -12,7 +12,7 @@ load('../plot_mat_files/fig2_data.mat');
 % %     Read Data from COCO Data     %
 % %----------------------------------%
 % % Run string identifier
-% run_read = 'run06_initial_periodic_orbit';
+% run_read = 'run05_initial_periodic_orbit';
 
 % % Read bd file
 % bd_read = coco_bd_read(run_read);

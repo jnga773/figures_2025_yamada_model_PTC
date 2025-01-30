@@ -11,8 +11,11 @@ load('../plot_mat_files/fig4_data.mat');
 %----------------------------------%
 %     Read Data from COCO Data     %
 %----------------------------------%
+% % Run string indentifier
+% run_PR = 'run08_phase_reset_PTC_single';
+% 
 % % Bifurcation data
-% bd_PR = coco_bd_read(run_in);
+% bd_PR = coco_bd_read(run_PR);
 % 
 % % Get solution labels
 % label_PR = coco_bd_labs(bd_PR, 'SP');
