@@ -645,10 +645,10 @@ prob = coco_set(prob, 'cont', 'al_max', 25);
 % where 'k' is an integer. This is the perturbed segment, that may have to
 % orbit the unperturbed periodic orbit many times before "resetting". Hence
 % we have set the NTST for this segment (NTST(4)) as k * 50.
-NTST(1) = 30;
+NTST(1) = 50;
 NTST(2) = 10;
 NTST(3) = 10;
-NTST(4) = 30 * k;
+NTST(4) = 50 * k;
 
 prob = coco_set(prob, 'seg1.coll', 'NTST', NTST(1));
 prob = coco_set(prob, 'seg2.coll', 'NTST', NTST(2));
@@ -693,7 +693,7 @@ prob = apply_PR_boundary_conditions(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.1];
+SP_values = 0.1;
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -719,7 +719,7 @@ run_new = run_names.phase_transition_curve;
 run_old = run_names.phase_reset_perturbation;
 
 % Continuation point
-label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
+label_old = coco_bd_labs(coco_bd_read(run_old), 'EP');
 label_old = label_old(end);
 
 % Print to console
@@ -778,6 +778,15 @@ prob = apply_PR_boundary_conditions(prob, data_PR, bcs_funcs);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
+% Array of values for special event
+SP_values = [0.0, 0.3];
+
+% When the parameter we want (from param) equals a value in A_vec
+prob = coco_add_event(prob, 'SP', 'theta_old', SP_values);
+
+%------------------%
+%     Run COCO     %
+%------------------%
 % Run COCO continuation
 prange = {[0.0, 1.0], [], [], [0.99, 1.01], [], []};
 coco(prob, run_new, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
@@ -785,12 +794,11 @@ coco(prob, run_new, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_per
 %-------------------%
 %     Save Data     %
 %-------------------%
-% % Plot PTC plane in A_perturb
-% plot_PTC_plane_A_perturb(run_new);
-% 
-% % Save PTC scan data
-% % save_PTC_scan_data(run_new, './data_mat/PTC_scan_data_G_small_set.mat');
-% save_PTC_scan_data(run_new, './data_mat/PTC_scan_data_I_small_set.mat');
+% Save data for Figure 3
+save_fig3_data(run_new, '../plot_mat_files/fig3_data.mat');
+
+% Save data for Figure 4
+save_fig4_data(run_new, '../plot_mat_files/fig4_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %

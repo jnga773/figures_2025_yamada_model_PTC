@@ -3,8 +3,30 @@ clear all; close all; clc;
 %-------------------------------------------------------------------------%
 %                                Read Data                                %
 %-------------------------------------------------------------------------%
-% Load data
+%----------------------------------%
+%     Read Data from .mat File     %
+%----------------------------------%
 load('../plot_mat_files/fig4_data.mat');
+
+%----------------------------------%
+%     Read Data from COCO Data     %
+%----------------------------------%
+% % Bifurcation data
+% bd_PR = coco_bd_read(run_in);
+% 
+% % Get solution labels
+% label_PR = coco_bd_labs(bd_PR, 'SP');
+% 
+% % Get theta_old values
+% theta_old_run1 = coco_bd_val(bd_PR, label_PR(1), 'theta_old');
+% theta_old_run2 = coco_bd_val(bd_PR, label_PR(2), 'theta_old');
+% 
+% % Get A_perturb value
+% A_perturb = coco_bd_val(bd_PR, label_PR(1), 'A_perturb');
+% 
+% % Read theta_old and theta_new values from bifurcation data
+% theta_old_plot = coco_bd_col(bd_PR, 'theta_old');
+% theta_new_plot = coco_bd_col(bd_PR, 'theta_new');
 
 %%
 %-------------------------------------------------------------------------%
@@ -14,7 +36,7 @@ load('../plot_mat_files/fig4_data.mat');
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
+fig = figure(2); clf;
 fig.Name = 'Single PTC';
 
 % Figure dimensions
@@ -48,15 +70,15 @@ patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), FaceAlpha=0.2, ...
       EdgeColor='none', HandleVisibility='off')
 
 % Grey lines at theta_old = 0 and 0.3
-xline(ax, 0, LineStyle='-', Color=[0, 0, 0, 0.5], LineWidth=1);
-xline(ax, 0.3, LineStyle='-', Color=[0, 0, 0, 0.5], LineWidth=1);
+xline(ax, theta_old_run1, LineStyle='-', Color=[0, 0, 0, 0.5], LineWidth=1);
+xline(ax, theta_old_run2, LineStyle='-', Color=[0, 0, 0, 0.5], LineWidth=1);
 
 %-------------------%
 %     Plot: PTC     %
 %-------------------%
 % Plot PTC: run1
-plot(ax, theta_old_run1, theta_new_run1, Color='k', LineStyle='-', LineWidth=1.5);
-plot(ax, theta_old_run1, theta_new_run1+1, Color='k', LineStyle='-', LineWidth=1.5);
+plot(ax, theta_old_plot, theta_new_plot, Color='k', LineStyle='-', LineWidth=1.5);
+plot(ax, theta_old_plot, theta_new_plot+1, Color='k', LineStyle='-', LineWidth=1.5);
 
 %-------------------%
 %     Hold Axis     %
@@ -94,8 +116,8 @@ ax.YAxis.MinorTickValues = 0.0 : 0.25 : 1.0;
 %---------------------%
 %     Axis Labels     %
 %---------------------%
-ax.XAxis.Label.String = '$\\theta_{\\mathrm{o}}$';
-ax.YAxis.Label.String = '$\\theta_{\\mathrm{n}}$';
+ax.XAxis.Label.String = '$\theta_{\mathrm{o}}$';
+ax.YAxis.Label.String = '$\theta_{\mathrm{n}}$';
 
 %----------------------%
 %     Figure Stuff     %
@@ -105,5 +127,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../images/fig4_G_PTC_single.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% filename_out = '../fig4_G_PTC_single.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

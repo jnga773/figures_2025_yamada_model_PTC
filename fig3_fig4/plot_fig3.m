@@ -4,49 +4,105 @@ clear all; close all; clc;
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
+%----------------------------------%
+%     Read Data from .mat File     %
+%----------------------------------%
 % Read from data structure file
 load('../plot_mat_files/fig3_data.mat');
-load('../plot_mat_files/initial_PO.mat');
 
-%-------------------------%
-%     Read Parameters     %
-%-------------------------%
-% Periodicity
-% k = p_run1(6);
-% Period
-% T_PO = p_run1(5);
-
-% Read A_perturb
-% A_perturb_run1 = p_run1(11);
-% A_perturb_run2 = p_run2(11);
-
-fprintf('A_perturb(1) = %.4f\n', A_perturb);
-fprintf('A_perturb(2) = %.4f\n\n', A_perturb);
-
-% Read theta_old
-% theta_old_run1 = p_run1(7);
-% theta_old_run2 = p_run2(7);
-
-fprintf('theta_old(1) = %.4f\n', theta_old_run1);
-fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
-
-%----------------------------------------%
-%     Copy Unperturned Orbit k Times     %
-%----------------------------------------%
-% Time data
-tbp = tbp_PO / T_PO;
-
-% Copy original periodic orbit data
-X_PO_plot = xbp_PO(:, 3);
-tbp_plot  = tbp;
-for i = 2: k
-  X_PO_plot = [X_PO_plot(1:end-1); xbp_PO(:, 3)];
-  tbp_plot  = [tbp_plot(1:end-1); tbp_plot(end) + tbp];
-end
-
-% Multiply segment time solutions
-tbp4_run1 = k * tbp4_run1;
-tbp4_run2 = k * tbp4_run2;
+% %------------------------------------------%
+% %     Read Initial Periodic Orbit Data     %
+% %------------------------------------------%
+% % Run string identifier
+% run_PO = 'run06_initial_periodic_orbit';
+% % Bifurcation data
+% bd_PO = coco_bd_read(run_PO);
+% 
+% % Get solution label
+% label_PO = coco_bd_labs(bd_PO, 'PO_PT');
+% 
+% % Read 'initial_PO' COLL data
+% [sol_PO, data_PO] = coll_read_solution('initial_PO', run_PO, label_PO);
+% 
+% % State space solution
+% xbp_PO = sol_PO.xbp;
+% % Temporal solution
+% tbp_PO = sol_PO.tbp;
+% % Period
+% T_PO   = sol_PO.T;
+% 
+% % Parameters
+% p      = sol_PO.p;
+% pnames = data_PO.pnames;
+% 
+% %-------------------------------------%
+% %     Read Data: Stationary Point     %
+% %-------------------------------------%
+% % Read 'xpos' EP data
+% [sol_pos, ~] = ep_read_solution('xpos', run_PO, label_PO);
+% 
+% % Stationary point
+% xpos = sol_pos.x;
+% 
+% %--------------------------------%
+% %     Read Data: Phase Reset     %
+% %--------------------------------%
+% % Run string indentifier
+% run_PR = 'run10_phase_reset_PTC_single';
+% 
+% % Bifurcation data
+% bd_PR = coco_bd_read(run_PR);
+% 
+% % Get solution labels
+% label_PR = coco_bd_labs(bd_PR, 'SP');
+% 
+% % Get theta_old values
+% theta_old_run1 = coco_bd_val(bd_PR, label_PR(1), 'theta_old');
+% theta_old_run2 = coco_bd_val(bd_PR, label_PR(2), 'theta_old');
+% 
+% % Get A_perturb value
+% A_perturb = coco_bd_val(bd_PR, label_PR(1), 'A_perturb');
+% 
+% % Get periodicity
+% k = coco_bd_val(bd_PR, label_PR(1), 'k');
+% 
+% % Read segment 3 solution
+% [sol3_run1, ~] = coll_read_solution('seg3', run_PR, label_PR(1));
+% [sol3_run2, ~] = coll_read_solution('seg3', run_PR, label_PR(2));
+% 
+% % Read segment 4 solution
+% [sol4_run1, ~] = coll_read_solution('seg4', run_PR, label_PR(1));
+% [sol4_run2, ~] = coll_read_solution('seg4', run_PR, label_PR(2));
+% 
+% % Get segment4 state space solution
+% xbp3_run1 = sol3_run1.xbp;
+% xbp3_run2 = sol3_run2.xbp;
+% xbp4_run1 = sol4_run1.xbp;
+% xbp4_run2 = sol4_run2.xbp;
+% 
+% % Get segment 4 temporal solution
+% tbp4_run1 = sol4_run1.tbp;
+% tbp4_run2 = sol4_run2.tbp;
+% 
+% %----------------------------------------%
+% %     Copy Unperturned Orbit k Times     %
+% %----------------------------------------%
+% % Time data
+% tbp_normalised = tbp_PO / T_PO;
+% 
+% % Setup plotting data
+% xbp_PO_plot = xbp_PO(:, 3);
+% tbp_PO_plot = tbp_normalised;
+% 
+% % Copy original periodic orbit data
+% for i = 2: k
+%   xbp_PO_plot = [xbp_PO_plot(1:end-1); xbp_PO(:, 3)];
+%   tbp_PO_plot = [tbp_PO_plot(1:end-1); tbp_PO_plot(end) + tbp_normalised];
+% end
+% 
+% % Multiply segment time solutions
+% tbp4_run1 = k * tbp4_run1;
+% tbp4_run2 = k * tbp4_run2;
 
 %%
 %-------------------------------------------------------------------------%
@@ -143,8 +199,8 @@ hold(ax2, 'off');
 hold(ax3, 'on');
 
 % Plot unerperturbed orbit
-max_idx = max(find(tbp_plot < 12.0));
-plot(ax3, tbp_plot(1:max_idx), X_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
+max_idx = max(find(tbp_PO_plot < 12.0));
+plot(ax3, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
 
 % Plot segment 4
 max_idx = max(find(tbp4_run1 < 12.0));
@@ -160,8 +216,8 @@ hold(ax3, 'off');
 hold(ax4, 'on');
 
 % Plot unerperturbed orbit
-max_idx = max(find(tbp_plot < 12.0));
-plot(ax4, tbp_plot(1:max_idx), X_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
+max_idx = max(find(tbp_PO_plot < 12.0));
+plot(ax4, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
 
 % Plot segment 4
 max_idx = max(find(tbp4_run2 < 12.0));
@@ -260,5 +316,5 @@ end
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig3_G_reset_phase_and_time.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% filename_out = '../fig3_G_reset_phase_and_time.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

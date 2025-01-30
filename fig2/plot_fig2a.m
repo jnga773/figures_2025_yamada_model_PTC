@@ -4,65 +4,66 @@ clear all; close all; clc;
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
-% Read from .mat file
-% % Read data from initial periodic orbit data .mat file
-% filename_data = '../plot_mat_files/fig2_data.mat';
-% % Load data
-% load(filename_data);
+%----------------------------------%
+%     Read Data from .mat File     %
+%----------------------------------%
+load('../plot_mat_files/fig2_data.mat');
 
-% Read from COCO data
-% Run string identifier
-run_read = 'run09_stable_manifold_close_eps';
+% %----------------------------------%
+% %     Read Data from COCO Data     %
+% %----------------------------------%
+% % Run string identifier
+% run_read = 'run09_stable_manifold_close_eps';
 
-% Read bd file
-bd_read = coco_bd_read(run_read);
+% % Read bd file
+% bd_read = coco_bd_read(run_read);
 
-% Solution label to plot (take one less just in case MX)
-label_read = max(coco_bd_labs(bd_read, '')) - 1;
+% % Solution label to plot (take one less just in case MX)
+% label_read = max(coco_bd_labs(bd_read, '')) - 1;
 
-%-----------------------------------%
-%     Read Data: Periodic Orbit     %
-%-----------------------------------%
-% Read COCO solution
-[sol_PO, data_PO] = coll_read_solution('PO_stable', run_read, label_read);
+% %-----------------------------------%
+% %     Read Data: Periodic Orbit     %
+% %-----------------------------------%
+% % Read COCO solution
+% [sol_PO, data_PO] = coll_read_solution('PO_stable', run_read, label_read);
 
-% State space solution
-xbp_PO = sol_PO.xbp;
-% Temporal solution
-tbp_PO = sol_PO.tbp;
-% Period
-T_PO   = sol_PO.T;
+% % State space solution
+% xbp_PO = sol_PO.xbp;
+% % Temporal solution
+% tbp_PO = sol_PO.tbp;
+% % Period
+% T_PO   = sol_PO.T;
 
-% Parameters
-p      = sol_PO.p;
-pnames = data_PO.pnames;
+% % Parameters
+% p      = sol_PO.p;
+% pnames = data_PO.pnames;
 
-%--------------------------------------%
-%     Read Data: Stationary Points     %
-%--------------------------------------%
-% Read COCO solutions
-[sol_0, ~]   = ep_read_solution('x0', run_read, label_read);
-[sol_pos, ~] = ep_read_solution('xpos', run_read, label_read);
-[sol_neg, ~] = ep_read_solution('xneg', run_read, label_read);
+% %--------------------------------------%
+% %     Read Data: Stationary Points     %
+% %--------------------------------------%
+% % Read COCO solutions
+% [sol_0, ~]   = ep_read_solution('x0', run_read, label_read);
+% [sol_pos, ~] = ep_read_solution('xpos', run_read, label_read);
+% [sol_neg, ~] = ep_read_solution('xneg', run_read, label_read);
 
-% State space solutions
-x0   = sol_0.x;
-xpos = sol_pos.x;
-xneg = sol_neg.x;
+% % State space solutions
+% x0   = sol_0.x;
+% xpos = sol_pos.x;
+% xneg = sol_neg.x;
 
-%-----------------------------%
-%     Read Data: Manifold     %
-%-----------------------------%
-% Read stable manifold solutions
-[sol1, ~] = coll_read_solution('W1', run_read, label_read);
-[sol2, ~] = coll_read_solution('W2', run_read, label_read);
+% %-----------------------------%
+% %     Read Data: Manifold     %
+% %-----------------------------%
+% % Read stable manifold solutions
+% [sol1, ~] = coll_read_solution('W1', run_read, label_read);
+% [sol2, ~] = coll_read_solution('W2', run_read, label_read);
 
-% State space solutions
-W1 = sol1.xbp;
-W2 = sol2.xbp;
+% % State space solutions
+% W1 = sol1.xbp;
+% W2 = sol2.xbp;
 
-% Append to single array
-Wq_s = [W1; flip(W2)];
+% % Append to single array
+% Wq_s = [W1; flip(W2)];
 
 %%
 %-------------------------------------------------------------------------%
@@ -74,8 +75,17 @@ colours = colororder();
 % Setup figure
 fig = figure(1); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
-fig.Units = 'centimeters'; fig.Position = [5, 5, 6, 6]; fig.PaperSize = fig.Position(3:4);
 
+% Figure dimensions
+fig.Units = 'centimeters';
+fig.Position = [5, 5, 6, 6];
+
+% Figure pdf settings
+fig.PaperUnits = fig.Units;
+fig.PaperPosition = fig.Position;
+fig.PaperSize = fig.Position(3:4);
+
+% Axis setup
 tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
 ax = nexttile;
 ax.FontSize = 8;
@@ -153,10 +163,11 @@ grid(ax, 'on');
 ax.GridLineWidth = 0.5; ax.GridColor = 'black'; ax.GridAlpha = 0.25;
 
 % 3D plot view
-view(45, 10.0);
+% view(45, 10);
+view(45, 6);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig2a_phase_portrait.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% filename_out = '../fig2a_phase_portrait.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

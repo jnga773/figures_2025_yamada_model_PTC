@@ -3,53 +3,45 @@ clear all; close all; clc;
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
-% Read from .mat file
-% % Read data from initial periodic orbit data .mat file
-% filename_data = '../plot_mat_files/fig2_data.mat';
-% % Load data
-% load(filename_data);
+%----------------------------------%
+%     Read Data from .mat File     %
+%----------------------------------%
+load('../plot_mat_files/fig2_data.mat');
 
-% Read from COCO data
-% Run string identifier
-run_read = 'run06_initial_periodic_orbit';
+% %----------------------------------%
+% %     Read Data from COCO Data     %
+% %----------------------------------%
+% % Run string identifier
+% run_read = 'run06_initial_periodic_orbit';
 
-% Read bd file
-bd_read = coco_bd_read(run_read);
+% % Read bd file
+% bd_read = coco_bd_read(run_read);
 
-% Solution label to plot (take one less just in case MX)
-label_read = max(coco_bd_labs(bd_read, '')) - 1;
+% % Solution label to plot (take one less just in case MX)
+% label_read = max(coco_bd_labs(bd_read, '')) - 1;
 
-%-----------------------------------%
-%     Read Data: Periodic Orbit     %
-%-----------------------------------%
-% Read COCO solution
-[sol_PO, data_PO] = coll_read_solution('PO_stable', run_read, label_read);
+% %-----------------------------------%
+% %     Read Data: Periodic Orbit     %
+% %-----------------------------------%
+% % Read COCO solution
+% [sol_PO, data_PO] = coll_read_solution('PO_stable', run_read, label_read);
 
-% State space solution
-xbp_PO = sol_PO.xbp;
-% Temporal solution
-tbp_PO = sol_PO.tbp;
-% Period
-T_PO   = sol_PO.T;
+% % State space solution
+% xbp_PO = sol_PO.xbp;
+% % Temporal solution
+% tbp_PO = sol_PO.tbp;
+% % Period
+% T_PO   = sol_PO.T;
 
 %------------------------%
 %    Add two periods     %
 %------------------------%
-% Periodicity
-k = 2;
-
 % Period of periodic orbit
 tbp = tbp_PO / T_PO;
 
 % Copy original periodic orbit data
-xbp_plot = xbp_PO;
-
-tbp_plot = tbp;
-
-for i = 2: k
-  xbp_plot = [xbp_plot(1:end-1, :); xbp_PO];
-  tbp_plot  = [tbp_plot(1:end-1); tbp_plot(end) + tbp];
-end
+xbp_plot = [xbp_PO(1:end-1, :); xbp_PO];
+tbp_plot = [tbp(1:end-1); 1 + tbp];
 
 %%
 %-------------------------------------------------------------------------%
@@ -63,7 +55,6 @@ fig = figure(1); clf;
 fig.Name = 'Temporal Trace of Periodic Orbit';
 
 % Figure dimensions
-fig.Units = 'centimeters';
 fig.Units = 'centimeters';
 fig.Position = [5, 5, 8.5, 4.25];
 
@@ -133,6 +124,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig2b_periodic_orbit_temporal_trace.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
-% plot2svg(filename_out);
+% filename_out = '../fig2b_periodic_orbit_temporal_trace.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

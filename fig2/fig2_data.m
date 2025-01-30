@@ -655,20 +655,15 @@ prob = coco_add_event(prob, 'EPS0', 'eps', [1e-8, 1e-9, 4.5e-10]);
 prange = {[1e-8, eps], [], []};
 coco(prob, run_new, [], 1, {'eps', 'T1', 'T2'}, prange);
 
-%----------------------%
-%    Testing Plots     %
-%----------------------%
+%------------------%
+%    Save Data     %
+%------------------%
 % Solution label to plot
 label_plot = coco_bd_labs(coco_bd_read(run_new), '');
 label_plot = max(label_plot) - 1;
 
-% Save solution
-filename_out = '../plot_mat_files/initial_PO.mat';
-save_fig2_data(run_new, label_plot, filename_out);
-
 % Save again as fig2_data
-filename_out = '../plot_mat_files/fig2_data.mat';
-save_fig2_data(run_new, label_plot, filename_out);
+save_fig2_data(run_new, label_plot, '../plot_mat_files/fig2_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %
