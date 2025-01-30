@@ -44,11 +44,18 @@ print('Run name: {}'.format(run_new_str))
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Copy continuation script
-auto.copy('./continuation_scripts/', 'initial_EP')
-
 # Run the first continuation from the initial equilibrium point
-run_new = auto.run(x0, PAR=p0, c='initial_EP')
+run_new = auto.run(x0, PAR=p0, e='./functions/yamada',
+                   # State space settings
+                   NDIM=3, unames={1: 'x1', 2: 'x2', 3: 'x3'},
+                   # Parameter settings
+                   NPAR=4,parnames={1: 'gamma', 2: 'A', 3: 'B', 4: 'a'},
+                   ICP=['A', 'gamma'], UZSTOP={'A': [5.0, 20.0], 'gamma': [0.0, 0.4]},
+                   # Step settings
+                   NMX=100, NPR=10,
+                   # Problem type settings
+                   IPS=1, IRS=0, ILP=1, ISP=2, ISW=1, MXBF=0,
+                   JAC=1, NBC=0, NINT=0)
 
 #-------------------#
 #     Save Data     #
@@ -127,11 +134,14 @@ print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 #-------------------------------#
 # Continue from Hop bifurcation
 run_new = auto.run(run_old(label_old), ISW=2,
+                   # Parameter settings
                    ICP=['A', 'gamma'],
                    UZSTOP={'gamma': [0.0, 0.4], 'A': [5.0, 20.0]},
+                   # Saved solution points
+                   UZR={'A': 7.37570000},
+                   # Step settings
                    DSMIN=5e-3, DS=5e-3, DSMAX=5e-3,
-                   NMX=500, NPR=50,
-                   UZR={'A': 7.37570000})
+                   NMX=500, NPR=50)
 
 #-------------------#
 #     Save Data     #
@@ -157,7 +167,7 @@ run_new_str = 'run04_hopf_to_PO'
 run_old_str = 'run03_hopf'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
-label_old = run_old('GH1')
+label_old = run_old('UZ1')
 label_old = label_old['LAB']
 
 # Print to console
@@ -171,24 +181,23 @@ print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 #-------------------------------#
 # Gamma value for saved point
 SP = 3.54e-2
-# SP = 2.5e-2
 
 # Follow periodic orbits
 print('Continuing periodic orbits ...')
 run_new = auto.run(run_old(label_old), ISW=-1, IPS=2, LAB=1,
+                   # Parameter settings
                    ICP=['gamma'],
+                   # Saved solution
+                   UZR={'gamma': SP},
+                   # Step size solutions
                    NTST=50, DSMIN=1e-1, DS=1e-1, DSMAX=1e-1,
-                   NMX=500, NPR=50,
-                   UZR={'gamma': SP})
+                   NMX=500, NPR=50)
 
 #-------------------#
 #     Save Data     #
 #-------------------#
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)
-
-# Write periodic orbit data to run06_initial_solution.dat
-initial_PO.write_initial_solution_PO(run_new('UZ1'))
 
 # Print clear line
 print('\n')
@@ -243,27 +252,31 @@ def read_parameters_PO(sol_in):
 # Read parameters from previous run
 par_PO, pnames_PO = read_parameters_PO(run_old(label_old))
 
+# Read periodic orbit solution from previous run, rotate, and set as new
+# initial solution
+x_init_PO = initial_PO.calc_initial_solution_PO(run_old(label_old))
+
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Copy continuation script
-auto.copy('./continuation_scripts/', 'initial_PO')
-
 # Run continuation
-run_new = auto.run(c='initial_PO', PAR=par_PO, parnames=pnames_PO)
+run_new = auto.run(x_init_PO, e='./functions/yamada_VAR',
+                   # State space settings
+                   NDIM=3, unames={1: 'x1', 2: 'x2', 3: 'x3'},
+                   # Parameter settings
+                   NPAR=5, PAR=par_PO, parnames=pnames_PO,
+                   ICP=['gamma', 'T'], UZSTOP={'gamma': [0.0, 0.4]},
+                   # Saved solution
+                   UZR={'A': 7.3757, 'gamma': 3.54e-2},
+                   # Continuation problem settings
+                   IRS=0, IPS=4, ISW=1, ILP=0, ISP=2, MXBF=0,
+                   JAC=0, NBC=4, NINT=0,
+                   # Step size setting
+                   NMX=10, NPR=1, NTST=50,
+                   DSMIN=1e-3, DS=-1e-3, DSMAX=1e-2)
 
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)
-
-# Write shifted periodic data and 'zero-ed' variational data as
-# initial solution to the variational problem to ./data/run07_initial_solution.dat'
-# initial_PO.write_initial_solution_floquet(run_new('EP1'))
-
-#--------------#
-#     Plot     #
-#--------------#
-# Save solution to MATLAB .mat file
-# initial_PO.save_PO_data_matlab(run_new('EP1'))
 
 # Print clear line
 print('\n')
@@ -333,14 +346,26 @@ def read_parameters_VAR(sol_in):
 # Read parameters from previous run
 par_VAR, pnames_VAR = read_parameters_VAR(run_old(label_old))
 
+# Read periodic orbit solution from previous run and calculate variational
+# problem initial solution.
+x_init_VAR = initial_PO.calc_initial_solution_VAR(run_old(label_old))
+
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Copy continuation script
-auto.copy('./continuation_scripts/', 'floquet_variational')
-
 # Run continuation
-run_new = auto.run(c='floquet_variational', PAR=par_VAR, parnames=pnames_VAR,
+run_new = auto.run(x_init_VAR, e='./functions/yamada_VAR',
+                   # State space settings
+                   NDIM=6, unames={1:'x1', 2:'x2', 3:'x3', 4:'wn_1', 5:'wn_2', 6:'wn_3'},
+                   # Parameter settings
+                   PAR=par_VAR, parnames=pnames_VAR,
+                   NPAR=7, ICP=['mu_s', 'w_norm', 'gamma'], UZSTOP={'mu_s': [0.0, 1.1]},
+                   # Saved solution points
+                   UZR={'mu_s': 1.0},
+                   # Continuation problem settings
+                   IRS=0, IPS=4, ISW=1, ILP=0, ISP=2, MXBF=0,
+                   JAC=0, NBC=8, NINT=0,
+                   # Step size settings
                    DSMIN=1e-4, DS=1e-4, DSMAX=1e-3)
 
 #-------------------#
