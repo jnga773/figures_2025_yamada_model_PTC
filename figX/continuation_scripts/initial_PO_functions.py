@@ -90,7 +90,7 @@ def write_initial_solution_PO(bd_data_in):
     Reads the periodic orbit data from [bd_data_in] and writes to to
     [FILE].dat.
     """
-    from numpy import argmax, concatenate, array
+    from numpy import argmax, concatenate
     
     #-------------------#
     #     Read Data     #
@@ -98,11 +98,11 @@ def write_initial_solution_PO(bd_data_in):
     # Grab the periodic orbit data file
     sol = bd_data_in
 
-    # # Read parameters
-    # gamma = sol['gamma']
-    # A     = sol['A']
-    # B     = sol['B']
-    # a     = sol['a']
+    # Read parameters
+    gamma = sol['gamma']
+    A     = sol['A']
+    B     = sol['B']
+    a     = sol['a']
 
     # Read time data
     t_read = sol['t']
@@ -112,8 +112,8 @@ def write_initial_solution_PO(bd_data_in):
     x2_read = sol['x2']
     x3_read = sol['x3']
 
-    # # Calculate stationary points
-    # x0, xpos, xneg = calc_stationary_points([gamma, A, B, a])
+    # Calculate stationary points
+    x0, xpos, xneg = calc_stationary_points([gamma, A, B, a])
 
     #--------------------#
     #     Shift Data     #
@@ -138,34 +138,28 @@ def write_initial_solution_PO(bd_data_in):
         x3 = concatenate((x3[0], x3[1]))
         t = concatenate((t[0], t[1]))
 
-    #----------------#
-    #     Output     #
-    #----------------#
-    x_init_out = array([t, x1, x2, x3], dtype='float')
-
-    # #-----------------------#
-    # #     Write to file     #
-    # #-----------------------#
-    # filename_data = './data_mat/initial_solution_PO.dat'
-    # with open(filename_data, 'w') as file_data:
-    #     for i in range(len(t)):
-    #         str_write = ("{:>20.15f} \t "
-    #                      "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \t"
-    #                      "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \t"
-    #                      "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \t"
-    #                      "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \n"
-    #                      ).format(t[i],
-    #                               x1[i], x2[i], x3[i],
-    #                               x0[0], x0[1], x0[2],
-    #                               xneg[0], xneg[1], xneg[2],
-    #                               xpos[0], xpos[1], xpos[2])
+    #-----------------------#
+    #     Write to file     #
+    #-----------------------#
+    filename_data = './data_mat/initial_solution_PO.dat'
+    with open(filename_data, 'w') as file_data:
+        for i in range(len(t)):
+            str_write = ("{:>20.15f} \t "
+                         "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \t"
+                         "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \t"
+                         "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \t"
+                         "{:>20.15f} \t {:>20.15f} \t {:>20.15f} \n"
+                         ).format(t[i],
+                                  x1[i], x2[i], x3[i],
+                                  x0[0], x0[1], x0[2],
+                                  xneg[0], xneg[1], xneg[2],
+                                  xpos[0], xpos[1], xpos[2])
             
-    #         # Write to file
-    #         file_data.write(str_write)
+            # Write to file
+            file_data.write(str_write)
 
-    # # Close file
-    # file_data.close()
-
+    # Close file
+    file_data.close()
 
 #------------------------------------------------------------------------------#
 # Write initial peroiodic orbit solution to a MATLAB .mat file

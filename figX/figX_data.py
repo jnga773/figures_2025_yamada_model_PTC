@@ -45,7 +45,7 @@ print('Run name: {}'.format(run_new_str))
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./continuation_scripts/initial_PO/', 'initial_EP')
+auto.copy('./continuation_scripts/', 'initial_EP')
 
 # Run the first continuation from the initial equilibrium point
 run_new = auto.run(x0, PAR=p0, c='initial_EP')
@@ -171,6 +171,7 @@ print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 #-------------------------------#
 # Gamma value for saved point
 SP = 3.54e-2
+# SP = 2.5e-2
 
 # Follow periodic orbits
 print('Continuing periodic orbits ...')
@@ -185,6 +186,9 @@ run_new = auto.run(run_old(label_old), ISW=-1, IPS=2, LAB=1,
 #-------------------#
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)
+
+# Write periodic orbit data to run06_initial_solution.dat
+initial_PO.write_initial_solution_PO(run_new('UZ1'))
 
 # Print clear line
 print('\n')
@@ -239,30 +243,27 @@ def read_parameters_PO(sol_in):
 # Read parameters from previous run
 par_PO, pnames_PO = read_parameters_PO(run_old(label_old))
 
-# Read old solution
-x_init = initial_PO.write_initial_solution_PO(run_old(label_old))
-
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./continuation_scripts/initial_PO/', 'initial_PO')
+auto.copy('./continuation_scripts/', 'initial_PO')
 
 # Run continuation
-run_new = auto.run(x_init, c='initial_PO', PAR=par_PO, parnames=pnames_PO)
+run_new = auto.run(c='initial_PO', PAR=par_PO, parnames=pnames_PO)
 
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)
 
 # Write shifted periodic data and 'zero-ed' variational data as
 # initial solution to the variational problem to ./data/run07_initial_solution.dat'
-initial_PO.write_initial_solution_floquet(run_new('EP1'))
+# initial_PO.write_initial_solution_floquet(run_new('EP1'))
 
 #--------------#
 #     Plot     #
 #--------------#
 # Save solution to MATLAB .mat file
-initial_PO.save_PO_data_matlab(run_new('EP1'))
+# initial_PO.save_PO_data_matlab(run_new('EP1'))
 
 # Print clear line
 print('\n')
@@ -336,7 +337,7 @@ par_VAR, pnames_VAR = read_parameters_VAR(run_old(label_old))
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./continuation_scripts/initial_PO/', 'floquet_variational')
+auto.copy('./continuation_scripts/', 'floquet_variational')
 
 # Run continuation
 run_new = auto.run(c='floquet_variational', PAR=par_VAR, parnames=pnames_VAR,
@@ -501,7 +502,7 @@ SP_points = concatenate((linspace(0.0, 1.0, 20),
 SP_points = unique(SP_points)
 
 # Copy continuation script
-auto.copy('./continuation_scripts/phase_reset/', 'PTC_initial')
+auto.copy('./continuation_scripts/', 'PTC_initial')
 
 # Try set up phase reset calculation lol
 run_new = auto.run(c='PTC_initial', PAR=par_PR, parnames=pnames_PR,
