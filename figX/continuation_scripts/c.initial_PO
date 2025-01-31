@@ -1,50 +1,46 @@
 #==============================================================================#
-#                      STABLE FLOQUET VARIATIONAL PROBLEM                      #
+#                     SHIFTED PERIODIC ORBIT CONTINUATION                      #
 #==============================================================================#
-#-----------------------------#
-#     Initial Calculation     #
-#-----------------------------#
+#--------------------------#
+#     Problem Settings     #
+#--------------------------#
 # Equation file
 e = './functions/yamada_VAR'
 
-# Data file for initial solution
-dat = './data_mat/initial_solution_VAR'
-
-# Set initial solution number to 0
+# Set initial solution point to 0
 IRS = 0
 # Problem type
 IPS = 4
-# Set branching switching (1=off, -1=branch switch, 2=LP or HB).
+# Branch switching
 ISW = 1
 
-# Set fold detection to 1
-ILP = 1
+# Set fold detection to 0
+ILP = 0
 ISP = 2
 
 #----------------------------#
 #     Parameter Settings     #
 #----------------------------#
 # Maximum number of parameters
-NPAR     = 7
+NPAR = 5
 
 # Continuation parameters
-ICP      = ['mu_s', 'w_norm', 'gamma']
+ICP = ['gamma', 'T']
 
 # Set boundary for A parameter
-UZSTOP   = {'mu_s': [0.0, 1.1]}
+UZSTOP = {'gamma': [0.0, 0.4]}
 
 # Set defined stopping points for A and gamma
-UZR      = {'mu_s': 1.0}
+UZR = {'A': 7.3757, 'gamma': [2.5e-2, 3.54e-2]}
 
 #------------------------------#
 #     State Space Settings     #
 #------------------------------#
 # State space variables
-unames   = {1:'x1', 2:'x2', 3:'x3',
-            4:'wn_1', 5:'wn_2', 6:'wn_3'}
+unames   = {1:'x1', 2:'x2', 3:'x3'}
 
 # State space dimesion
-NDIM     = 6
+NDIM = 3
 
 #------------------------------------------#
 #     Jacobian and Boundary Conditions     #
@@ -53,7 +49,7 @@ NDIM     = 6
 JAC = 0
 
 # Number of boundary conditions
-NBC = 8
+NBC = 4
 
 # Number of integral conditions
 NINT = 0
@@ -62,22 +58,22 @@ NINT = 0
 #     Continuation Settings     #
 #-------------------------------#
 # Number of steps
-NMX = 300
+NMX = 10
 # Number of saved steps
-NPR = 10
+NPR = 1
 
 # NTST
 NTST = 50
 
 # Step sizes
-DSMIN = 5e-4
-DS    = 5e-4
-DSMAX = 1e-3
+DSMIN = 1e-3
+DS    = -1e-3
+DSMAX = 1e-2
 
-# # Number of collocation points?
-# NCOL = 4
-# # Set adaptive mesh interval
-# IAD = 0
+# Number of collocation points?
+NCOL = 4
+# Set adaptive mesh interval
+IAD = 1
 
 # #----------------------------#
 # #     Tolerance Settings     #

@@ -8,12 +8,12 @@ Created on Fri Jan 31 16:42:11 2025
 
 # # Append Python path to add AUTO functions
 # import sys
-# sys.path.append('/Users/jnga773/auto/07p/python')
-# sys.path.append('/Users/jnga773/auto/07p/python/auto')
+# sys.path.append('$HOME/auto/07p/python')
+# sys.path.append('$HOME/auto/07p/python/auto')
 
 # Load extra functions
 import auto
-import data_functions as data_funcs
+import continuation_scripts.data_functions as data_funcs
 
 # %%
 #==============================================================================#
@@ -51,7 +51,7 @@ print('Run name: {}'.format(run_new_str))
 #     Run AUTO Continuation     #
 #-------------------------------#
 # # Copy continuation script
-auto.copy('./constant_files/', 'initial_EP')
+auto.copy('./continuation_scripts/', 'initial_EP')
 
 # Run the first continuation from the initial equilibrium point
 run_new = auto.run(x0, PAR=p0, c='initial_EP')
@@ -230,7 +230,7 @@ x_init_PO, p_PO, pnames_PO = data_funcs.calc_initial_solution_PO(run_old(label_o
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./constant_files/', 'initial_PO')
+auto.copy('./continuation_scripts/', 'initial_PO')
 
 # Run continuation
 run_new = auto.run(x_init_PO, PAR=p_PO, parnames=pnames_PO,
@@ -289,7 +289,7 @@ x_init_VAR, p_VAR, pnames_VAR = data_funcs.calc_initial_solution_VAR(run_old(lab
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./constant_files/', 'floquet_variational')
+auto.copy('./continuation_scripts/', 'floquet_variational')
 
 # Run continuation
 run_new = auto.run(x_init_VAR, PAR=p_VAR, parnames=pnames_VAR,
@@ -389,10 +389,13 @@ print('Run name: {}'.format(run_new_str))
 #     Read Data     #
 #-------------------#
 # Set initial phase resetting parameters
-from numpy import pi
-k = 25
-theta_perturb = 0.5 * pi
+# Periodicity
+k = 50
 
+# Perturbation direction
+from numpy import pi
+theta_perturb = 0.0
+# theta_perturb = 0.5 * pi
 
 # Calculate initial solution
 x_init_PR, p_PR, pnames_PR = \
@@ -404,14 +407,11 @@ x_init_PR, p_PR, pnames_PR = \
 # Set saved points
 from numpy import linspace, concatenate
 
-# # Saved points for large scan of G perturbation
-# SP_points = concatenate((linspace(0.0, 0.25, 25), linspace(0.30, 2.0, 25)))
-
-# Saved points for large scan of I perturbation
-SP_points = concatenate((linspace(0.0, 1.0, 35), linspace(0.30, 25.0, 35)))
+# Saved points for large scan of G perturbation
+SP_points = concatenate((linspace(0.0, 0.25, 25), linspace(0.30, 2.0, 25)))
 
 # Copy continuation script
-auto.copy('./constant_files/', 'PTC_initial')
+auto.copy('./continuation_scripts/', 'PTC_initial')
 
 # Try set up phase reset calculation lol
 run_new = auto.run(x_init_PR, PAR=p_PR, parnames=pnames_PR,

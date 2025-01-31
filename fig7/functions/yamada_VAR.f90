@@ -350,16 +350,7 @@ SUBROUTINE FUNC(NDIM, U, ICP, PAR, IJAC, F_out, DFDU, DFDP)
   ! State space variables
   x_vec = U(1 : xdim)
 
-  IF (NDIM .EQ. 4*xdim) THEN
-    ! Periodic orbit and equilibrium point continuation.
-    ! x0
-    x0    = U(xdim+1 : 2*xdim)
-    ! xneg
-    xneg  = U(2*xdim+1 : 3*xdim)
-    ! x0
-    xpos  = U(3*xdim+1 : 4*xdim)
-
-  ELSE IF (NDIM .EQ. 2*xdim) THEN
+  IF (NDIM .EQ. 2*xdim) THEN
     ! Variational problem continuation
     ! Perpendicular vector variables
     w_vec = U(xdim+1 : 2*xdim)
@@ -384,23 +375,7 @@ SUBROUTINE FUNC(NDIM, U, ICP, PAR, IJAC, F_out, DFDU, DFDP)
   ! Multiply by period
   F_out(1 : xdim) = T * vec_field
 
-  IF (NDIM .EQ. 4*xdim) THEN
-    !----------------------------!
-    !     Equilibrium Points     !
-    !----------------------------!
-    ! x0
-    CALL FIELD(x0, PAR, vec_field)
-    F_out(xdim+1 : 2*xdim) = vec_field
-
-    ! xneg
-    CALL FIELD(xneg, PAR, vec_field)
-    F_out(2*xdim+1 : 3*xdim) = vec_field
-
-    ! xpos
-    CALL FIELD(xpos, PAR, vec_field)
-    F_out(3*xdim+1 : 4*xdim) = vec_field
-
-  ELSE IF (NDIM .EQ. 2*xdim) THEN
+  IF (NDIM .EQ. 2*xdim) THEN
     !-----------------------------!
     !     Variational Problem     !
     !-----------------------------!
@@ -494,20 +469,7 @@ SUBROUTINE BCND(NDIM, PAR, ICP, NBC, U0, U1, FB, IJAC, DBC)
   x0_vec = U0(1 : xdim)
   x1_vec = U1(1 : xdim)
 
-  IF (NDIM .EQ. 4*xdim) THEN
-    ! Equilibrium point: x0
-    x0_0   = U0(xdim+1 : 2*xdim)
-    x0_1   = U1(xdim+1 : 2*xdim)
-
-    ! Equilibrium point: xneg
-    xneg_0 = U0(2*xdim+1 : 3*xdim)
-    xneg_1 = U1(2*xdim+1 : 3*xdim)
-
-    ! Equilibrium point: xpos
-    xpos_0 = U0(3*xdim+1 : 4*xdim)
-    xpos_1 = U1(3*xdim+1 : 4*xdim)
-
-  ELSE IF (NDIM .EQ. 2*xdim) THEN
+  IF (NDIM .EQ. 2*xdim) THEN
     ! Variational problem: Perpeindicular vectors
     w0_vec = U0(xdim+1 : 2*xdim)
     w1_vec = U1(xdim+1 : 2*xdim)
@@ -523,20 +485,7 @@ SUBROUTINE BCND(NDIM, PAR, ICP, NBC, U0, U1, FB, IJAC, DBC)
   ! Boundary condition encoding
   CALL BCS_PO(x0_vec, x1_vec, PAR, FB(1:xdim+1))
 
-  IF (NDIM .EQ. 4*xdim) THEN
-    !----------------------------!
-    !     Equilibrium Points     !
-    !----------------------------!
-    ! x0
-    CALL BCS_EP(x0_0, x0_1, PAR, FB(xdim+2 : 2*xdim+1))
-
-    ! xneg
-    CALL BCS_EP(xneg_0, xneg_1, PAR, FB(2*xdim+2 : 3*xdim+1))
-
-    ! xpos
-    CALL BCS_EP(xpos_0, xpos_1, PAR, FB(3*xdim+2 : 4*xdim+1))
-  
-  ELSE IF (NDIM .EQ. 2*xdim) THEN
+  IF (NDIM .EQ. 2*xdim) THEN
     !-----------------------------!
     !     Variational Problem     !
     !-----------------------------!
@@ -619,74 +568,6 @@ SUBROUTINE BCS_PO(U0, U1, PAR, FB)
   FB(xdim+1)   = vec_field(1)
 
 END SUBROUTINE BCS_PO
-
-SUBROUTINE BCS_EP(U0, U1, PAR, FB)
-  ! Boundary conditions for a stationary point:
-  !                 F(x(0)) = 0.
-  !
-  ! Input
-  ! ----------
-  ! U0   : REAL(KIND=8), ARRAY
-  !     State variable values at the 'left' boundary
-  ! U1   : REAL(KIND=8), ARRAY
-  !     State variable values at the 'right' boundary
-  ! PAR  : REAL(KIND=8), ARRAY
-  !     Array of the equation parameters
-  !
-  ! Output
-  ! ----------
-  ! FB   : REAL(KIND=8), ARRAY
-  !     The value of the boundary condition functions
-
-  !============================================================================!
-  !                   DEFINING AND DECLARING VARIABLES/ARRAYS                  !
-  !============================================================================!
-  ! Import global variables
-  USE VECTOR_FIELD
-
-  IMPLICIT NONE
-
-  !-------------------------!
-  !     INPUT ARGUMENTS     !
-  !-------------------------!
-  ! Equation parameters.
-  REAL(KIND=8), INTENT(IN)    :: PAR(*)
-  ! State variable values at the 'left' boundary
-  REAL(KIND=8), INTENT(IN)    :: U0(xdim)
-  ! State variable values at the 'right' boundary
-  REAL(KIND=8), INTENT(IN)    :: U1(xdim)
-
-  !--------------------------!
-  !     OUTPUT ARGUMENTS     !
-  !--------------------------!
-  ! The value of the boundary condition functions
-  REAL(KIND=8), INTENT(OUT)   :: FB(xdim)
-
-  !---------------------------!
-  !     SUBROUTINE THINGS     !
-  !---------------------------!
-  ! The vector field
-  REAL(KIND=8)                :: vec_field(xdim)
-  ! State vector
-  REAL(KIND=8)                :: x0_vec(xdim), x1_vec(xdim)
-
-  !============================================================================!
-  !                              INPUT PARAMETERS                              !
-  !============================================================================!
-  ! State space variables
-  x0_vec = U0(1 : xdim)
-  x1_vec = U1(1 : xdim)
-
-  !============================================================================!
-  !                        BOUNDARY CONDITION ENCODING                         !
-  !============================================================================!
-  ! Calculate the vector field
-  CALL FIELD(x0_vec, PAR, vec_field)
-
-  ! Periodic boundary conditions: x(0) - x(1) = 0
-  FB(1 : xdim) = vec_field
-
-END SUBROUTINE BCS_EP
 
 SUBROUTINE BCS_FLOQUET(U0, U1, PAR, FB)
   ! Boundary conditions for the Floquet multipliers with the adjoint equation

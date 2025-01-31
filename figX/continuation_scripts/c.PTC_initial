@@ -7,9 +7,6 @@
 # Equation file
 e = './functions/yamada_PR'
 
-# Initial solution data file
-dat = './data_mat/initial_solution_PR'
-
 # Problem type
 IPS = 4
 # Set branching switching (1=off, -1=branch switch, 2=LP or HB).
