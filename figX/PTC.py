@@ -5,7 +5,7 @@
 
 # Load extra functions
 import auto
-import continuation_scripts.data_functions as data_funcs
+import data_functions as data_funcs
 import continuation_scripts.old_functions as old_functions
 
 #==============================================================================#
@@ -27,6 +27,12 @@ import continuation_scripts.old_functions as old_functions
 #------------------#
 # This run name
 run_new_str = 'run01_phase_reset_perturbation'
+# Previous run name
+run_old_str = 'run07_floquet_wnorm'
+run_old = data_funcs.bd_read(run_old_str)
+# Previous solution label
+label_old = run_old('UZ1')
+label_old = label_old['LAB']
 
 # Print to console
 print('~~~ Phase Reset: First Run ~~~')
@@ -36,64 +42,15 @@ print('Run name: {}'.format(run_new_str))
 #-------------------#
 #     Read Data     #
 #-------------------#
-# Define function for reading previous parameters and setting phase resetting
-# parameters
-def set_parameters_PR():
-    from scipy.io import loadmat
-    # Read Floquet data
-    data_floquet = loadmat('./data_mat/floquet_solution.mat')
-    
-    # Read parameters
-    gamma = data_floquet['gamma'].item()
-    A     = data_floquet['A'].item()
-    B     = data_floquet['B'].item()
-    a     = data_floquet['a'].item()
-    T     = data_floquet['T'].item()
-    mu_s  = data_floquet['mu_s'].item()
+# Set initial phase resetting parameters
+from numpy import pi
+k = 25
+theta_perturb = 0.5 * pi
 
-    #----------------------------#
-    #     Initial Parameters     #
-    #----------------------------#
-    from numpy import pi
 
-    # Integer for period
-    k             = 50
-    # \theta_old (where perturbation starts)
-    theta_old     = 1.0
-    # \theta_new (where segment comes back to \Gamma)
-    theta_new     = 1.0
-    # Distance from perturbed segment to \Gamma
-    eta           = 0.0
-    # Size of perturbation
-    A_perturb     = 0.0
-    # Angle at which perturbation is applied?
-    # theta_perturb = 0.0
-    theta_perturb = 0.5 * pi
-    # Azimuthal angle at which perturbation is applied?
-    phi_perturb   = 0.0
-
-    #----------------#
-    #     Output     #
-    #----------------#
-    # Parameter vector
-    p_out = { 1: gamma, 2: A, 3: B, 4: a,
-              5: T, 6: k, 7: theta_old, 8: theta_new,
-              9: mu_s, 10: eta,
-             11: A_perturb, 12: theta_perturb, 13: phi_perturb}
-    
-    # Parameter names
-    pnames_out = { 1: 'gamma', 2: 'A', 3: 'B', 4: 'a',
-                   5: 'T', 6: 'k', 7: 'theta_old', 8: 'theta_new',
-                   9: 'mu_s', 10: 'eta',
-                  11: 'A_perturb', 12: 'theta_perturb', 13: 'phi_perturb'}
-    
-    return p_out, pnames_out
-
-# Read parameters from previous run
-par_PR, pnames_PR = set_parameters_PR()
-
-# Calculate and write initial solution from previous run
-old_functions.write_initial_solution_phase_reset(par_PR[6])
+# Calculate initial solution
+x_init_PR, p_PR, pnames_PR = \
+    data_funcs.calc_initial_solution_PR(run_old(label_old), k, theta_perturb)
 
 #-------------------------------#
 #     Run AUTO Continuation     #
@@ -119,9 +76,14 @@ SP_points = concatenate((linspace(0.0, 0.25, 25), linspace(0.30, 2.0, 25)))
 auto.copy('./constant_files/', 'PTC_initial')
 
 # Try set up phase reset calculation lol
-run_new = auto.run(c='PTC_initial', PAR=par_PR, parnames=pnames_PR,
-                   NMX=2000,
-                   NTST=par_PR[6] * 60,
+# run_new = auto.run(x_init_PR, PAR=p_PR, parnames=pnames_PR,
+#                    c='PTC_initial',
+#                    NMX=2000, NTST=p_PR[6] * 50,
+#                    UZR={'A_perturb': SP_points},
+#                    UZSTOP={'A_perturb': max(SP_points) + 0.1})
+run_new = auto.run(dat='./data_mat/initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
+                   c='PTC_initial',
+                   NMX=2000, NTST=p_PR[6] * 50,
                    UZR={'A_perturb': SP_points},
                    UZSTOP={'A_perturb': max(SP_points) + 0.1})
 
