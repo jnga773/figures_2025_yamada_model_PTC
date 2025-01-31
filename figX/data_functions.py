@@ -371,39 +371,39 @@ def calc_initial_solution_PR(sol_in, k_in, theta_in):
     x_seg4 = [x1_period, x2_period, x3_period]
     x_seg4 = array(x_seg4).T
 
-    filename_data = './data_mat/initial_solution_PR.dat'
-    with open(filename_data, 'w') as file_data:
-        for i in range(len(t_seg)):
-            # Break up each column section into separate pieces
+    # filename_data = './data_mat/initial_solution_PR.dat'
+    # with open(filename_data, 'w') as file_data:
+    #     for i in range(len(t_seg)):
+    #         # Break up each column section into separate pieces
 
-            # Time
-            t_write    = "{:>15.10f}".format(t_seg[i])
-            # Segment 1
-            seg1_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f} \t"
-                          "{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
-                          ).format(x_seg1[i, 0], x_seg1[i, 1], x_seg1[i, 2],
-                                   x_seg1[i, 3], x_seg1[i, 4], x_seg1[i, 5])
-            # Segment 2
-            seg2_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f} \t"
-                          "{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
-                          ).format(x_seg2[i, 0], x_seg2[i, 1], x_seg2[i, 2],
-                                   x_seg2[i, 3], x_seg2[i, 4], x_seg2[i, 5])
-            # Segment 3
-            seg3_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
-                          ).format(x_seg3[i, 0], x_seg3[i, 1], x_seg3[i, 2])
-            # Segment 4
-            seg4_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
-                          ).format(x_seg4[i, 0], x_seg4[i, 1], x_seg4[i, 2])
+    #         # Time
+    #         t_write    = "{:>15.10f}".format(t_seg[i])
+    #         # Segment 1
+    #         seg1_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f} \t"
+    #                       "{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
+    #                       ).format(x_seg1[i, 0], x_seg1[i, 1], x_seg1[i, 2],
+    #                                x_seg1[i, 3], x_seg1[i, 4], x_seg1[i, 5])
+    #         # Segment 2
+    #         seg2_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f} \t"
+    #                       "{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
+    #                       ).format(x_seg2[i, 0], x_seg2[i, 1], x_seg2[i, 2],
+    #                                x_seg2[i, 3], x_seg2[i, 4], x_seg2[i, 5])
+    #         # Segment 3
+    #         seg3_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
+    #                       ).format(x_seg3[i, 0], x_seg3[i, 1], x_seg3[i, 2])
+    #         # Segment 4
+    #         seg4_write = ("{:>15.10f} \t {:>15.10f} \t {:>15.10f}"
+    #                       ).format(x_seg4[i, 0], x_seg4[i, 1], x_seg4[i, 2])
 
-            # Total string
-            str_write = ("{} \t {} \t {} \t {} \t {} \n"
-                         ).format(t_write, seg1_write, seg2_write, seg3_write, seg4_write)
+    #         # Total string
+    #         str_write = ("{} \t {} \t {} \t {} \t {} \n"
+    #                      ).format(t_write, seg1_write, seg2_write, seg3_write, seg4_write)
             
-            # Write to file
-            file_data.write(str_write)
+    #         # Write to file
+    #         file_data.write(str_write)
 
-    # Close file
-    file_data.close()
+    # # Close file
+    # file_data.close()
 
     #----------------#
     #     Output     #
@@ -420,7 +420,7 @@ def calc_initial_solution_PR(sol_in, k_in, theta_in):
                   x1_extended, x2_extended, x3_extended,
                   # Segment '4'
                   x1_period, x2_period, x3_period]
-    # x_init_out = array(x_init_out, dtype='float')
+    x_init_out = array(x_init_out, dtype='float')
 
     # Parameter vector
     p_out = { 1: gamma, 2: A, 3: B, 4: a,
