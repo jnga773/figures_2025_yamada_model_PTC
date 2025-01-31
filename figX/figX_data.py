@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jan 31 16:42:11 2025
+
+@author: jnga773
+"""
 # # Append Python path to add AUTO functions
 # import sys
 # sys.path.append('/Users/jnga773/auto/07p/python')
@@ -5,9 +12,7 @@
 
 # Load extra functions
 import auto
-import continuation_scripts.data_functions as data_funcs
-import continuation_scripts.old_functions as old_functions
-import continuation_scripts.continuation_scripts as cont
+import data_functions as data_funcs
 
 #==============================================================================#
 ##                            INITIAL CONTINUATION                            ##
@@ -24,7 +29,6 @@ p0 = {1: gamma, 2: A, 3: B, 4: a}
 # Initial solution is the 'off' state
 x0 = [A, B, 0]
 
-# %%
 #------------------------------------------------------------------------------#
 #                           Compute Equilibrium Point                          #
 #------------------------------------------------------------------------------#
@@ -218,7 +222,7 @@ print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 #     Read Data     #
 #-------------------#
 # Calculate initial solution from previous run
-x_init_PO, p_PO, pnames_PO = cont.calc_initial_solution_PO(run_old(label_old))
+x_init_PO, p_PO, pnames_PO = data_funcs.calc_initial_solution_PO(run_old(label_old))
 
 #-------------------------------#
 #     Run AUTO Continuation     #
@@ -277,7 +281,7 @@ print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 #     Read Data     #
 #-------------------#
 # Calculate initial solution from previous run
-x_init_VAR, p_VAR, pnames_VAR = cont.calc_initial_solution_VAR(run_old(label_old))
+x_init_VAR, p_VAR, pnames_VAR = data_funcs.calc_initial_solution_VAR(run_old(label_old))
 
 #-------------------------------#
 #     Run AUTO Continuation     #
@@ -287,7 +291,7 @@ auto.copy('./constant_files/', 'floquet_variational')
 
 # Run continuation
 run_new = auto.run(x_init_VAR, PAR=p_VAR, parnames=pnames_VAR,
-                   c='floquet_variational',
+                   c='floquet_variational', NPR=50,
                    DSMIN=1e-4, DS=1e-4, DSMAX=1e-3)
 
 #-------------------#
@@ -340,7 +344,7 @@ run_new = auto.run(run_old(label_old), LAB=1,
 #     Save Data     #
 #-------------------#
 # Save solution to MATLAB .mat file
-old_functions.save_floquet_data_matlab(run_new('UZ1'))
+# old_functions.save_floquet_data_matlab(run_new('UZ1'))
 
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)

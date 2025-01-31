@@ -7,9 +7,6 @@
 # Equation file
 e = './functions/yamada_VAR'
 
-# Data file for initial solution
-dat = './data_mat/initial_solution_VAR'
-
 # Set initial solution number to 0
 IRS = 0
 # Problem type

@@ -116,7 +116,7 @@ SP_points = concatenate((linspace(0.0, 0.25, 25), linspace(0.30, 2.0, 25)))
 #              12.0, 14.0, 16.0, 18.0, 20.0]
 
 # Copy continuation script
-auto.copy('./continuation_scripts/', 'PTC_initial')
+auto.copy('./constant_files/', 'PTC_initial')
 
 # Try set up phase reset calculation lol
 run_new = auto.run(c='PTC_initial', PAR=par_PR, parnames=pnames_PR,
