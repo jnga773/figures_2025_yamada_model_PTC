@@ -795,10 +795,10 @@ coco(prob, run_new, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_per
 %     Save Data     %
 %-------------------%
 % Save data for Figure 3
-save_fig3_data(run_new, '../plot_mat_files/fig3_data.mat');
+save_fig3_data(run_new, './fig3_data.mat');
 
 % Save data for Figure 4
-save_fig4_data(run_new, '../plot_mat_files/fig4_data.mat');
+save_fig4_data(run_new, './fig4_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %

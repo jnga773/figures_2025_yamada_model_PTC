@@ -8,7 +8,7 @@ clear all; close all; clc;
 %     Read Data from .mat File     %
 %----------------------------------%
 % Read from data structure file
-load('../plot_mat_files/fig3_data.mat');
+load('./fig3_data.mat');
 
 % %------------------------------------------%
 % %     Read Initial Periodic Orbit Data     %

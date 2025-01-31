@@ -751,7 +751,7 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 % %     Save Data     %
 % %-------------------%
 % % Save data for Figure 6
-% save_fig6_data(run_new, '../plot_mat_files/fig5_data.mat');
+% save_fig6_data(run_new, './fig5_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %

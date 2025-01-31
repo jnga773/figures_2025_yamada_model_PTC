@@ -3,10 +3,8 @@ clear all; close all; clc;
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
-% Read data from initial periodic orbit data .mat file
-filename_data = './data_files/initial_PO.mat';
 % Load data
-load(filename_data);
+load('./fig6_data.mat');
 
 %%
 %-------------------------------------------------------------------------%
