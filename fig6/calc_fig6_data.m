@@ -599,7 +599,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %     Read Data     %
 %-------------------%
 % Set periodicity
-k = 25;
+k = 35;
 
 % Set perturbation direction
 theta_perturb = 0.0;
@@ -646,10 +646,10 @@ prob = coco_set(prob, 'cont', 'al_max', 25);
 % where 'k' is an integer. This is the perturbed segment, that may have to
 % orbit the unperturbed periodic orbit many times before "resetting". Hence
 % we have set the NTST for this segment (NTST(4)) as k * 50.
-NTST(1) = 25;
+NTST(1) = 35;
 NTST(2) = 10;
 NTST(3) = 10;
-NTST(4) = 25 * k;
+NTST(4) = 35 * k;
 
 prob = coco_set(prob, 'seg1.coll', 'NTST', NTST(1));
 prob = coco_set(prob, 'seg2.coll', 'NTST', NTST(2));
@@ -694,7 +694,7 @@ prob = apply_PR_boundary_conditions(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.05, 0.1, 0.3, 0.55, 1.0, 1.5, 2.0];
+SP_values = [0.05, 0.1, 0.2, 0.55, 1.0, 1.5, 2.0];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -714,7 +714,7 @@ bdtest = coco(prob, run_new, [], 1, ...
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_transition_curve = 'run10_phase_reset_PTC_scan';
+run_names.phase_transition_curve = 'run09_phase_reset_PTC_scan';
 run_new = run_names.phase_transition_curve;
 % Which run this continuation continues from
 run_old = run_names.phase_reset_perturbation;
@@ -728,30 +728,30 @@ fprintf('Calculate phase transition curve \n');
 fprintf('Run name: %s \n', run_new);
 fprintf('Continuing from SP points in run: %s \n', run_old);
 
-% %---------------------------------%
-% %     Cycle through SP labels     %
-% %---------------------------------%
-% % Set number of threads
-% M = 6;
-% parfor (run = 1 : length(label_old), M)
-%   % Label for this run
-%   this_run_label = label_old(run);
-% 
-%   % Data directory for this run
-%   fprintf('\n Continuing from point %d in run: %s \n', this_run_label, run_old);
-% 
-%   this_run_name = {run_new; sprintf('run_%02d', run)};
-% 
-%   % Run continuation
-%   PTC_scan_A_perturb(this_run_name, run_old, this_run_label, data_PR, bcs_funcs);
-% 
-% end
-% 
-% %-------------------%
-% %     Save Data     %
-% %-------------------%
-% % Save data for Figure 6
-% save_fig6_data(run_new, './fig5_data.mat');
+%---------------------------------%
+%     Cycle through SP labels     %
+%---------------------------------%
+% Set number of threads
+M = 6;
+parfor (run = 1 : length(label_old), M)
+  % Label for this run
+  this_run_label = label_old(run);
+
+  % Data directory for this run
+  fprintf('\n Continuing from point %d in run: %s \n', this_run_label, run_old);
+
+  this_run_name = {run_new; sprintf('run_%02d', run)};
+
+  % Run continuation
+  PTC_scan_A_perturb(this_run_name, run_old, this_run_label, data_PR, bcs_funcs);
+
+end
+
+%-------------------%
+%     Save Data     %
+%-------------------%
+% Save data for Figure 6
+save_fig6_data(run_new, './fig6_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %
