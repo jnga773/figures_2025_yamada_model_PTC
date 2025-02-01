@@ -6,6 +6,18 @@ close all; clear all; clc
 % Load data
 load('./fig6_data.mat');
 
+% Data indices to plot
+% plot_idx = 1:4;
+plot_idx = 4:7;
+
+% Default line colours
+colours = colororder();
+
+% Plot colours
+plot_colours = {colours(2, :), colours(4, :), colours(5, :), ...
+                colours(6, :), ...
+                colours(7, :), colours(8, :), colours(9, :)};
+
 %-------------------------------------------------------------------------%
 %%                               Plot Data                               %%
 %-------------------------------------------------------------------------%
@@ -56,18 +68,14 @@ patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), FaceAlpha=0.2, ...
 % Linewidth
 lw = 1.5;
 
-% Plot indices
-plot_idx = [8, 9, 11, 13];
-plot_colours = {colours(6, :), colours(7, :), colours(8, :), colours(9, :)};
-
 % Plot all PTCs
 for i = 1 : length(plot_idx)
   idx = plot_idx(i);
+
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot
-  plot(ax, theta_old_lt1{idx}, theta_new_lt1{idx}, Color=plot_colours{i}, LineStyle='-');
-  plot(ax, theta_old_gt1{idx}, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
+  plot(ax, theta_old{idx}, theta_new{idx}, Color=plot_colours{idx}, LineStyle='-');
 end
 
 %-------------------%
@@ -90,8 +98,11 @@ ax.YAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
 %     Axis Tick Labels     %
 %--------------------------%
 % Turn off all axis labels
-ax.XAxis.TickLabels = {};
-ax.YAxis.TickLabels = {};
+% ax.XAxis.TickLabels = {};
+% ax.YAxis.TickLabels = {};
+
+xlabel(ax, '$\theta_{\mathrm{o}}$');
+ylabel(ax, '$\theta_{\mathrm{n}}$');
 
 %---------------------%
 %     Axis Limits     %
@@ -110,4 +121,4 @@ box(ax, 'on');
 %----------------------%
 % Filename
 filename_out = '../images/pdf/fig7b_G_PTCs.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');

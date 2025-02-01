@@ -13,10 +13,11 @@ function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bc
 
   % Set tolerance
   % prob = coco_set(prob, 'corr', 'TOL', 5e-7);
+  
   % Set step sizes
-  % prob = coco_set(prob, 'cont', 'h_min', 5e-2);
-  % prob = coco_set(prob, 'cont', 'h0', 1e-1);
-  prob = coco_set(prob, 'cont', 'h_max', 1e1);
+  prob = coco_set(prob, 'cont', 'h_min', 5e-2);
+  prob = coco_set(prob, 'cont', 'h0', 1e-1);
+  prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
   % Set adaptive meshR
   prob = coco_set(prob, 'cont', 'NAdapt', 10);
@@ -24,8 +25,8 @@ function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bc
   % Set number of steps
   prob = coco_set(prob, 'cont', 'PtMX', 750);
 
- % Set norm to int
- prob = coco_set(prob, 'cont', 'norm', inf);
+  % Set norm to int
+  prob = coco_set(prob, 'cont', 'norm', inf);
 
   % Set MaxRes and al_max
   prob = coco_set(prob, 'cont', 'MaxRes', 10);

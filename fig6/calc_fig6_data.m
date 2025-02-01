@@ -599,7 +599,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %     Read Data     %
 %-------------------%
 % Set periodicity
-k = 35;
+k = 30;
 
 % Set perturbation direction
 theta_perturb = 0.0;
@@ -615,9 +615,9 @@ data_PR = calc_PR_initial_conditions(run_old, label_old, k, theta_perturb, phi_p
 prob = coco_prob();
 
 % Set step sizes
-% prob = coco_set(prob, 'cont', 'h_min', 5e-5);
-% prob = coco_set(prob, 'cont', 'h0', 1e-3);
-% prob = coco_set(prob, 'cont', 'h_max', 1e1);
+prob = coco_set(prob, 'cont', 'h_min', 5e-5);
+prob = coco_set(prob, 'cont', 'h0', 1e-3);
+prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive mesh
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
@@ -646,10 +646,10 @@ prob = coco_set(prob, 'cont', 'al_max', 25);
 % where 'k' is an integer. This is the perturbed segment, that may have to
 % orbit the unperturbed periodic orbit many times before "resetting". Hence
 % we have set the NTST for this segment (NTST(4)) as k * 50.
-NTST(1) = 35;
+NTST(1) = 30;
 NTST(2) = 10;
 NTST(3) = 10;
-NTST(4) = 35 * k;
+NTST(4) = 30 * k;
 
 prob = coco_set(prob, 'seg1.coll', 'NTST', NTST(1));
 prob = coco_set(prob, 'seg2.coll', 'NTST', NTST(2));

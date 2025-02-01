@@ -4,15 +4,24 @@ clear all; close all; clc;
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
 % Load data
+load('./fig2_data.mat', 'Wq_s');
 load('./fig6_data.mat');
+
+% List of perturbations to plot
+A_perturb_plot = A_perturb(1:4);
+A_perturb_plot = A_perturb(4:end);
+
+% Default line colours
+colours = colororder();
+
+% Plot colours
+% plot_colours = {colours(2, :), colours(4, :), colours(5, :), colours(6, :)};
+plot_colours = {colours(6, :), colours(7, :), colours(8, :), colours(9, :)};
 
 %%
 %-------------------------------------------------------------------------%
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
-% Default line colours
-colours = colororder();
-
 % Setup figure
 fig = figure(1); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
@@ -60,14 +69,10 @@ plot3(ax, xpos(1), xpos(2), xpos(3), Marker='o', MarkerSize=7.5, LineStyle='none
 %----------------------------%
 %     Plot: Perturbation     $
 %----------------------------%
-% List of perturbations
-A_p = [0.05, 0.1, 0.3, 0.55];
-
-plot_colours = {colours(2, :), colours(4, :), colours(5, :), colours(6, :)};
 lw = 1.0;
 
-for i = 1 : length(A_p)
-  plot3(ax, smooth(xbp_PO(:, 1)+A_p(i)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)), ...
+for i = 1 : length(A_perturb_plot)
+  plot3(ax, smooth(xbp_PO(:, 1)+A_perturb_plot(i)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)), ...
         Color=plot_colours{i}, LineStyle='-', LineWidth=lw)%, ...
         % Marker='none', MarkerFaceColor=colour(1:3), MarkerEdgeColor=colour(1:3));
 end
@@ -135,8 +140,4 @@ view(45, 6.0);
 %     Save Figure     %
 %---------------------%
 filename_out = '../images/pdf/fig6a_phase_portrait.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
-% saveas(fig, filename_out, 'svg');
-% exportgraphics(fig, filename_out, 'ContentType', 'vector', 'Units', 'centimeters')
-% export_fig(filename_out, '-pdf', fig);
-% plot2svg(filename_out);
+% exportgraphics(fig, filename_out, ContentType='vector');

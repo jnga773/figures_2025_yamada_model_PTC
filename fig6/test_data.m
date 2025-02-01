@@ -5,7 +5,7 @@ close all; clear all; clc
 %     Read Data: Folders     %
 %----------------------------%
 % Run name string identifier
-run_name = 'run10_phase_reset_PTC_scan';
+run_name = 'run09_phase_reset_PTC_scan';
 % Folder name
 dir_data = sprintf('./data/%s/', run_name);
 % List all directories
@@ -127,7 +127,7 @@ lw = 1.5;
 hold(ax, 'on');
 
 % Plotting index
-plot_idx = 3 ;
+plot_idx = 7;
 plot(ax, theta_old{plot_idx}, theta_new{plot_idx}, LineStyle='-');
 
 % for plot_idx = 1 : length(A_perturb)
