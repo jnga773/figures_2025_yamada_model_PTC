@@ -7,7 +7,7 @@ clear all;
 %-------------------%
 %     Read Data     %
 %-------------------%
-mat_file = './data_mat/PTC_scan.mat';
+mat_file = '../data_files/PTC_scan.mat';
 % Load data from .mat
 load(mat_file);
 

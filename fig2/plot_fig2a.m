@@ -7,7 +7,7 @@ clear all; close all; clc;
 %----------------------------------%
 %     Read Data from .mat File     %
 %----------------------------------%
-load('./fig2_data.mat');
+load('../data_files/fig2_data.mat');
 
 % %----------------------------------%
 % %     Read Data from COCO Data     %

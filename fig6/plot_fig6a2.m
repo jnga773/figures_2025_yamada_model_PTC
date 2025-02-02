@@ -4,11 +4,14 @@ clear all; close all; clc;
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
 % Load data
-load('./fig2_data.mat', 'Wq_s');
-load('./fig6_data.mat');
+load('../data_files/fig6_data.mat');
+
+% Load data
+load('../data_files/fig2_data.mat', 'Wq_s');
+load('../data_files/fig6_data.mat');
 
 % List of perturbations to plot
-A_perturb_plot = A_perturb(1:4);
+% A_perturb_plot = A_perturb(1:4);
 A_perturb_plot = A_perturb(4:end);
 
 % Default line colours
@@ -22,6 +25,9 @@ plot_colours = {colours(6, :), colours(7, :), colours(8, :), colours(9, :)};
 %-------------------------------------------------------------------------%
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
+% Default line colours
+colours = colororder();
+
 % Setup figure
 fig = figure(1); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
@@ -87,6 +93,7 @@ ax.XAxis.Limits = [0.0, 6.0];
 ax.YAxis.Limits = [0.0, 4.0];
 ax.ZAxis.Limits = [0.0, 20];
 
+
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
@@ -134,10 +141,10 @@ ax.GridLineWidth = 0.5; ax.GridColor = 'black'; ax.GridAlpha = 0.25;
 
 % 3D plot view
 % view(45, 10.0);
-view(45, 6.0);
+view(45, 6);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../images/pdf/fig6a_phase_portrait.pdf';
+filename_out = '../images/pdf/fig7a_phase_portrait.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

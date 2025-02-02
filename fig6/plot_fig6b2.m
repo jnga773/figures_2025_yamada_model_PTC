@@ -4,11 +4,11 @@ close all; clear all; clc
 %%                               Read Data                               %%
 %-------------------------------------------------------------------------%
 % Load data
-load('./fig6_data.mat');
+load('../data_files/fig6_data.mat');
 
 % Data indices to plot
-plot_idx = 1:4;
-% plot_idx = 4:7;
+% plot_idx = 1:4;
+plot_idx = 4:7;
 
 % Default line colours
 colours = colororder();
@@ -30,6 +30,7 @@ fig.Name = 'PTC Scan';
 % Figure dimensions
 fig.Units = 'centimeters';
 fig.Position = [5, 5, 6, 12];
+% fig.Position = [3, 3, 2, 5.5];
 % fig.Position = [5, 5, 5, 10];
 
 % Figure pdf settings
@@ -97,8 +98,11 @@ ax.YAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
 %     Axis Tick Labels     %
 %--------------------------%
 % Turn off all axis labels
-ax.XAxis.TickLabels = {};
-ax.YAxis.TickLabels = {};
+% ax.XAxis.TickLabels = {};
+% ax.YAxis.TickLabels = {};
+
+xlabel(ax, '$\theta_{\mathrm{o}}$');
+ylabel(ax, '$\theta_{\mathrm{n}}$');
 
 %---------------------%
 %     Axis Limits     %
@@ -116,5 +120,5 @@ box(ax, 'on');
 %      Save Figure     %
 %----------------------%
 % Filename
-filename_out = '../images/pdf/fig6b_G_PTCs.pdf';
+filename_out = '../images/pdf/fig7b_G_PTCs.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

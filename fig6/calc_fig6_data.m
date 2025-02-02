@@ -751,7 +751,7 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 6
-save_fig6_data(run_new, './fig6_data.mat');
+save_fig6_data(run_new, '../data_files/fig6_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %

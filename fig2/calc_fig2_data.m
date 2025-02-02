@@ -663,7 +663,7 @@ label_plot = coco_bd_labs(coco_bd_read(run_new), '');
 label_plot = max(label_plot) - 1;
 
 % Save again as fig2_data
-save_fig2_data(run_new, label_plot, './fig2_data.mat');
+save_fig2_data(run_new, label_plot, '../data_files/fig2_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %
