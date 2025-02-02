@@ -404,11 +404,14 @@ x_init_PR, p_PR, pnames_PR = \
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Set saved points
-from numpy import linspace, concatenate
+from numpy import linspace, concatenate, unique
 
 # Saved points for large scan of I perturbation
-SP_points = concatenate((linspace(0.0, 1.0, 35), linspace(0.30, 25.0, 35)))
+SP_points = concatenate((linspace(0.0, 1.0, 20), 
+                         linspace(1.0, 10.0, 15),
+                         linspace(10.0, 13.0, 15),
+                         linspace(13.0, 25.0, 20)))
+SP_points = unique(SP_points)
 
 # Copy continuation script
 auto.copy('./continuation_scripts/', 'PTC_initial')
@@ -428,6 +431,93 @@ data_funcs.save_move_data(run_new, run_new_str)
 
 # Print clear line
 print('\n')
+
+# %%
+#------------------------------------------------------------------------------#
+##           Second Continuation: Phase Transition Curve (Multiple)           ##
+#------------------------------------------------------------------------------#
+# We then fix the perturbation amplitude A_perturb and free theta_old and
+# theta_new to compute the phase transition curve (PTC).
+
+#------------------#
+#     Run Name     #
+#------------------#
+# This run name
+run_new_str = 'run09_PTC_scan'
+# Previous run name
+run_old_str = 'run08_phase_reset_perturbation'
+run_old = data_funcs.bd_read(run_old_str)
+# Previous solution label
+label_old = run_old('UZ')
+label_old = [sol['LAB'] for sol in label_old[:-1]]
+
+# Print to console
+print('~~~ Phase Reset: Second Run ~~~')
+print('Compute phase transition curve (PTC)')
+print('Run name: {}'.format(run_new_str))
+print('Continuing from (Saved Points) in run: {}'.format(run_old_str))
+
+#--------------------------------------#
+#     Define Continuation Function     #
+#--------------------------------------#
+# Define function for parallelising
+def calculate_PTC(i):
+    """
+    Run PTC continuation run for label 'i' in run_old.
+    """
+    from numpy import arange
+    
+    # This label
+    this_label = label_old[i]
+
+    # Run string identifier
+    this_run = 'sol_' + str(i+1).zfill(3)
+
+    # Print run information
+    print('Continuing from point {} in run: {}'.format(this_label, run_old_str))
+    
+    # Set saved solutions for theta_old
+    SP_points = arange(0.1, 2.0, 0.1)
+    theta_old_stop = [0.0, 2.0]
+    theta_new_stop = [-1.0, 3.0]
+
+    # Run continuation
+    run_scan = auto.run(run_old(this_label), LAB=1,
+                        ICP=['theta_old', 'theta_new', 'eta', 'mu_s', 'T'],
+                        UZSTOP={'theta_old': theta_old_stop, 'theta_new': theta_new_stop},
+                        UZR={'theta_old': SP_points},
+                        DSMIN=1e-2, DS=1e-1, DSMAX=1e0,
+                        EPSL=1e-7, EPSU=1e-7, EPSS=1e-4,
+                        NMX=8000, NPR=100)
+    run_scan += auto.run(DS='-')
+    
+    #-------------------#
+    #     Save Data     #
+    #-------------------#
+    # Append runs and save data
+    run_scan = auto.relabel(run_scan)
+    # run_scan = auto.merge(run_scan)
+    
+    # Save data
+    data_funcs.save_move_data(run_scan, '{}/{}'.format(run_new_str, this_run))
+
+    # Print new line
+    print('\n')
+
+#--------------------------------------------#
+#     Run Continuation: Regular For Loop     #
+#--------------------------------------------#
+# Regular for loop run
+for i in range(len(label_old)):
+    # Run continuation
+    calculate_PTC(i)
+
+#--------------#
+#     Plot     #
+#--------------#
+# Save data
+import save_figX_data as data_PTC
+data_PTC.save_PTC_scan(run_new_str)
 
 # %%
 #==============================================================================#
