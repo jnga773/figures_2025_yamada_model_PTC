@@ -4,10 +4,17 @@ clear all; close all; clc;
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
-%----------------------------------%
-%     Read Data from .mat File     %
-%----------------------------------%
-load('../data_files/fig2_data.mat');
+% Read from data structure file
+load('../data_files/fig5_data.mat');
+
+%-------------------------%
+%     Read Parameters     %
+%-------------------------%
+% Print parameters to console
+fprintf('A_perturb = %.4f\n\n', A_perturb);
+
+fprintf('theta_old(1) = %.4f\n', theta_old_run1);
+fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
 
 %%
 %-------------------------------------------------------------------------%
@@ -23,35 +30,41 @@ fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 % Figure dimensions
 % fig.Units = 'centimeters';
 fig.Units = 'inches';
-fig.Position = [5, 5, 6, 6];
+fig.Position = [5, 5, 3.5, 3.5];
 
 % Figure pdf settings
 fig.PaperUnits = fig.Units;
 fig.PaperPosition = fig.Position;
 fig.PaperSize = fig.Position(3:4);
 
-% Axis setup
+% % Axis setup: Manual padding
+% ax = gca();
+% ax.Position = [0.01, 0.01, 0.98, 0.98];
+
+% Axis setup: Tiled layout
 tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
 ax = nexttile;
-ax.FontSize = 8;
 
-%--------------%
-%     Plot     %
-%--------------%
+% Set fontsizes
+ax.FontSize = 9;
+
+%------------------------------%
+%     Plot: Phase Portrait     %
+%------------------------------%
 % Hold axes
 hold(ax, 'on');
 
+% Plot segment 4
+plot(ax, xbp4_run2(:, 1), xbp4_run2(:, 3), Color=[0.0, 0.0, 0.0, 0.5], ...
+     LineWidth=1.0, DisplayName='Segment 4');
+
 % Plot original periodic orbit
-plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), Color=colours(3, :), ...
-      LineWidth=2.0);
+plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), Color=colours(3, :), ...
+     LineWidth=2.0, DisplayName='$\Gamma$');
 
 % Plot equilibrium point
-plot3(ax, xpos(1), xpos(2), xpos(3), Marker='diamond', MarkerSize=10, ...
-      MarkerFaceColor='r', MarkerEdgecolor='r');
-
-% Plot stable manifold
-plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
-      Color=colours(1, :), LineWidth=2.0);
+plot(ax, xpos(1), xpos(3), Marker='o', MarkerSize=4.0, LineStyle='none', ...
+      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 % Hold axes
 hold(ax, 'off');
@@ -59,58 +72,46 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.YAxis.Limits = [0.0, 4.0];
-ax.ZAxis.Limits = [0.0, 21];
+ax.XAxis.Limits = [0, 5];
+ax.YAxis.Limits = [-0.1, 20];
 
-%--------------------%
-%     Axis Ticks     %
-%--------------------%
-% X-Axis
+%------------------------------%
+%     Axis Ticks: Settings     %
+%------------------------------%
 ax.XAxis.TickDirection = 'in';
-ax.XAxis.TickValues = 0.0 : 2.0 : 6.0;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 0.0 : 1.0 : 6.0;
+ax.YAxis.TickDirection = 'in';
+ax.YAxis.MinorTick = 'on';
+
+%---------------------------------%
+%     Axis Ticks: ax1 and ax2     %
+%---------------------------------%
+% X-Axis
+ax.XAxis.TickValues = 0.0 : 1 : 5.0;
+ax.XAxis.MinorTickValues = 0.0 : 0.5 : 5.0;
 
 % Y-Axis
-ax.YAxis.TickDirection = 'in';
-ax.YAxis.TickValues = 0.0 : 2.0 : 4.0;
-ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.0 : 1.0 : 4.0;
-
-% Z-Axis
-ax.ZAxis.TickDirection = 'in';
-ax.ZAxis.TickValues = 0.0 : 5.0 : 20.0;
-ax.ZAxis.MinorTick = 'on';
-ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.YAxis.TickValues = 0.0 : 5 : 20.0;
+ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-ax.XAxis.Label.String = '$G$';
-ax.YAxis.Label.String = '$Q$';
-ax.ZAxis.Label.String = '$I$';
+xlabel(ax, '$G$');
+ylabel(ax, '$I$');
 
-% Turn off all axis labels
+% Turn off all tick labels
 % ax.XAxis.TickLabels = {};
 % ax.YAxis.TickLabels = {};
-% ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
-grid(ax, 'on');
-
-% Grid lines
-ax.GridLineWidth = 0.5; ax.GridColor = 'black'; ax.GridAlpha = 0.25;
-
-% 3D plot view
-% view(45, 10);
-view(45, 6);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../fig2a_phase_portrait.pdf';
+% filename_out = '../fig5a2.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

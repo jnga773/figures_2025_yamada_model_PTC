@@ -8,31 +8,6 @@ clear all; close all; clc;
 %----------------------------------%
 load('../data_files/fig2_data.mat');
 
-% %----------------------------------%
-% %     Read Data from COCO Data     %
-% %----------------------------------%
-% % Run string identifier
-% run_read = 'run05_initial_periodic_orbit';
-
-% % Read bd file
-% bd_read = coco_bd_read(run_read);
-
-% % Solution label to plot (take one less just in case MX)
-% label_read = max(coco_bd_labs(bd_read, '')) - 1;
-
-% %-----------------------------------%
-% %     Read Data: Periodic Orbit     %
-% %-----------------------------------%
-% % Read COCO solution
-% [sol_PO, data_PO] = coll_read_solution('PO_stable', run_read, label_read);
-
-% % State space solution
-% xbp_PO = sol_PO.xbp;
-% % Temporal solution
-% tbp_PO = sol_PO.tbp;
-% % Period
-% T_PO   = sol_PO.T;
-
 %------------------------%
 %    Add two periods     %
 %------------------------%
@@ -103,18 +78,17 @@ ax.YAxis.TickValues = 0.0 : 5.0 : 25.0;
 ax.YAxis.MinorTick = 'on';
 ax.YAxis.MinorTickValues = 0.0 : 2.5 : 25.0;
 
-%--------------------------%
-%     Axis Tick Labels     %
-%--------------------------%
-% % Turn off all axis labels
+%------------------------------%
+%     Axis and Tick Labels     %
+%------------------------------%
+% Axis labels
+ax.XAxis.Label.String = '$t / T_{\Gamma}$';
+ax.YAxis.Label.String = '$G / Q / I$';
+
+% Turn off all axis labels
 % ax.XAxis.TickLabels = {};
 % ax.YAxis.TickLabels = {};
-
-%---------------------%
-%     Axis Labels     %
-%---------------------%
-ax.XAxis.Label.String = '$t / T_{\Gamma}$';
-ax.YAxis.Label.String = '$G/Q/I$';
+% ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
