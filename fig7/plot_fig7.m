@@ -1,5 +1,5 @@
 % Clear stuff
-clear all;
+clear all; close all;
 
 %-------------------------------------------------------------------------%
 %%                             Read Data                                 %%
@@ -7,35 +7,66 @@ clear all;
 %-------------------%
 %     Read Data     %
 %-------------------%
-mat_file = '../data_files/PTC_scan.mat';
-% Load data from .mat
-load(mat_file);
+% Load big PTC scan data
+load('../data_files/fig7_data.mat');
 
 %--------------------------------%
 %     Coordinates for 'Hole'     %
 %--------------------------------%
-% % G-direction
-% intersection.theta_old = 0.3176;
-% intersection.A_perturb = 0.5576;
+% G-direction
+intersection.theta_old = 0.3176;
+intersection.A_perturb = 0.5576;
 
 % I-Direction
-intersection.theta_old = 0.4981;
-intersection.A_perturb = 4.0371;
+% intersection.theta_old = 0.4981;
+% intersection.A_perturb = 4.0371;
 
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
 %-------------------------------------------------------------------------%
+%-------------------%
+%     Colourmap     %
+%-------------------%
 % Plotting colours
 colours = colororder();
 
-fig = figure(5); clf;
-fig.Name = 'PTC Scans';
-fig.Units = 'inches'; fig.Position = [0, 0, 16, 8]; fig.PaperSize = [16, 8];
+n_colours_in = 2048;
+n_colours_out = 1024;
 
+% Get colour map
+colour_map = parula(n_colours_in);
+% Create a linear ramp the size of the colormap we actually want
+t = linspace(0,1,n_colours_out);
+% Apply whatever transform you like to the ramp
+t2 = t .^ 2;
+% Use that to scale the big linear colormap into the small stretched one.
+colour_map_transformed = colour_map(1+floor((n_colours_in-1)*t2'),:); 
+
+colormap(colour_map_transformed);
+
+%-------------------------%
+%     Figure Settings     %
+%-------------------------%
+fig = figure(1); clf;
+fig.Name = 'PTC Scans';
+
+% Figure dimensions
+fig.Units = 'centimeters';
+fig.Position = [3, 3, 8, 6.4];
+
+% Figure pdf settings
+fig.PaperUnits = fig.Units;
+fig.PaperPosition = fig.Position;
+fig.PaperSize = fig.Position(3:4);
+
+% Axis setup
 tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
 ax = nexttile;
-ax.FontSize = 11;
+ax.FontSize = 8;
 
+%-------------------%
+%     Hold Axis     %
+%-------------------%
 hold(ax, 'on');
 
 %-------------------------------------------------%
@@ -44,58 +75,46 @@ hold(ax, 'on');
 plot3(ax, [intersection.theta_old, intersection.theta_old], ...
      [intersection.A_perturb, intersection.A_perturb], ...
      [-5, 5], ...
-     Color='k', LineWidth=5.0, LineStyle='-');
+     Color='k', LineWidth=2.5, LineStyle='-');
 
-%-----------------------%
-%     Plot: 3D Plot     %
-%-----------------------%
-% % Plot: theta_old < 1
-% data_plot = data_before_hole;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
+%--------------------------%
+%     Plot: PTC Curves     %
+%--------------------------%
+% % Linewidth
+% lw = 1.5;
+% 
+% % Plot indices
+% plot_idx = [2, 4, 6, 8, ...
+%             9, 11, 13];
+% plot_colours = {colours(2, :), colours(4, :), colours(5, :), colours(6, :), ...
+%                 colours(7, :), colours(8, :), colours(9, :)};
+% 
+% % Plot all PTCs
+% for i = 1 : length(plot_idx)
+%   idx = plot_idx(i);
+%   fprintf('A_p = %.3f\n', A_perturb(idx));
+% 
+%   % theta_old plot data
+%   theta_old_lt1_plot = theta_old_lt1{idx};
+%   theta_old_gt1_plot = theta_old_gt1{idx};
+%   % theta_new plot data
+%   theta_new_lt1_plot = theta_new_lt1{idx};
+%   theta_new_gt1_plot = theta_new_gt1{idx};
+% 
+%   % A_perturb plot data
+%   A_plot1 = A_perturb(idx) * ones(length(theta_old_lt1{idx}));
+%   A_plot2 = A_perturb(idx) * ones(length(theta_old_gt1{idx}));
+% 
+%   if A_perturb(idx) < 0.2
+%     theta_new_lt1_plot = theta_new_lt1_plot + 1;
+%     theta_new_gt1_plot = theta_new_gt1_plot + 1;
+%   elseif A_perturb(idx) < 0.6
+%     theta_new_gt1_plot = theta_new_gt1_plot + 1;
+%   end
 % 
 %   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
-% end
-
-% data_plot = data_after_hole;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
-% 
-%   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
-% end
-
-% data_plot = data_hole_lt1;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
-% 
-%   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
-% end
-
-% data_plot = data_hole_gt1;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
-% 
-%   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
+%   plot3(ax, theta_old_lt1_plot, A_plot1, theta_new_lt1_plot, Color=plot_colours{i}, LineStyle='-');
+%   plot3(ax, theta_old_gt1_plot, A_plot2, theta_new_gt1_plot, Color=plot_colours{i}, LineStyle='-');
 % end
 
 %-----------------------%
@@ -103,40 +122,19 @@ plot3(ax, [intersection.theta_old, intersection.theta_old], ...
 %-----------------------%
 % Surface: Hole (theta_old < 1)
 [X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
-Z(end, end) = Z(end, end-1);
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: Hole (theta_old > 1)
 [X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
-surf(ax, X, Y, Z, MeshStyle='column');
+surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: Before hole
 [X, Y, Z] = pad_data(data_before_hole, 0, 'none');
-surf(ax, X, Y, Z, MeshStyle='column');
+surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: After hole
 [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
-surf(ax, X, Y, Z, MeshStyle='column');
-
-%-----------------------------------------%
-%     Plot: Surface (One Level Lower)     %
-%-----------------------------------------%
-% % Surface: Hole (theta_old < 1)
-% [X, Y, Z] = pad_data(data_hole_lt1, 1, 'lt1');
-% Z(end, end) = Z(end, end-1);
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% 
-% % Surface: Hole (theta_old > 1)
-% [X, Y, Z] = pad_data(data_hole_gt1, 1, 'gt1');
-% surf(ax, X, Y, Z, MeshStyle='column');
-% 
-% % Surface: Before hole
-% [X, Y, Z] = pad_data(data_before_hole, 1, 'none');
-% surf(ax, X, Y, Z, MeshStyle='column');
-% 
-% % Surface: After hole
-% [X, Y, Z] = pad_data(data_after_hole, 1, 'none');
-% surf(ax, X, Y, Z, MeshStyle='column');
+surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 %---------------------------%
 %     Surface: Settings     %
@@ -145,7 +143,7 @@ surf(ax, X, Y, Z, MeshStyle='column');
 shading(ax, 'interp');
 
 % Colorbar
-cbar = colorbar();
+% cbar = colorbar();
 
 hold(ax, 'off');
 
@@ -154,36 +152,35 @@ hold(ax, 'off');
 %---------------------%
 ax.XAxis.Limits = [0.0, 1.0];
 ax.YAxis.Limits = [0.0, max(A_perturb)];
-ax.ZAxis.Limits = [0.4, 3.0];
+ax.ZAxis.Limits = [0.0, 2.5];
 
-%---------------------%
-%     Axis Labels     %
-%---------------------%
-ax.XAxis.Label.String = '$\theta_{\mathrm{old}}$';
-ax.YAxis.Label.String = '$A_{\mathrm{perturb}}$';
-ax.ZAxis.Label.String = '$\theta_{\mathrm{new}}$';
-
-%--------------------%
-%     Axis Title     %
-%--------------------%
-d_vec = [cos(theta_perturb); 0.0; sin(theta_perturb)];
-title_str = sprintf('Phase Transition Curve (PTC) with $\\vec{d} = (%.0f, %.0f, %.0f)$', d_vec(1), d_vec(2), d_vec(3));
-ax.Title.String = title_str;
+%--------------------------%
+%     Axis Tick Labels     %
+%--------------------------%
+% Turn off all axis labels
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
+ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
 grid(ax, 'on');
-view(-45, 15);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% if save_figure == true
-%   % Filename
-%   exportgraphics(fig, filename_out, ContentType='vector');
-% end
+view(315, 15);
+filename_out = '../images/pdf/fig8a_G_PTC_surface_1.png';
+
+% view(135, 15);
+% filename_out = '../images/pdf/fig8b_G_PTC_surface_2.png';
+
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=750);
+
+% saveFigPDF(fig, filename_out, fig.Position(3:4), 750);
+% print(fig, '-depsc2', filename_out, '-painters');
 
 %-------------------------------------------------------------------------%
 %%                           Data Functions                              %%
@@ -225,18 +222,18 @@ function [theta_old, A_perturb, theta_new] = pad_data(data_in, theta_new_modifie
   if strcmp(theta_old_lt1_gt1, 'lt1')
     % Find theta_old_read with max theta_old value, interpolate so is the
     % same length as theta_old_max
-    [TO_min_val, max_idx] = min(min_theta_old);
+    [~, max_idx] = min(min_theta_old);
 
-    % Interpolate data
+    % Interpolate date
     theta_old_max = theta_old_read{max_idx};
   end
 
   if strcmp(theta_old_lt1_gt1, 'gt1')
     % Find theta_old_read with max theta_old value, interpolate so is the
     % same length as theta_old_max
-    [TO_max_val, max_idx] = max(max_theta_old);
+    [~, max_idx] = max(max_theta_old);
 
-    % Interpolate data
+    % Interpolate date
     theta_old_max = theta_old_read{max_idx};
   end
 
@@ -269,21 +266,25 @@ function [theta_old, A_perturb, theta_new] = pad_data(data_in, theta_new_modifie
     if strcmp(theta_old_lt1_gt1, 'lt1')
       % Find min value
       [min_val, min_idx] = min(theta_old_read{i});
-
-      % Find all values less than this
+      % Find all values less than min val
       lt1_idx = theta_old_interp < min_val;
+
+      % % Find max theta_old value
+      % [max_val, max_idx] = max(theta_old_read{i});
+      % % Find all values greater than max val
+      % gt1_idx = theta_old_interp > max_val;
 
       % Set to the value
       theta_old_interp(lt1_idx) = min_val;
 
-      % Set all NaN values to the first theta_new value
-      theta_new_NaN = theta_new_read{i}(min_idx);
-
       % Find NaNs
-      is_it_a_nan = isnan(theta_new_interp);
+      is_theta_new_nan = isnan(theta_new_interp);
 
-      % Find all NaNs below the minimum theta_old value
-      theta_new_interp(is_it_a_nan(lt1_idx)) = theta_new_NaN;
+      % Set NaNs of lt1_idx to min val
+      theta_new_interp(is_theta_new_nan(lt1_idx)) = theta_new_read{i}(min_idx);
+
+      % Set NaNs of gt1_idx to max val
+      % theta_new_interp(is_theta_new_nan(gt1_idx)) = theta_new_read{i}(max_idx);
     end
 
     if strcmp(theta_old_lt1_gt1, 'gt1')
@@ -298,13 +299,8 @@ function [theta_old, A_perturb, theta_new] = pad_data(data_in, theta_new_modifie
 
       % Set all NaN values to the first theta_new value
       theta_new_NaN = theta_new_read{i}(max_idx);
-
       % Find NaNs
-      is_it_a_nan = isnan(theta_new_interp);
-
-      % Find all NaNs above the maximum theta_old value
-      theta_new_interp(is_it_a_nan) = theta_new_NaN;
-      % theta_new_interp(is_it_a_nan(gt1_idx)) = theta_new_NaN;
+      theta_new_interp(isnan(theta_new_interp)) = theta_new_NaN;
     end
     
     % % Append the first value

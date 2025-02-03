@@ -409,8 +409,8 @@ from numpy import linspace, concatenate, unique
 
 # Saved points for large scan of G perturbation
 SP_points = concatenate((linspace(0.0, 0.25, 25), linspace(0.30, 2.0, 25)))
-# SP_points = concatenate((SP_points, [0.05, 0.1, 0.2, 0.55, 1.0, 1.5, 2.0]))
-# SP_points = unique(SP_points)
+SP_points = concatenate((SP_points, [0.05, 0.1, 0.2, 0.55, 1.0, 1.5, 2.0]))
+SP_points = unique(SP_points)
 
 # # Saved points for large scan of I perturbation
 # SP_points = concatenate((linspace(0.0, 1.0, 20), 
@@ -423,11 +423,16 @@ SP_points = concatenate((linspace(0.0, 0.25, 25), linspace(0.30, 2.0, 25)))
 auto.copy('./continuation_scripts/', 'PTC_initial')
 
 # Try set up phase reset calculation lol
-run_new = auto.run(x_init_PR, PAR=p_PR, parnames=pnames_PR,
+run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
                    c='PTC_initial',
                    NMX=2000, NTST=k * 50,
                    UZR={'A_perturb': SP_points},
                    UZSTOP={'A_perturb': max(SP_points) + 0.1})
+# run_new = auto.run(x_init_PR, PAR=p_PR, parnames=pnames_PR,
+#                    c='PTC_initial',
+#                    NMX=2000, NTST=k * 50,
+#                    UZR={'A_perturb': SP_points},
+#                    UZSTOP={'A_perturb': max(SP_points) + 0.1})
 
 #-------------------#
 #     Save Data     #
@@ -523,8 +528,8 @@ for i in range(len(label_old)):
 #     Plot     #
 #--------------#
 # Save data
-import save_figX_data as data_PTC
-data_PTC.save_PTC_scan(run_new_str)
+import save_fig7_data as data_PTC
+data_PTC.save_PTC_scan(run_new_str, '../data_files/fig7_data.mat')
 
 # %%
 #==============================================================================#

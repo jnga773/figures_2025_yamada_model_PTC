@@ -119,7 +119,7 @@ def check_runs_MX(bd_list_in):
 
 #--------------------------------------------------------------------------------------#
 def read_PTC_scan_data(bd_list_in):
-    from numpy import flip
+    from numpy import flip, argsort
 
     #-------------------------#
     #     Read Parameters     #
@@ -158,13 +158,23 @@ def read_PTC_scan_data(bd_list_in):
         # Phase values
         old_gt1_read = bd_gt1['theta_old']
         new_gt1_read = bd_gt1['theta_new']
+        
+        # Sort in order of theta_old
+        idx_sort_gt1 = argsort(old_gt1_read)
+        old_gt1_read = old_gt1_read[idx_sort_gt1]
+        new_gt1_read = new_gt1_read[idx_sort_gt1]
 
         #-----------------------#
         #     theta_old < 1     #
         #-----------------------#
         # Phase values
-        old_lt1_read = flip(bd_lt1['theta_old'])
-        new_lt1_read = flip(bd_lt1['theta_new'])
+        old_lt1_read = bd_lt1['theta_old']
+        new_lt1_read = bd_lt1['theta_new']
+        
+        # Sort in order of theta_old
+        idx_sort_lt1 = argsort(old_lt1_read)
+        old_lt1_read = old_lt1_read[idx_sort_lt1]
+        new_lt1_read = new_lt1_read[idx_sort_lt1]
 
         #--------------------#
         #     Parameters     #
@@ -485,80 +495,8 @@ def fill_surface_gaps(data_hole_gt1_in, data_hole_lt1_in, data_before_hole_in, d
     
     return data_hole_gt1_out, data_hole_lt1_out 
 
-#--------------------------------------------------------------------------------------#
-def pad_arrays(data_in):
-    """
-    Pads the theta_old and theta_new arrays to match the arrays with the max
-    length. This makes things easier to plot using MATLAB's surf.
-    """
-    from numpy import array, pad, ones
-    
-    #---------------#
-    #     Input     #
-    #---------------#
-    theta_old_in = data_in['theta_old']
-    theta_new_in = data_in['theta_new']
-    A_perturb_in = data_in['A_perturb']
-    
-    #-------------------------#
-    #     Find Max Length     #
-    #-------------------------#    
-    # Cycle through and calculate max length
-    array_lengths = []
-    for i in range(len(theta_old_in)):
-        array_lengths.append(len(theta_old_in[i]))
-    
-    # Find maximum array length to pad to
-    max_len = max(array_lengths)
-    
-    #------------------#
-    #     Pad Data     #
-    #------------------#
-    # Pad array
-    theta_old_out = []
-    theta_new_out = []
-    A_perturb_out = []
-    
-    for i in range(len(theta_old_in)):
-        # Read arrays
-        A_read = A_perturb_in[i]
-        old_read = theta_old_in[i]
-        new_read = theta_new_in[i]
-        
-        # Pad length
-        pad_len = max_len - len(old_read)
-        
-        # Pad arrays        
-        old_pad = pad(old_read, (pad_len, 0),
-                      'constant', constant_values=(old_read[0], 0))
-        
-        new_pad = pad(new_read, (pad_len, 0),
-                      'constant', constant_values=(new_read[0], 0))
-        
-        # times by ones()
-        A_pad = A_read * ones(max_len)
-        
-        # Append to output
-        theta_old_out.append(old_pad)
-        theta_new_out.append(new_pad)
-        A_perturb_out.append(A_pad)
-    
-    #----------------#
-    #     Output     #
-    #----------------#
-    theta_old_out = array(theta_old_out).T
-    theta_new_out = array(theta_new_out).T
-    A_perturb_out = array(A_perturb_out).T
-    
-    # Turn into a data structure / dictionary
-    data_out = {'theta_old': theta_old_out,
-                'theta_new': theta_new_out,
-                'A_perturb': A_perturb_out}
-    
-    return data_out
-
 #------------------------------------------------------------------------------#
-def save_PTC_scan(run_str_in):
+def save_PTC_scan(run_str_in, filename_in):
     """
     Reads and saves the A_perturb, theta_old, and theta_new data
     from the scan run 'run09_PTC_scan' to a MATLAB .mat file.
@@ -567,6 +505,8 @@ def save_PTC_scan(run_str_in):
     -------
     run_str_in : str
         String label identifier for the current run.
+    filename_in : str
+        File to save data to
     """
     from scipy.io import savemat
 
@@ -586,64 +526,48 @@ def save_PTC_scan(run_str_in):
     #     Sort Data     #
     #-------------------#
     # Fix data
-    theta_old_fix, theta_new_fix = fix_theta_data(theta_old_read, theta_new_read)
+    theta_old_fix, theta_new_fix = \
+        fix_theta_data(theta_old_read, theta_new_read)
     
     # Sort data inside hole
-    data_hole_gt1, data_hole_lt1 = sort_data_holes(theta_old_fix, theta_new_fix, bd_list, A_perturb_read, 'hole')
+    data_hole_gt1, data_hole_lt1 = \
+        sort_data_holes(theta_old_fix, theta_new_fix, bd_list, A_perturb_read, 'hole')
 
     # Sort data before hole
-    data_before_hole = sort_data_holes(theta_old_fix, theta_new_fix, bd_list, A_perturb_read, 'before')
+    data_before_hole = \
+        sort_data_holes(theta_old_fix, theta_new_fix, bd_list, A_perturb_read, 'before')
 
     # Sort data after hole
-    data_after_hole = sort_data_holes(theta_old_fix, theta_new_fix, bd_list, A_perturb_read, 'after')
+    data_after_hole = \
+        sort_data_holes(theta_old_fix, theta_new_fix, bd_list, A_perturb_read, 'after')
     
     #---------------------------------------#
     #     Fill In Gaps Between Segments     #
     #---------------------------------------#
     # Merge hole_gt1 to before
-    data_hole_gt1_merge, data_hole_lt1_merge = fill_surface_gaps(data_hole_gt1, data_hole_lt1, data_before_hole, data_after_hole)
-
-    #------------------#
-    #     Pad Data     #
-    #------------------#
-    # Inside hole: theta_old > 1
-    # data_hole_gt1_pad = pad_arrays(data_hole_gt1)
-    data_hole_gt1_pad = pad_arrays(data_hole_gt1_merge)
-
-    # Inside hole: theta_old < 1
-    # data_hole_lt1_pad = pad_arrays(data_hole_lt1)
-    data_hole_lt1_pad = pad_arrays(data_hole_lt1_merge)
-
-    # Before hole
-    data_before_hole_pad = pad_arrays(data_before_hole)
-
-    # After hole
-    data_after_hole_pad = pad_arrays(data_after_hole)
+    data_hole_gt1_merge, data_hole_lt1_merge = \
+        fill_surface_gaps(data_hole_gt1, data_hole_lt1, data_before_hole, data_after_hole)
     
     #-------------------#
     #     Save Data     #
     #-------------------#
     # Create dictionary for all saved stuff
-    mat_out = {'A': param['A'], 'gamma': param['gamma'], 'B': param['B'], 'a': param['a'],
-                'theta_perturb': param['theta_perturb'], 'A_perturb': A_perturb_read}
-    
-    mat_out['data_hole_gt1'] = data_hole_gt1
-    mat_out['data_hole_lt1'] = data_hole_lt1
-    
-    mat_out['data_hole_gt1_pad']    = data_hole_gt1_pad
-    mat_out['data_hole_lt1_pad']    = data_hole_lt1_pad
-    mat_out['data_before_hole_pad'] = data_before_hole_pad
-    mat_out['data_after_hole_pad']  = data_after_hole_pad
+    mat_out = {'A': param['A'],
+               'gamma': param['gamma'],
+               'B': param['B'],
+               'a': param['a'],
+               'theta_perturb': param['theta_perturb'],
+               'A_perturb': A_perturb_read}
 
     mat_out['data_hole_gt1']    = data_hole_gt1_merge
     mat_out['data_hole_lt1']    = data_hole_lt1_merge
     mat_out['data_before_hole'] = data_before_hole
     mat_out['data_after_hole']  = data_after_hole
 
-    mat_out['theta_old_gt1'] = theta_old_read['gt1']
-    mat_out['theta_old_lt1'] = theta_old_read['lt1']
-    mat_out['theta_new_gt1'] = theta_new_read['gt1']
-    mat_out['theta_new_lt1'] = theta_new_read['lt1']
+    # mat_out['theta_old_gt1'] = theta_old_read['gt1']
+    # mat_out['theta_old_lt1'] = theta_old_read['lt1']
+    # mat_out['theta_new_gt1'] = theta_new_read['gt1']
+    # mat_out['theta_new_lt1'] = theta_new_read['lt1']
 
     # Save data
-    savemat('./data_mat/PTC_scan.mat', mat_out)
+    savemat(filename_in, mat_out)
