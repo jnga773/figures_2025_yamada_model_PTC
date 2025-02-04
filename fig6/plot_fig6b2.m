@@ -10,13 +10,24 @@ load('../data_files/fig6_data.mat');
 % plot_idx = 1:4;
 plot_idx = 4:7;
 
-% Default line colours
-colours = colororder();
+% Colours
+% Green     (#2ca02c) = [ 44, 160,  44] ./ 255
+% Yellowg   (#7fbf08) = [127, 191,   8] ./ 255
+% Chartreus (#bcbd22) = [188, 189,  34] ./ 255
+% Orange    (#ff7f0e) = [255, 126,  14] ./ 255
+% Red       (#d62728) = [214,  39,  40] ./ 255
+% Pink      (#e38ab7) = [227, 138, 183] ./ 255
+% Purple    (#9467bd) = [148, 103, 189] ./ 255
+% Blue      (#4649a6) = [ 70,  73, 166] ./ 255
 
 % Plot colours
-plot_colours = {colours(2, :), colours(4, :), colours(5, :), ...
-                colours(6, :), ...
-                colours(7, :), colours(8, :), colours(9, :)};
+plot_colours = {[127, 191,   8] ./ 255;
+                [188, 189,  34] ./ 255;
+                [255, 126,  14] ./ 255;
+                [214,  39,  40] ./ 255;
+                [227, 138, 183] ./ 255;
+                [148, 103, 189] ./ 255;
+                [ 70,  73, 166] ./ 255};
 
 %-------------------------------------------------------------------------%
 %%                               Plot Data                               %%
@@ -28,20 +39,25 @@ fig = figure(1); clf;
 fig.Name = 'PTC Scan';
 
 % Figure dimensions
-fig.Units = 'centimeters';
-fig.Position = [5, 5, 6, 12];
-% fig.Position = [3, 3, 2, 5.5];
-% fig.Position = [5, 5, 5, 10];
+% fig.Units = 'centimeters';
+fig.Units = 'inches';
+fig.Position = [5, 5, 4.5, 9];
 
 % Figure pdf settings
 fig.PaperUnits = fig.Units;
 fig.PaperPosition = fig.Position;
 fig.PaperSize = fig.Position(3:4);
 
-% Axis setup
+% % Axis setup: Manual padding
+% ax = gca();
+% ax.Position = [0.01, 0.01, 0.98, 0.98];
+
+% Axis setup: Tiled layout
 tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
 ax = nexttile;
-ax.FontSize = 8;
+
+% Fontsize
+ax.FontSize = 9;
 
 %-------------------%
 %     Hold Axis     %
@@ -83,6 +99,11 @@ end
 %-------------------%
 hold(ax, 'off');
 
+%---------------------------%
+%     Data Aspect Ratio     %
+%---------------------------%
+ax.DataAspectRatio = [1, 1, 1];
+
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
@@ -94,15 +115,16 @@ ax.YAxis.TickValues = -0.5 : 0.5 : 2.5;
 ax.YAxis.MinorTick = 'on';
 ax.YAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
 
-%--------------------------%
-%     Axis Tick Labels     %
-%--------------------------%
-% Turn off all axis labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
-
+%------------------------------%
+%     Axis and Tick Labels     %
+%------------------------------%
+% Axis labels
 xlabel(ax, '$\theta_{\mathrm{o}}$');
 ylabel(ax, '$\theta_{\mathrm{n}}$');
+
+% % Turn off all tick labels
+% ax.XAxis.TickLabels = {};
+% ax.YAxis.TickLabels = {};
 
 %---------------------%
 %     Axis Limits     %
@@ -114,11 +136,10 @@ ax.YAxis.Limits = [-0.25, 2.0];
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
-% grid(ax, 'on');
 
 %----------------------%
 %      Save Figure     %
 %----------------------%
 % Filename
-filename_out = '../images/pdf/fig7b_G_PTCs.pdf';
+% filename_out = '../fig6b2_G_PTCs.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');
