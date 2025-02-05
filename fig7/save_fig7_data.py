@@ -564,10 +564,10 @@ def save_PTC_scan(run_str_in, filename_in):
     mat_out['data_before_hole'] = data_before_hole
     mat_out['data_after_hole']  = data_after_hole
 
-    # mat_out['theta_old_gt1'] = theta_old_read['gt1']
-    # mat_out['theta_old_lt1'] = theta_old_read['lt1']
-    # mat_out['theta_new_gt1'] = theta_new_read['gt1']
-    # mat_out['theta_new_lt1'] = theta_new_read['lt1']
+    mat_out['theta_old_gt1'] = theta_old_read['gt1']
+    mat_out['theta_old_lt1'] = theta_old_read['lt1']
+    mat_out['theta_new_gt1'] = theta_new_read['gt1']
+    mat_out['theta_new_lt1'] = theta_new_read['lt1']
 
     # Save data
     savemat(filename_in, mat_out)

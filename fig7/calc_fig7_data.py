@@ -390,7 +390,7 @@ print('Run name: {}'.format(run_new_str))
 #-------------------#
 # Set initial phase resetting parameters
 # Periodicity
-k = 50
+k = 55
 
 # Perturbation direction
 from numpy import pi

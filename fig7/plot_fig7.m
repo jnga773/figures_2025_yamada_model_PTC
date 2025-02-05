@@ -9,6 +9,11 @@ clear all; close all;
 %-------------------%
 % Load big PTC scan data
 load('../data_files/fig7_data.mat');
+% load('../data_files/fig7_data.mat', 'data_after_hole', 'data_before_hole', 'data_hole_gt1', 'data_hole_lt1');
+% A_perturb_data = A_perturb;
+
+% Load smaller PTC data
+% load('../data_files/fig6_data.mat');
 
 %--------------------------------%
 %     Coordinates for 'Hole'     %
@@ -20,6 +25,29 @@ intersection.A_perturb = 0.5576;
 % I-Direction
 % intersection.theta_old = 0.4981;
 % intersection.A_perturb = 4.0371;
+
+%----------------------%
+%     Plot Colours     %
+%----------------------%
+% Plot colours
+% Green     (#2ca02c) = [ 44, 160,  44] ./ 255
+% Yellowg   (#7fbf08) = [127, 191,   8] ./ 255
+% Chartreus (#bcbd22) = [188, 189,  34] ./ 255
+% Orange    (#ff7f0e) = [255, 126,  14] ./ 255
+% Red       (#d62728) = [214,  39,  40] ./ 255
+% Pink      (#e38ab7) = [227, 138, 183] ./ 255
+% Purple    (#9467bd) = [148, 103, 189] ./ 255
+% Blue      (#4649a6) = [ 70,  73, 166] ./ 255
+
+% Plot colours
+plot_colours = {[127, 191,   8] ./ 255;
+                [188, 189,  34] ./ 255;
+                [255, 126,  14] ./ 255;
+                [214,  39,  40] ./ 255;
+                [227, 138, 183] ./ 255;
+                [148, 103, 189] ./ 255;
+                [ 70,  73, 166] ./ 255};
+
 
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
@@ -51,7 +79,8 @@ fig = figure(1); clf;
 fig.Name = 'PTC Scans';
 
 % Figure dimensions
-fig.Units = 'centimeters';
+% fig.Units = 'centimeters';
+fig.Units = 'inches';
 fig.Position = [3, 3, 8, 6.4];
 
 % Figure pdf settings
@@ -59,10 +88,16 @@ fig.PaperUnits = fig.Units;
 fig.PaperPosition = fig.Position;
 fig.PaperSize = fig.Position(3:4);
 
-% Axis setup
+% % Axis setup: Manual padding
+% ax = gca();
+% ax.Position = [0.01, 0.01, 0.98, 0.98];
+
+% Axis setup: Tiled layout
 tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
 ax = nexttile;
-ax.FontSize = 8;
+
+% Fontsize
+ax.FontSize = 9;
 
 %-------------------%
 %     Hold Axis     %
@@ -80,42 +115,33 @@ plot3(ax, [intersection.theta_old, intersection.theta_old], ...
 %--------------------------%
 %     Plot: PTC Curves     %
 %--------------------------%
-% % Linewidth
-% lw = 1.5;
-% 
-% % Plot indices
-% plot_idx = [2, 4, 6, 8, ...
-%             9, 11, 13];
-% plot_colours = {colours(2, :), colours(4, :), colours(5, :), colours(6, :), ...
-%                 colours(7, :), colours(8, :), colours(9, :)};
-% 
-% % Plot all PTCs
-% for i = 1 : length(plot_idx)
-%   idx = plot_idx(i);
-%   fprintf('A_p = %.3f\n', A_perturb(idx));
-% 
-%   % theta_old plot data
-%   theta_old_lt1_plot = theta_old_lt1{idx};
-%   theta_old_gt1_plot = theta_old_gt1{idx};
-%   % theta_new plot data
-%   theta_new_lt1_plot = theta_new_lt1{idx};
-%   theta_new_gt1_plot = theta_new_gt1{idx};
-% 
-%   % A_perturb plot data
-%   A_plot1 = A_perturb(idx) * ones(length(theta_old_lt1{idx}));
-%   A_plot2 = A_perturb(idx) * ones(length(theta_old_gt1{idx}));
-% 
-%   if A_perturb(idx) < 0.2
-%     theta_new_lt1_plot = theta_new_lt1_plot + 1;
-%     theta_new_gt1_plot = theta_new_gt1_plot + 1;
-%   elseif A_perturb(idx) < 0.6
-%     theta_new_gt1_plot = theta_new_gt1_plot + 1;
-%   end
-% 
-%   % Plot
-%   plot3(ax, theta_old_lt1_plot, A_plot1, theta_new_lt1_plot, Color=plot_colours{i}, LineStyle='-');
-%   plot3(ax, theta_old_gt1_plot, A_plot2, theta_new_gt1_plot, Color=plot_colours{i}, LineStyle='-');
-% end
+% Linewidth
+lw = 1.5;
+
+% plot_A_perturb = [0.05, 0.1, 0.2, 0.55, 1.0, 1.5, 2.0];
+% plot_idx = [5, 11, 22, 32, 39, 47, 55];
+plot_idx = [5, 11, 19, 32, 39, 47, 55];
+
+% Plot all PTCs
+for i = 1 : length(plot_idx)
+  idx = plot_idx(i);
+
+  fprintf('A_p = %.3f\n', A_perturb(idx));
+
+  % A_perturb plot data
+  % A_plot = A_perturb(idx) * ones(length(theta_old{idx}));
+  A_plot_lt1 = A_perturb(idx) * ones(length(theta_old_lt1{idx}));
+  A_plot_gt1 = A_perturb(idx) * ones(length(theta_old_gt1{idx}));
+
+  % Plot
+  if A_perturb(idx) < 0.55
+    plot3(ax, theta_old_lt1{idx}, A_plot_lt1, theta_new_lt1{idx}, Color=plot_colours{i}, LineStyle='-');
+    plot3(ax, theta_old_gt1{idx}-1, A_plot_gt1, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
+  else
+    plot3(ax, theta_old_lt1{idx}, A_plot_lt1, theta_new_lt1{idx}, Color=plot_colours{i}, LineStyle='-');
+    plot3(ax, theta_old_gt1{idx}-1, A_plot_gt1, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
+  end
+end
 
 %-----------------------%
 %     Plot: Surface     %
@@ -151,16 +177,21 @@ hold(ax, 'off');
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [0.0, 1.0];
-ax.YAxis.Limits = [0.0, max(A_perturb)];
-ax.ZAxis.Limits = [0.0, 2.5];
+ax.YAxis.Limits = [0.0, 2.1];
+ax.ZAxis.Limits = [0.0, 3.0];
 
-%--------------------------%
-%     Axis Tick Labels     %
-%--------------------------%
-% Turn off all axis labels
-ax.XAxis.TickLabels = {};
-ax.YAxis.TickLabels = {};
-ax.ZAxis.TickLabels = {};
+%------------------------------%
+%     Axis and Tick Labels     %
+%------------------------------%
+% Axis labels
+xlabel(ax, '$\theta_{\mathrm{o}}$');
+ylabel(ax, '$A_{\mathrm{p}}$');
+zlabel(ax, '$\theta_{\mathrm{n}}$');
+
+% % Turn off all axis labels
+% ax.XAxis.TickLabels = {};
+% ax.YAxis.TickLabels = {};
+% ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
