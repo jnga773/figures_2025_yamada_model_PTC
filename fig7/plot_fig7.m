@@ -120,7 +120,7 @@ lw = 1.5;
 
 % plot_A_perturb = [0.05, 0.1, 0.2, 0.55, 1.0, 1.5, 2.0];
 % plot_idx = [5, 11, 22, 32, 39, 47, 55];
-plot_idx = [5, 11, 19, 32, 39, 47, 55];
+plot_idx = [5, 11, 17, 32, 39, 47, 55];
 
 % Plot all PTCs
 for i = 1 : length(plot_idx)
