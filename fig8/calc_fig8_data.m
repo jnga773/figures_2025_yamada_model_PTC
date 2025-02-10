@@ -779,7 +779,7 @@ prob = apply_PR_boundary_conditions(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.0, 0.3];
+SP_values = 0.0 : 0.1 : 1.0;
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'theta_old', SP_values);
@@ -794,8 +794,8 @@ coco(prob, run_new, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_per
 %-------------------%
 %     Save Data     %
 %-------------------%
-% Save data for Figure 3
-save_fig3_data(run_new, '../data_files/fig8_data.mat');
+% Save data for Figure 8
+save_fig8_data(run_new, '../data_files/fig8_data.mat');
 
 %=========================================================================%
 %                               END OF FILE                               %

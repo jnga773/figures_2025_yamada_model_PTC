@@ -7,35 +7,60 @@ clear all;
 %-------------------%
 %     Read Data     %
 %-------------------%
-mat_file = './data_mat/PTC_scan.mat';
+mat_file = '../data_files/fig9_data.mat';
 % Load data from .mat
 load(mat_file);
 
 %--------------------------------%
 %     Coordinates for 'Hole'     %
 %--------------------------------%
-% % G-direction
-% intersection.theta_old = 0.3176;
-% intersection.A_perturb = 0.5576;
-
 % I-Direction
-intersection.theta_old = 0.4981;
-intersection.A_perturb = 4.0371;
+intersection.theta_old = 0.503722;
+intersection.A_perturb = 4.142870;
 
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
 %-------------------------------------------------------------------------%
+%-------------------%
+%     Colourmap     %
+%-------------------%
 % Plotting colours
 colours = colororder();
 
-fig = figure(5); clf;
-fig.Name = 'PTC Scans';
-fig.Units = 'inches'; fig.Position = [0, 0, 16, 8]; fig.PaperSize = [16, 8];
+n_colours_in = 2048;
+n_colours_out = 1024;
 
-tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-ax = nexttile;
-ax.FontSize = 11;
+% Get colour map
+colour_map = parula(n_colours_in);
+% Create a linear ramp the size of the colormap we actually want
+t = linspace(0,1,n_colours_out);
+% Apply whatever transform you like to the ramp
+t2 = t .^ 0.9;
+% Use that to scale the big linear colormap into the small stretched one.
+colour_map_transformed = colour_map(1+floor((n_colours_in-1)*t2'),:); 
 
+colormap(colour_map_transformed);
+
+%-------------------------%
+%     Figure Settings     %
+%-------------------------%
+fig = figure(9); clf;
+fig.Name = 'PTC Scans: Intensity';
+ax = gca();
+
+% Axis dimensions
+width = 8.0;
+height = 6.4;
+
+% Add set_figure_dimensions() function to path
+% addpath('../');
+
+% Set figure size
+set_figure_dimensions(width, height);
+
+%-------------------%
+%     Hold Axis     %
+%-------------------%
 hold(ax, 'on');
 
 %-------------------------------------------------%
@@ -44,59 +69,7 @@ hold(ax, 'on');
 plot3(ax, [intersection.theta_old, intersection.theta_old], ...
      [intersection.A_perturb, intersection.A_perturb], ...
      [-5, 5], ...
-     Color='k', LineWidth=5.0, LineStyle='-');
-
-%-----------------------%
-%     Plot: 3D Plot     %
-%-----------------------%
-% % Plot: theta_old < 1
-% data_plot = data_before_hole;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
-% 
-%   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
-% end
-
-% data_plot = data_after_hole;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
-% 
-%   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
-% end
-
-% data_plot = data_hole_lt1;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
-% 
-%   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
-% end
-
-% data_plot = data_hole_gt1;
-% for i = 1 : length(data_plot.A_perturb)
-%   % Grab data
-%   theta_old_plot = data_plot.theta_old{i};
-%   theta_new_plot = data_plot.theta_new{i};
-%   A_perturb_plot = data_plot.A_perturb(i) * ones(length(theta_old_plot));
-% 
-%   % Plot
-%   plot3(ax, theta_old_plot, A_perturb_plot, theta_new_plot, ...
-%         Color=colours(1, :), LineStyle='-');
-% end
+     Color='k', LineWidth=2.5, LineStyle='-');
 
 %-----------------------%
 %     Plot: Surface     %
@@ -144,8 +117,8 @@ surf(ax, X, Y, Z, MeshStyle='column');
 % Shading of surface
 shading(ax, 'interp');
 
-% Colorbar
-cbar = colorbar();
+% % Colorbar
+% cbar = colorbar();
 
 hold(ax, 'off');
 
@@ -153,37 +126,53 @@ hold(ax, 'off');
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [0.0, 1.0];
-ax.YAxis.Limits = [0.0, max(A_perturb)];
-ax.ZAxis.Limits = [0.4, 3.0];
-
-%---------------------%
-%     Axis Labels     %
-%---------------------%
-ax.XAxis.Label.String = '$\theta_{\mathrm{old}}$';
-ax.YAxis.Label.String = '$A_{\mathrm{perturb}}$';
-ax.ZAxis.Label.String = '$\theta_{\mathrm{new}}$';
+ax.YAxis.Limits = [0.0, 25.0];
+ax.ZAxis.Limits = [0.25, 3.0];
 
 %--------------------%
-%     Axis Title     %
+%     Axis Ticks     %
 %--------------------%
-d_vec = [cos(theta_perturb); 0.0; sin(theta_perturb)];
-title_str = sprintf('Phase Transition Curve (PTC) with $\\vec{d} = (%.0f, %.0f, %.0f)$', d_vec(1), d_vec(2), d_vec(3));
-ax.Title.String = title_str;
+% X-Axis
+ax.XAxis.TickValues = 0.0 : 0.5 : 1.0;
+ax.XAxis.MinorTick = 'on';
+ax.XAxis.MinorTickValues = 0.0 : 0.25 : 1.0;
+
+% Y-Axis
+ax.YAxis.TickValues = 0.0 : 5.0 : 25.0;
+ax.YAxis.MinorTick = 'on';
+ax.YAxis.MinorTickValues = 0.0 : 2.5 : 25.0;
+
+% Z-Axis
+ax.ZAxis.TickValues = 0.0 : 0.5 : 3.0;
+ax.ZAxis.MinorTick = 'on';
+ax.ZAxis.MinorTickValues = 0.0 : 0.25 : 3.0;
+
+%------------------------------%
+%     Axis and Tick Labels     %
+%------------------------------%
+% % Axis labels
+% xlabel(ax, '$\theta_{\mathrm{o}}$');
+% ylabel(ax, '$A_{\mathrm{p}}$');
+% zlabel(ax, '$\theta_{\mathrm{n}}$');
+
+% Turn off all axis labels
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
+ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
 grid(ax, 'on');
-view(-45, 15);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% if save_figure == true
-%   % Filename
-%   exportgraphics(fig, filename_out, ContentType='vector');
-% end
+view(315, 15);
+filename_out = '../fig8_I_PTC_surface_1.png';
+
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=750);
 
 %-------------------------------------------------------------------------%
 %%                           Data Functions                              %%

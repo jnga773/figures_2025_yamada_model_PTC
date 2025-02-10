@@ -66,7 +66,7 @@ colormap(colour_map_transformed);
 %     Figure Settings     %
 %-------------------------%
 fig = figure(7); clf;
-fig.Name = 'PTC Scans';
+fig.Name = 'PTC Scans: Gain';
 ax = gca();
 
 % Axis dimensions
