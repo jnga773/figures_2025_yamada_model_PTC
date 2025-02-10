@@ -35,6 +35,8 @@ Each of the `calc_figX_data.m` COCO scripts makes use of functions in two folder
 - `functions`: Contains the Matlab encoding of the vector fields (`functions/fields/`) and of the boundary conditions (`functions/bcs/`).
 - `continuation_scripts`: Contains functions which either calculate an initial solution, setup the COCO continuation problem scturcture, or save the relevant data to a Matlab `.mat` file.
 
+In the main directory, there is also a Matlab function file `set_figure_dimensions.m`. This function defines the dimensions of the axis 'Position' property to a specific dimension in centimetres. For the paper, I import the figures without any labels into Inkscape, and use the textbox tool in Inkscape to generate all of the labels, ticks, and text. `set_figure_dimensions` therefore allows me much finer control over the size of the figures.
+
 This repository is structured as follows:
 
 - `data_files`  
@@ -89,3 +91,5 @@ This repository is structured as follows:
   - `calc_fig9_data.py`: AUTO script for generating a whole lot of PTCs for increasing perturbation amplitudes for an $I$-perturbation.
   - `plot_fig9.m`: Plots Fig. 9 - Surface of PTCs from one viewpoint.
   - `save_fig9_data.m`: Saves the figure data to a Matlab `.mat` file.
+
+- `set_figure_dimensions.m`: Matlab function file to define the dimensions of the 'Position' property of the figure axis in a way that works for me :)
