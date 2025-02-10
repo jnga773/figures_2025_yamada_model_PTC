@@ -9,11 +9,6 @@ clear all; close all;
 %-------------------%
 % Load big PTC scan data
 load('../data_files/fig7_data.mat');
-% load('../data_files/fig7_data.mat', 'data_after_hole', 'data_before_hole', 'data_hole_gt1', 'data_hole_lt1');
-% A_perturb_data = A_perturb;
-
-% Load smaller PTC data
-% load('../data_files/fig6_data.mat');
 
 %--------------------------------%
 %     Coordinates for 'Hole'     %
@@ -21,10 +16,6 @@ load('../data_files/fig7_data.mat');
 % G-direction
 intersection.theta_old = 0.3176;
 intersection.A_perturb = 0.5576;
-
-% I-Direction
-% intersection.theta_old = 0.4981;
-% intersection.A_perturb = 4.0371;
 
 %----------------------%
 %     Plot Colours     %
@@ -47,7 +38,6 @@ plot_colours = {[188, 189,  34] ./ 255;
                 [227, 138, 183] ./ 255;
                 [148, 103, 189] ./ 255;
                 [ 27, 195, 204] ./ 255};
-
 
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
@@ -75,29 +65,19 @@ colormap(colour_map_transformed);
 %-------------------------%
 %     Figure Settings     %
 %-------------------------%
-fig = figure(1); clf;
+fig = figure(7); clf;
 fig.Name = 'PTC Scans';
+ax = gca();
 
-% Figure dimensions
-% fig.Units = 'centimeters';
-fig.Units = 'inches';
-fig.Position = [3, 3, 8, 6.4];
+% Axis dimensions
+width = 8.0;
+height = 6.4;
 
-% Figure pdf settings
-fig.PaperUnits = fig.Units;
-fig.PaperPosition = fig.Position;
-fig.PaperSize = fig.Position(3:4);
+% Add set_figure_dimensions() function to path
+% addpath('../');
 
-% % Axis setup: Manual padding
-% ax = gca();
-% ax.Position = [0.01, 0.01, 0.98, 0.98];
-
-% Axis setup: Tiled layout
-tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-ax = nexttile;
-
-% Fontsize
-ax.FontSize = 9;
+% Set figure size
+set_figure_dimensions(width, height);
 
 %-------------------%
 %     Hold Axis     %
@@ -118,9 +98,13 @@ plot3(ax, [intersection.theta_old, intersection.theta_old], ...
 % Linewidth
 lw = 1.5;
 
-% plot_A_perturb = [0.05, 0.1, 0.2, 0.55, 1.0, 1.5, 2.0];
-% plot_idx = [5, 11, 22, 32, 39, 47, 55];
-plot_idx = [5, 11, 17, 32, 39, 47, 55];
+plot_A_perturb = [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0];
+
+% Find plotting indices
+plot_idx = zeros(length(plot_A_perturb), 1);
+for i = 1 : length(plot_A_perturb)
+  plot_idx(i) = find(round(A_perturb, 3) == plot_A_perturb(i));
+end
 
 % Plot all PTCs
 for i = 1 : length(plot_idx)
@@ -129,18 +113,12 @@ for i = 1 : length(plot_idx)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % A_perturb plot data
-  % A_plot = A_perturb(idx) * ones(length(theta_old{idx}));
   A_plot_lt1 = A_perturb(idx) * ones(length(theta_old_lt1{idx}));
   A_plot_gt1 = A_perturb(idx) * ones(length(theta_old_gt1{idx}));
 
   % Plot
-  if A_perturb(idx) < 0.55
-    plot3(ax, theta_old_lt1{idx}, A_plot_lt1, theta_new_lt1{idx}, Color=plot_colours{i}, LineStyle='-');
-    plot3(ax, theta_old_gt1{idx}-1, A_plot_gt1, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
-  else
-    plot3(ax, theta_old_lt1{idx}, A_plot_lt1, theta_new_lt1{idx}, Color=plot_colours{i}, LineStyle='-');
-    plot3(ax, theta_old_gt1{idx}-1, A_plot_gt1, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
-  end
+  plot3(ax, theta_old_lt1{idx}, A_plot_lt1, theta_new_lt1{idx}, Color=plot_colours{i}, LineStyle='-');
+  plot3(ax, theta_old_gt1{idx}-1, A_plot_gt1, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
 end
 
 %-----------------------%
@@ -177,21 +155,39 @@ hold(ax, 'off');
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [0.0, 1.0];
-ax.YAxis.Limits = [0.0, 2.1];
-ax.ZAxis.Limits = [0.0, 3.0];
+ax.YAxis.Limits = [0.0, 2.0];
+ax.ZAxis.Limits = [0.0, 2.5];
+
+%--------------------%
+%     Axis Ticks     %
+%--------------------%
+% X-Axis
+ax.XAxis.TickValues = 0.0 : 0.5 : 1.0;
+ax.XAxis.MinorTick = 'on';
+ax.XAxis.MinorTickValues = 0.0 : 0.25 : 1.0;
+
+% Y-Axis
+ax.YAxis.TickValues = 0.0 : 1.0 : 2.0;
+ax.YAxis.MinorTick = 'on';
+ax.YAxis.MinorTickValues = 0.0 : 0.5 : 2.0;
+
+% Z-Axis
+ax.ZAxis.TickValues = 0.0 : 0.5 : 3.0;
+ax.ZAxis.MinorTick = 'on';
+ax.ZAxis.MinorTickValues = 0.0 : 0.25 : 3.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
-% Axis labels
-xlabel(ax, '$\theta_{\mathrm{o}}$');
-ylabel(ax, '$A_{\mathrm{p}}$');
-zlabel(ax, '$\theta_{\mathrm{n}}$');
+% % Axis labels
+% xlabel(ax, '$\theta_{\mathrm{o}}$');
+% ylabel(ax, '$A_{\mathrm{p}}$');
+% zlabel(ax, '$\theta_{\mathrm{n}}$');
 
-% % Turn off all axis labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
-% ax.ZAxis.TickLabels = {};
+% Turn off all axis labels
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
+ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -202,16 +198,10 @@ grid(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-view(315, 15);
-filename_out = '../images/pdf/fig8a_G_PTC_surface_1.png';
+view(135, 15);
+filename_out = '../fig7b_G_PTC_surface_2.png';
 
-% view(135, 15);
-% filename_out = '../images/pdf/fig8b_G_PTC_surface_2.png';
-
-% exportgraphics(fig, filename_out, ContentType='image', Resolution=750);
-
-% saveFigPDF(fig, filename_out, fig.Position(3:4), 750);
-% print(fig, '-depsc2', filename_out, '-painters');
+exportgraphics(fig, filename_out, ContentType='image', Resolution=750);
 
 %-------------------------------------------------------------------------%
 %%                           Data Functions                              %%

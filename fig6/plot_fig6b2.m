@@ -10,6 +10,9 @@ load('../data_files/fig6_data.mat');
 % plot_idx = 1:4;
 plot_idx = 4:7;
 
+%----------------------%
+%     Plot Colours     %
+%----------------------%
 % Default line colours
 colours = colororder();
 

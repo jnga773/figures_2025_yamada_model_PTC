@@ -11,6 +11,9 @@ load('../data_files/fig6_data.mat');
 plot_idx = 1:4;
 % plot_idx = 4:7;
 
+%----------------------%
+%     Plot Colours     %
+%----------------------%
 % Default line colours
 colours = colororder();
 
@@ -38,7 +41,7 @@ plot_colours = {[188, 189,  34] ./ 255;
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
 % Setup figure
-fig = figure(1); clf;
+fig = figure(6); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
