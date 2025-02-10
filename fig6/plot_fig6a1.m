@@ -40,27 +40,17 @@ plot_colours = {[188, 189,  34] ./ 255;
 % Setup figure
 fig = figure(1); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
+ax = gca();
 
-% Figure dimensions
-% fig.Units = 'centimeters';
-fig.Units = 'inches';
-fig.Position = [5, 5, 7.5, 4];
+% Axis dimensions
+width = 7.5;
+height = 4.0;
 
-% Figure pdf settings
-fig.PaperUnits = fig.Units;
-fig.PaperPosition = fig.Position;
-fig.PaperSize = fig.Position(3:4);
+% Add set_figure_dimensions() function to path
+% addpath('../');
 
-% % Axis setup: Manual padding
-% ax = gca();
-% ax.Position = [0.01, 0.01, 0.98, 0.98];
-
-% Axis setup: Tiled layout
-tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-ax = nexttile;
-
-% Fontsize
-ax.FontSize = 9;
+% Set figure size
+set_figure_dimensions(width, height);
 
 %-------------------%
 %     Hold Axis     %
@@ -95,7 +85,8 @@ for i = 1 : length(plot_idx)
 
   % Plot
   plot3(ax, smooth(xbp_PO(:, 1)+A_perturb(idx)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)), ...
-        Color=plot_colours{idx}, LineStyle='-', LineWidth=lw)
+        Color=plot_colours{idx}, LineStyle='-', LineWidth=lw)%, ...
+        % Marker='none', MarkerFaceColor=colour(1:3), MarkerEdgeColor=colour(1:3));
 end
 
 % Hold axes
@@ -133,14 +124,14 @@ ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-xlabel(ax, '$G$');
-ylabel(ax, '$Q$');
-zlabel(ax, '$I$');
+% xlabel(ax, '$G$');
+% ylabel(ax, '$Q$');
+% zlabel(ax, '$I$');
 
-% % Turn off all tick labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
-% ax.ZAxis.TickLabels = {};
+% Turn off all tick labels
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
+ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -152,10 +143,11 @@ grid(ax, 'on');
 ax.GridLineWidth = 0.5; ax.GridColor = 'black'; ax.GridAlpha = 0.25;
 
 % 3D plot view
+% view(45, 10.0);
 view(45, 6.0);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../fig6a1.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../fig6a1_phase_portrait.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

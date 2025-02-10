@@ -24,29 +24,19 @@ fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
-fig.Name = 'Periodic Orbit Phase Portrait (3D)';
+fig = figure(3); clf;
+fig.Name = 'Phase Reset in time: Intensity';
+ax = gca();
 
-% Figure dimensions
-% fig.Units = 'centimeters';
-fig.Units = 'inches';
-fig.Position = [5, 5, 7.8, 0.33*7.8];
+% Axis dimensions
+width = 7.8;
+height = width / 3;
 
-% Figure pdf settings
-fig.PaperUnits = fig.Units;
-fig.PaperPosition = fig.Position;
-fig.PaperSize = fig.Position(3:4);
+% Add set_figure_dimensions() function to path
+% addpath('../');
 
-% Axis setup: Manual padding
-% ax = gca();
-% ax.Position = [0.01, 0.01, 0.98, 0.98];
-
-% Axis setup: Tiled layout
-tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-ax = nexttile;
-
-% Set fontsizes
-ax.FontSize = 9;
+% Set figure size
+set_figure_dimensions(width, height);
 
 %------------------------------%
 %     Plot: Phase Portrait     %
@@ -94,12 +84,12 @@ ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-xlabel(ax, '$t / T_{\Gamma}$');
-ylabel(ax, '$I$');
+% xlabel(ax, '$t / T_{\Gamma}$');
+% ylabel(ax, '$I$');
 
 % Turn off all tick labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -109,5 +99,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../fig3b2_time1.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../fig3b2_time1.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

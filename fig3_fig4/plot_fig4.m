@@ -14,29 +14,19 @@ load('../data_files/fig4_data.mat');
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
+fig = figure(4); clf;
 fig.Name = 'Single PTC';
+ax = gca();
 
-% Figure dimensions
-% fig.Units = 'centimeters';
-fig.Units = 'inches';
-fig.Position = [5, 5, 6.0, 6.0];
+% Axis dimensions
+width = 6.0;
+height = 6.0;
 
-% Figure pdf settings
-fig.PaperUnits = fig.Units;
-fig.PaperPosition = fig.Position;
-fig.PaperSize = fig.Position(3:4);
+% Add set_figure_dimensions() function to path
+% addpath('../');
 
-% % Axis setup: Manual padding
-% ax = gca();
-% ax.Position = [0.01, 0.01, 0.98, 0.98];
-
-% Axis setup: Tiled layout
-tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-ax = nexttile;
-
-% Set fontsizes
-ax.FontSize = 9;
+% Set figure size
+set_figure_dimensions(width, height);
 
 %-------------------%
 %     Hold Axis     %
@@ -109,12 +99,12 @@ ax.YAxis.MinorTickValues = 0.0 : 0.25 : 1.0;
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-xlabel(ax, '$\theta_{\mathrm{o}}$');
-ylabel(ax, '$\theta_{\mathrm{n}}$');
+% xlabel(ax, '$\theta_{\mathrm{o}}$');
+% ylabel(ax, '$\theta_{\mathrm{n}}$');
 
 % Turn off all tick labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -124,5 +114,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../fig4.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../fig4_G_PTC_single.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

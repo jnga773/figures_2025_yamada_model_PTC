@@ -3,9 +3,6 @@ clear all; close all; clc;
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
-%----------------------------------%
-%     Read Data from .mat File     %
-%----------------------------------%
 load('../data_files/fig2_data.mat');
 
 %------------------------%
@@ -26,22 +23,19 @@ tbp_plot = [tbp(1:end-1); 1 + tbp];
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
+fig = figure(2); clf;
 fig.Name = 'Temporal Trace of Periodic Orbit';
+ax = gca();
 
-% Figure dimensions
-fig.Units = 'centimeters';
-fig.Position = [5, 5, 8.5, 4.25];
+% Axis dimensions
+width = 7.5;
+height = 3.0;
 
-% Figure pdf settings
-fig.PaperUnits = fig.Units;
-fig.PaperPosition = fig.Position;
-fig.PaperSize = fig.Position(3:4);
+% Add set_figure_dimensions() function to path
+% addpath('../');
 
-% Axis setup
-tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-ax = nexttile;
-ax.FontSize = 8;
+% Set figure size
+set_figure_dimensions(width, height);
 
 %--------------%
 %     Plot     %
@@ -82,13 +76,12 @@ ax.YAxis.MinorTickValues = 0.0 : 2.5 : 25.0;
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-ax.XAxis.Label.String = '$t / T_{\Gamma}$';
-ax.YAxis.Label.String = '$G / Q / I$';
+% xlabel(ax, '$t / T_{\Gamma}$');
+% ylabel(ax, '$G/Q/I$');
 
-% Turn off all axis labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
-% ax.ZAxis.TickLabels = {};
+% Turn off all tick labels
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -98,5 +91,6 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../fig2b_periodic_orbit_temporal_trace.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../fig2b_periodic_orbit_temporal_trace.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');
+% plot2svg(filename_out);

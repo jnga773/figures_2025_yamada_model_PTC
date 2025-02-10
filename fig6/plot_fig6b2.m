@@ -10,6 +10,9 @@ load('../data_files/fig6_data.mat');
 % plot_idx = 1:4;
 plot_idx = 4:7;
 
+% Default line colours
+colours = colororder();
+
 % Colours
 % Green     (#2ca02c) = [ 44, 160,  44] ./ 255
 % Chartreus (#bcbd22) = [188, 189,  34] ./ 255
@@ -35,29 +38,20 @@ plot_colours = {[188, 189,  34] ./ 255;
 % Default colour order (matplotlib)
 colours = colororder();
 
-fig = figure(1); clf;
-fig.Name = 'PTC Scan';
+% Setup figure
+fig = figure(6); clf;
+fig.Name = 'PTCs';
+ax = gca();
 
-% Figure dimensions
-% fig.Units = 'centimeters';
-fig.Units = 'inches';
-fig.Position = [5, 5, 4.5, 9];
+% Axis dimensions
+width = 4.5;
+height = 9.0;
 
-% Figure pdf settings
-fig.PaperUnits = fig.Units;
-fig.PaperPosition = fig.Position;
-fig.PaperSize = fig.Position(3:4);
+% Add set_figure_dimensions() function to path
+% addpath('../');
 
-% % Axis setup: Manual padding
-% ax = gca();
-% ax.Position = [0.01, 0.01, 0.98, 0.98];
-
-% Axis setup: Tiled layout
-tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-ax = nexttile;
-
-% Fontsize
-ax.FontSize = 9;
+% Set figure size
+set_figure_dimensions(width, height);
 
 %-------------------%
 %     Hold Axis     %
@@ -119,12 +113,12 @@ ax.YAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-xlabel(ax, '$\theta_{\mathrm{o}}$');
-ylabel(ax, '$\theta_{\mathrm{n}}$');
+% xlabel(ax, '$\theta_{\mathrm{o}}$');
+% ylabel(ax, '$\theta_{\mathrm{n}}$');
 
-% % Turn off all tick labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
+% Turn off all tick labels
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
 
 %---------------------%
 %     Axis Limits     %
@@ -136,10 +130,11 @@ ax.YAxis.Limits = [-0.25, 2.0];
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
+% grid(ax, 'on');
 
 %----------------------%
 %      Save Figure     %
 %----------------------%
 % Filename
-% filename_out = '../fig6b2_G_PTCs.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../fig6b2_G_PTCs.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');
