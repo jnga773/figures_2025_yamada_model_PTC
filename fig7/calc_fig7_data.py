@@ -408,7 +408,10 @@ x_init_PR, p_PR, pnames_PR = \
 from numpy import linspace, concatenate, unique
 
 # Saved points for large scan of G perturbation
-SP_points = concatenate((linspace(0.0, 0.25, 25), linspace(0.30, 2.0, 25)))
+SP_points = concatenate((linspace(0.0, 0.25, 25),
+                         linspace(0.30, 1.0, 25),
+                         linspace(1.0, 1.3, 25),
+                         linspace(1.3, 2.0, 25)))
 SP_points = concatenate((SP_points, [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0]))
 SP_points = unique(SP_points)
 
