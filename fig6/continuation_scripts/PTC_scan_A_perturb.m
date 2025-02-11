@@ -1,4 +1,4 @@
-function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bcs_funcs_in)
+function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, SP_values_in, bcs_funcs_in)
   % PTC_scan_A_perturb(run_name_in, label_old_in)
   %
   % Scan through SP labels from previous run (different values of A_perturb)
@@ -55,11 +55,8 @@ function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bc
   %-------------------------%
   %     Add COCO Events     %
   %-------------------------%
-  % Array of values for special event
-  SP_values = -1.0 : 0.1 : 2.0;
-
   % When the parameter we want (from param) equals a value in A_vec
-  prob = coco_add_event(prob, 'SP', 'theta_old', SP_values);
+  prob = coco_add_event(prob, 'SP', 'theta_old', SP_values_in);
 
   %------------------%
   %     Run COCO     %

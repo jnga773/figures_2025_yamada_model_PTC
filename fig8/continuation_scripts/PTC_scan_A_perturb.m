@@ -1,4 +1,4 @@
-function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bcs_funcs_in)
+function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, SP_values_in, bcs_funcs_in)
   % PTC_scan_A_perturb(run_name_in, label_old_in)
   %
   % Scan through SP labels from previous run (different values of A_perturb)
@@ -13,10 +13,11 @@ function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bc
 
   % Set tolerance
   % prob = coco_set(prob, 'corr', 'TOL', 5e-7);
+  
   % Set step sizes
-  % prob = coco_set(prob, 'cont', 'h_min', 5e-2);
-  % prob = coco_set(prob, 'cont', 'h0', 1e-1);
-  prob = coco_set(prob, 'cont', 'h_max', 1e1);
+  prob = coco_set(prob, 'cont', 'h_min', 5e-2);
+  prob = coco_set(prob, 'cont', 'h0', 1e-1);
+  prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
   % Set adaptive meshR
   prob = coco_set(prob, 'cont', 'NAdapt', 10);
@@ -24,8 +25,8 @@ function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bc
   % Set number of steps
   prob = coco_set(prob, 'cont', 'PtMX', 750);
 
- % Set norm to int
- prob = coco_set(prob, 'cont', 'norm', inf);
+  % Set norm to int
+  prob = coco_set(prob, 'cont', 'norm', inf);
 
   % Set MaxRes and al_max
   prob = coco_set(prob, 'cont', 'MaxRes', 10);
@@ -54,12 +55,12 @@ function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, bc
   %-------------------------%
   %     Add COCO Events     %
   %-------------------------%
-  % Array of values for special event
-  SP_values = -1.0 : 0.1 : 2.0;
-
   % When the parameter we want (from param) equals a value in A_vec
-  prob = coco_add_event(prob, 'SP', 'theta_old', SP_values);
+  prob = coco_add_event(prob, 'SP', 'theta_old', SP_values_in);
 
+  %------------------%
+  %     Run COCO     %
+  %------------------%
   % Run COCO continuation
   prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
   coco(prob, run_new_in, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);

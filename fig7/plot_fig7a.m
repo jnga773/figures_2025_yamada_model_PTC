@@ -42,26 +42,6 @@ plot_colours = {[188, 189,  34] ./ 255;
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
 %-------------------------------------------------------------------------%
-%-------------------%
-%     Colourmap     %
-%-------------------%
-% Plotting colours
-colours = colororder();
-
-n_colours_in = 2048;
-n_colours_out = 1024;
-
-% Get colour map
-colour_map = parula(n_colours_in);
-% Create a linear ramp the size of the colormap we actually want
-t = linspace(0,1,n_colours_out);
-% Apply whatever transform you like to the ramp
-t2 = t .^ 2;
-% Use that to scale the big linear colormap into the small stretched one.
-colour_map_transformed = colour_map(1+floor((n_colours_in-1)*t2'),:); 
-
-colormap(colour_map_transformed);
-
 %-------------------------%
 %     Figure Settings     %
 %-------------------------%
@@ -121,6 +101,15 @@ for i = 1 : length(plot_idx)
   plot3(ax, theta_old_gt1{idx}-1, A_plot_gt1, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
 end
 
+%--------------------------%
+%     Surface Settings     %
+%--------------------------%
+% Set colour map
+colormap(scale_colour_map(0.9));
+
+% Shading of surface
+shading(ax, 'interp');
+
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
@@ -140,17 +129,10 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
-%---------------------------%
-%     Surface: Settings     %
-%---------------------------%
-% Shading of surface
-shading(ax, 'interp');
-
-% Colorbar
-% cbar = colorbar();
-
+%-------------------%
+%     Hold Axis     %
+%-------------------%
 hold(ax, 'off');
-
 %---------------------%
 %     Axis Limits     %
 %---------------------%
@@ -199,13 +181,33 @@ grid(ax, 'on');
 %     Save Figure     %
 %---------------------%
 view(315, 15);
-filename_out = '../fig7a_G_PTC_surface_1.png';
+filename_out = '../pdf/fig7a_G_PTC_surface_1.png';
 
-exportgraphics(fig, filename_out, ContentType='image', Resolution=750);
+% exportgraphics(fig, filename_out, ContentType='imagwe', Resolution=750);
 
 %-------------------------------------------------------------------------%
 %%                           Data Functions                              %%
 %-------------------------------------------------------------------------%
+function colourmap_out = scale_colour_map(scale_factor)
+  % colourmap_out = scale_colour_map(scale_factor)
+  % 
+  % Rescale the colour map.
+
+  n_colours_in = 2048;
+  n_colours_out = 1024;
+
+  % Get colour map
+  colour_map = parula(n_colours_in);
+
+  % Create a linear ramp the size of the colormap we actually want
+  t = linspace(0,1,n_colours_out);
+  % Apply whatever transform you like to the ramp
+  t2 = t .^ scale_factor;
+
+  % Use that to scale the big linear colormap into the small stretched one.
+  colourmap_out = colour_map(1+floor((n_colours_in-1)*t2'),:);
+end
+
 function [theta_old, A_perturb, theta_new] = pad_data(data_in, theta_new_modifier, theta_old_lt1_gt1)
   % [theta_old, theta_new, A_perturb] = pad_data(theta_old_in, theta_new_in, A_perturb_in)
   %

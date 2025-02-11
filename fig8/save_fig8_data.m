@@ -1,9 +1,7 @@
 function save_fig8_data(run_in, filename_in)
   % save_fig8_data(run_in, filename_in)
   %
-  % Reads periodic orbit solution data from run
-  % 'run06_initial_periodic_orbit', and phase reset data from 'run_in'.
-  % Saves data to 'filename_in'.
+  % Reads PTC scan data from run_in and saves data to filename_in
 
   %------------------------------------------%
   %     Read Initial Periodic Orbit Data     %
@@ -39,42 +37,64 @@ function save_fig8_data(run_in, filename_in)
   % Stationary point
   xpos = sol_pos.x;
 
-  %--------------------------------%
-  %     Read Data: Phase Reset     %
-  %--------------------------------%
-  % Bifurcation data
-  bd_PR = coco_bd_read(run_in);
+  %------------------------%
+  %     Read Data: PTCs    %
+  %------------------------%
+  % Folder name
+  dir_data = sprintf('./data/%s/', run_in);
+  % List all directories
+  dirs = dir(dir_data);
+  % Remove ./ and ../
+  dirs = dirs(~ismember({dirs.name}, {'.', '..', '.DS_Store'}));
+  % Sub folder names
+  dir_sub = {dirs.name};
 
-  % Get solution labels
-  label_PR = coco_bd_labs(bd_PR, 'SP');
+  % Empty cells
+  A_perturb = cell(1, 2);
+  sol3      = cell(1, 2);
+  sol4      = cell(1, 2);
 
-  % Get theta_old values
-  theta_old_run1 = coco_bd_val(bd_PR, label_PR(1), 'theta_old');
-  theta_old_run2 = coco_bd_val(bd_PR, label_PR(2), 'theta_old');
+  % Cycle through data sub directories
+  for i = 1 : length(dir_sub)
+    % Run name
+    sub_run_name = {run_in, dir_sub{i}};
 
-  % Get A_perturb value
-  A_perturb = coco_bd_val(bd_PR, label_PR(1), 'A_perturb');
+    % Bifurcation data
+    bd_PR = coco_bd_read(sub_run_name);
+
+    % Get labels
+    label_PR = coco_bd_labs(bd_PR, 'SP');
+
+    % Get theta_old values
+    theta_old = coco_bd_val(bd_PR, label_PR, 'theta_old');
+
+    % Get A_perturb value
+    A_perturb_read = coco_bd_val(bd_PR, label_PR, 'A_perturb');
   
-  % Get periodicity
-  k = coco_bd_val(bd_PR, label_PR(1), 'k');
+    % Get periodicity
+    k = coco_bd_val(bd_PR, label_PR, 'k');
 
-  % Read segment 3 solution
-  [sol3_run1, ~] = coll_read_solution('seg3', run_in, label_PR(1));
-  [sol3_run2, ~] = coll_read_solution('seg3', run_in, label_PR(2));
+    % Read segment 3 solution
+    [sol3_read, ~] = coll_read_solution('seg3', sub_run_name, label_PR);
 
-  % Read segment 4 solution
-  [sol4_run1, ~] = coll_read_solution('seg4', run_in, label_PR(1));
-  [sol4_run2, ~] = coll_read_solution('seg4', run_in, label_PR(2));
+    % Read segment 4 solution
+    [sol4_read, ~] = coll_read_solution('seg4', sub_run_name, label_PR);
+
+    % Append to arrays
+    A_perturb{i} = A_perturb_read;
+    sol3{i}      = sol3_read;
+    sol4{i}      = sol4_read;
+  end
 
   % Get segment4 state space solution
-  xbp3_run1 = sol3_run1.xbp;
-  xbp3_run2 = sol3_run2.xbp;
-  xbp4_run1 = sol4_run1.xbp;
-  xbp4_run2 = sol4_run2.xbp;
+  xbp3_run1 = sol3{1}.xbp;
+  xbp3_run2 = sol3{2}.xbp;
+  xbp4_run1 = sol4{1}.xbp;
+  xbp4_run2 = sol4{2}.xbp;
 
   % Get segment 4 temporal solution
-  tbp4_run1 = sol4_run1.tbp;
-  tbp4_run2 = sol4_run2.tbp;
+  tbp4_run1 = sol4{1}.tbp;
+  tbp4_run2 = sol4{2}.tbp;
 
   %----------------------------------------%
   %     Copy Unperturned Orbit k Times     %
@@ -117,9 +137,9 @@ function save_fig8_data(run_in, filename_in)
   % Parameters
   data_out.p              = p;
   data_out.pnames         = pnames;
-  data_out.theta_old_run1 = theta_old_run1;
-  data_out.theta_old_run2 = theta_old_run2;
-  data_out.A_perturb      = A_perturb;
+  data_out.theta_old      = theta_old;
+  data_out.A_perturb_run1 = A_perturb{1};
+  data_out.A_perturb_run2 = A_perturb{2};
   data_out.k              = k;
   data_out.T_PO           = T_PO;
 

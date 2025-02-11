@@ -21,26 +21,6 @@ intersection.A_perturb = 4.142870;
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
 %-------------------------------------------------------------------------%
-%-------------------%
-%     Colourmap     %
-%-------------------%
-% Plotting colours
-colours = colororder();
-
-n_colours_in = 2048;
-n_colours_out = 1024;
-
-% Get colour map
-colour_map = parula(n_colours_in);
-% Create a linear ramp the size of the colormap we actually want
-t = linspace(0,1,n_colours_out);
-% Apply whatever transform you like to the ramp
-t2 = t .^ 0.9;
-% Use that to scale the big linear colormap into the small stretched one.
-colour_map_transformed = colour_map(1+floor((n_colours_in-1)*t2'),:); 
-
-colormap(colour_map_transformed);
-
 %-------------------------%
 %     Figure Settings     %
 %-------------------------%
@@ -70,6 +50,15 @@ plot3(ax, [intersection.theta_old, intersection.theta_old], ...
      [intersection.A_perturb, intersection.A_perturb], ...
      [-5, 5], ...
      Color='k', LineWidth=2.5, LineStyle='-');
+
+%--------------------------%
+%     Surface Settings     %
+%--------------------------%
+% Set colour map
+colormap(scale_colour_map(0.9));
+
+% Shading of surface
+shading(ax, 'interp');
 
 %-----------------------%
 %     Plot: Surface     %
@@ -177,6 +166,26 @@ filename_out = '../fig8_I_PTC_surface_1.png';
 %-------------------------------------------------------------------------%
 %%                           Data Functions                              %%
 %-------------------------------------------------------------------------%
+function colourmap_out = scale_colour_map(scale_factor)
+  % colourmap_out = scale_colour_map(scale_factor)
+  % 
+  % Rescale the colour map.
+
+  n_colours_in = 2048;
+  n_colours_out = 1024;
+
+  % Get colour map
+  colour_map = parula(n_colours_in);
+
+  % Create a linear ramp the size of the colormap we actually want
+  t = linspace(0,1,n_colours_out);
+  % Apply whatever transform you like to the ramp
+  t2 = t .^ scale_factor;
+
+  % Use that to scale the big linear colormap into the small stretched one.
+  colourmap_out = colour_map(1+floor((n_colours_in-1)*t2'),:);
+end
+
 function [theta_old, A_perturb, theta_new] = pad_data(data_in, theta_new_modifier, theta_old_lt1_gt1)
   % [theta_old, theta_new, A_perturb] = pad_data(theta_old_in, theta_new_in, A_perturb_in)
   %

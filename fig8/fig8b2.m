@@ -11,10 +11,9 @@ load('../data_files/fig8_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb = %.4f\n\n', A_perturb);
-
-fprintf('theta_old(1) = %.4f\n', theta_old_run1);
-fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
+fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -24,19 +23,30 @@ fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
 colours = colororder();
 
 % Setup figure
-fig = figure(8); clf;
-fig.Name = 'Phase Reset in time: Intensity';
+fig = figure(1); clf;
+fig.Name = 'Periodic Orbit Phase Portrait (3D)';
+
+% Figure dimensions
+fig.Units = 'centimeters';
+% fig.Position = [5, 5, 7.8, 0.5*7.8];
+fig.Position = [5, 5, 7.8, 0.33*7.8];
+
+% Figure pdf settings
+fig.PaperUnits = fig.Units;
+fig.PaperPosition = fig.Position;
+fig.PaperSize = fig.Position(3:4);
+
+% Axis setup: Manual padding
 ax = gca();
+ax.Position = [0.01, 0.01, 0.98, 0.98];
+% ax.Position = [0.0, 0.0, 1.0, 1.0];
 
-% Axis dimensions
-width = 7.8;
-height = width / 3;
+% Axis setup: Tiled layout
+% tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
+% ax = nexttile;
 
-% Add set_figure_dimensions() function to path
-% addpath('../');
-
-% Set figure size
-set_figure_dimensions(width, height);
+% Set fontsizes
+ax.FontSize = 9;
 
 %------------------------------%
 %     Plot: Phase Portrait     %
@@ -50,7 +60,7 @@ plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), Color=[colours(3, :)], 
 
 % Plot segment 4
 max_idx = max(find(tbp4_run1 < 12.0));
-plot(ax, tbp4_run1(1:max_idx), xbp4_run1(1:max_idx, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
+plot(ax, tbp4_run2(1:max_idx), xbp4_run2(1:max_idx, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
 
 % Hold axes
 hold(ax, 'off');
@@ -99,5 +109,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig8b1_time1.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% filename_out = '../pdf/fig8b2_time1.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

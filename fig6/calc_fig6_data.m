@@ -740,11 +740,13 @@ parfor (run = 1 : length(label_old), M)
 
   % Data directory for this run
   fprintf('\n Continuing from point %d in run: %s \n', this_run_label, run_old);
-
   this_run_name = {run_new; sprintf('run_%02d', run)};
 
+  % Array of values for special event
+  SP_values = -1.0 : 0.1 : 2.0;
+
   % Run continuation
-  PTC_scan_A_perturb(this_run_name, run_old, this_run_label, data_PR, bcs_funcs);
+  PTC_scan_A_perturb(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
 
 end
 
