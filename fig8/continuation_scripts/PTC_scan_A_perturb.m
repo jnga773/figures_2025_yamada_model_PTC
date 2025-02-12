@@ -62,7 +62,7 @@ function PTC_scan_A_perturb(run_new_in, run_old_in, label_old_in, data_PR_in, SP
   %     Run COCO     %
   %------------------%
   % Run COCO continuation
-  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  prange = {[1.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
   coco(prob, run_new_in, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
 
 end

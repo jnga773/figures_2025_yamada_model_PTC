@@ -23,28 +23,19 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
-fig.Name = 'Periodic Orbit Phase Portrait (3D)';
-
-% Figure dimensions
-fig.Units = 'centimeters';
-fig.Position = [5, 5, 3.5, 3.5];
-
-% Figure pdf settings
-fig.PaperUnits = fig.Units;
-fig.PaperPosition = fig.Position;
-fig.PaperSize = fig.Position(3:4);
-
-% Axis setup: Manual padding
+fig = figure(3); clf;
+fig.Name = 'Phase Reset Phase Portrait (2D)';
 ax = gca();
-ax.Position = [0.01, 0.01, 0.98, 0.98];
 
-% Axis setup: Tiled layout
-% tiles = tiledlayout(1, 1, Padding='compact', TileSpacing='compact');
-% ax = nexttile;
+% Axis dimensions
+width = 3.5;
+height = 3.5;
 
-% Set fontsizes
-ax.FontSize = 9;
+% Add set_figure_dimensions() function to path
+% addpath('../');
+
+% Set figure size
+set_figure_dimensions(width, height);
 
 %------------------------------%
 %     Plot: Phase Portrait     %
@@ -100,8 +91,8 @@ ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 % ylabel(ax, '$I$');
 
 % Turn off all tick labels
-ax.XAxis.TickLabels = {};
-ax.YAxis.TickLabels = {};
+% ax.XAxis.TickLabels = {};
+% ax.YAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -111,5 +102,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../pdf/fig8a2_portrait2.pdf';
+% filename_out = '../fig8a2_portrait2.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

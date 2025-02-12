@@ -602,7 +602,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 k = 30;
 
 % Set perturbation direction
-theta_perturb = 0.0;
+theta_perturb = 0.5 * pi;
 phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
@@ -694,7 +694,7 @@ prob = apply_PR_boundary_conditions(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.5, 6.0];
+SP_values = [0.5, 13.0];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -732,8 +732,8 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 2;
-parfor (run = 1 : length(label_old), M)
+M = 0;
+parfor (run = 2 : length(label_old), M)
   % Label for this run
   this_run_label = label_old(run);
 
@@ -743,7 +743,7 @@ parfor (run = 1 : length(label_old), M)
   this_run_name = {run_new; sprintf('run_%02d', run)};
 
   % Saved solution points for theta_old
-  SP_values = 0.5;
+  SP_values = [0.5, 1.5];
 
   % Run continuation
   PTC_scan_A_perturb(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
