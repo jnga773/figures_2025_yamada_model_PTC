@@ -39,6 +39,61 @@ plot_colours = {[188, 189,  34] ./ 255;
                 [148, 103, 189] ./ 255;
                 [ 27, 195, 204] ./ 255};
 
+%-----------------------------------%
+%     Sort Out Single Plot Data     %
+%-----------------------------------%
+plot_A_perturb = [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0];
+
+% Find plotting indices
+plot_idx = zeros(length(plot_A_perturb), 1);
+for i = 1 : length(plot_A_perturb)
+  plot_idx(i) = find(round(A_perturb, 3) == plot_A_perturb(i));
+end
+
+% Empty cells for plotting data
+theta_old_plot = cell(1, length(plot_idx));
+theta_new_plot = cell(1, length(plot_idx));
+A_perturb_plot = cell(1, length(plot_idx));
+
+for i = 1 : length(plot_A_perturb)
+  % Plot data index
+  idx = plot_idx(i);
+
+  % Logical checks
+  lt1_check = false;
+  gt1_check = false;
+
+  if round(theta_old_lt1{idx}(end) - theta_old_lt1{idx}(1), 3) == 1.0
+    lt1_check = true;
+  end
+  if round(theta_old_gt1{idx}(end) - theta_old_gt1{idx}(1), 3) == 1.0
+    gt1_check = true;
+  end
+
+  % Grab data
+  if lt1_check && gt1_check
+    % Both checks are true; take the lt1 data
+    theta_old_plot{i} = theta_old_lt1{idx};
+    theta_new_plot{i} = theta_new_lt1{idx};
+    A_perturb_plot{i} = A_perturb(idx) * ones(1, length(theta_old_lt1{idx}));
+  elseif lt1_check && ~gt1_check
+    % Only the lt1 check is true
+    theta_old_plot{i} = theta_old_lt1{idx};
+    theta_new_plot{i} = theta_new_lt1{idx};
+    A_perturb_plot{i} = A_perturb(idx) * ones(1, length(theta_old_lt1{idx}));
+  elseif ~lt1_check && gt1_check
+    % Onle the gt1 check is true
+    theta_old_plot{i} = theta_old_gt1{idx}-1.0;
+    theta_new_plot{i} = theta_new_gt1{idx};
+    A_perturb_plot{i} = A_perturb(idx) * ones(1, length(theta_old_gt1{idx}));
+  else
+    % Neither of the checks are true
+    theta_old_plot{i} = [theta_old_gt1{idx}-1.0, nan, theta_old_lt1{idx}];
+    theta_new_plot{i} = [theta_new_gt1{idx}, nan, theta_new_lt1{idx}];
+    A_perturb_plot{i} = A_perturb(idx) * ones(1, length([theta_old_gt1{idx}, nan, theta_old_lt1{idx}]));
+  end
+end
+
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
 %-------------------------------------------------------------------------%
@@ -73,39 +128,10 @@ plot3(ax, [intersection.theta_old, intersection.theta_old], ...
      Color='k', LineWidth=2.5, LineStyle='-');
 
 %--------------------------%
-%     Plot: PTC Curves     %
-%--------------------------%
-% Linewidth
-lw = 1.5;
-
-plot_A_perturb = [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0];
-
-% Find plotting indices
-plot_idx = zeros(length(plot_A_perturb), 1);
-for i = 1 : length(plot_A_perturb)
-  plot_idx(i) = find(round(A_perturb, 3) == plot_A_perturb(i));
-end
-
-% Plot all PTCs
-for i = 1 : length(plot_idx)
-  idx = plot_idx(i);
-
-  fprintf('A_p = %.3f\n', A_perturb(idx));
-
-  % A_perturb plot data
-  A_plot_lt1 = A_perturb(idx) * ones(length(theta_old_lt1{idx}));
-  A_plot_gt1 = A_perturb(idx) * ones(length(theta_old_gt1{idx}));
-
-  % Plot
-  plot3(ax, theta_old_lt1{idx}, A_plot_lt1, theta_new_lt1{idx}, Color=plot_colours{i}, LineStyle='-');
-  plot3(ax, theta_old_gt1{idx}-1, A_plot_gt1, theta_new_gt1{idx}, Color=plot_colours{i}, LineStyle='-');
-end
-
-%--------------------------%
 %     Surface Settings     %
 %--------------------------%
 % Set colour map
-colormap(scale_colour_map(0.9));
+colormap(scale_colour_map(2.0));
 
 % Shading of surface
 shading(ax, 'interp');
@@ -128,6 +154,18 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 % Surface: After hole
 [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+
+%--------------------------%
+%     Plot: PTC Curves     %
+%--------------------------%
+% Linewidth
+lw = 1.5;
+
+% Plot all PTCs
+for i = 1 : length(plot_idx)
+  idx = plot_idx(i);
+  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, Color=plot_colours{i}, LineStyle='-');
+end
 
 %-------------------%
 %     Hold Axis     %
@@ -180,9 +218,7 @@ grid(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% View point
 view(315, 15);
-
-% Filename
 filename_out = '../pdf/fig7a_G_PTC_surface_1.png';
-% exportgraphics(fig, filename_out, ContentType='imagwe', Resolution=750);
+
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
