@@ -342,7 +342,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %     Calculate Solution     %
 %----------------------------%
 % Calculate dem tings
-data_stable = calc_PO_initial_solution(run_old, label_old);
+data_stable = calc_initial_solution_PO(run_old, label_old);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -367,7 +367,7 @@ prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 prob = coco_set(prob, 'cont', 'NPR', 10);
 
 % Stable periodic orbit
-prob = ode_isol2coll(prob, 'PO_stable', funcs.field{:}, ...
+prob = ode_isol2coll(prob, 'initial_PO', funcs.field{:}, ...
                      data_stable.t, data_stable.x, data_stable.pnames, data_stable.p, ...
                      '-var', eye(3));
 
@@ -380,7 +380,7 @@ prob = ode_isol2ep(prob, 'x0', funcs.field{:}, ...
                    data_stable.x0, data_stable.p);
 
 % Glue parameters and apply boundary condition
-prob = apply_PO_boundary_conditions(prob, bcs_funcs.bcs_PO);
+prob = apply_boundary_conditions_PO(prob, bcs_funcs.bcs_PO);
 
 % Event for A = 7.5
 prob = coco_add_event(prob, 'PO_PT', 'A', data_stable.p(2));
@@ -432,7 +432,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %     Calculate Solution     %
 %----------------------------%
 % Calculate dem tings
-data_isol = calc_stable_Wq_initial_solution(run_old, label_old);
+data_isol = calc_initial_solution_Wsq(run_old, label_old);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -466,7 +466,7 @@ prob = ode_isol2coll(prob, 'W2', funcs.field{:}, ...
                      data_isol.t0, data_isol.x_init_2, data_isol.p);
 
 % Continue periodic orbits
-prob = ode_coll2coll(prob, 'PO_stable', run_old, label_old);
+prob = ode_coll2coll(prob, 'initial_PO', run_old, label_old);
 
 % Continue equilibrium points for non trivial steady states
 prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
@@ -477,7 +477,7 @@ prob = ode_ep2ep(prob, 'x0', run_old, label_old);
 %     Apply Boundary Conditions     %
 %-----------------------------------%
 % Glue parameters and apply boundary condition
-prob = apply_Wq_conditions(prob, bcs_funcs, data_isol.eps);
+prob = apply_boundary_conditions_Wsq(prob, bcs_funcs, data_isol.eps);
 
 %------------------------%
 %     Add CoCo Event     %
@@ -544,7 +544,7 @@ prob = ode_coll2coll(prob, 'W1', run_old, label_old);
 prob = ode_coll2coll(prob, 'W2', run_old, label_old);
 
 % Continue periodic orbits
-prob = ode_coll2coll(prob, 'PO_stable', run_old, label_old);
+prob = ode_coll2coll(prob, 'initial_PO', run_old, label_old);
 
 % Continue equilibrium points for non trivial steady states
 prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
@@ -559,7 +559,7 @@ prob = ode_ep2ep(prob, 'x0', run_old, label_old);
 eps = chart.x(data.eps_idx);
 
 % Glue parameters and apply boundary condition
-prob = apply_Wq_conditions(prob, bcs_funcs, eps);
+prob = apply_boundary_conditions_Wsq(prob, bcs_funcs, eps);
 
 %------------------------%
 %     Add CoCo Event     %
@@ -626,7 +626,7 @@ prob = ode_coll2coll(prob, 'W1', run_old, label_old);
 prob = ode_coll2coll(prob, 'W2', run_old, label_old);
 
 % Continue periodic orbits
-prob = ode_coll2coll(prob, 'PO_stable', run_old, label_old);
+prob = ode_coll2coll(prob, 'initial_PO', run_old, label_old);
 
 % Continue equilibrium points for non trivial steady states
 prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
@@ -641,7 +641,7 @@ prob = ode_ep2ep(prob, 'x0', run_old, label_old);
 eps = chart.x(data.eps_idx);
 
 % Glue parameters and apply boundary condition
-prob = apply_Wq_conditions(prob, bcs_funcs, eps);
+prob = apply_boundary_conditions_Wsq(prob, bcs_funcs, eps);
 
 %------------------------%
 %     Add CoCo Event     %

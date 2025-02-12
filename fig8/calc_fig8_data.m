@@ -375,7 +375,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %     Calculate Solution     %
 %----------------------------%
 % Calculate dem tings
-data_soln = calculate_periodic_orbit(run_old, label_old);
+data_soln = calc_initial_solution_PO(run_old, label_old);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -412,7 +412,7 @@ prob = ode_ep2ep(prob, 'x0',   run_old, label_old);
 %     Apply Boundary Conditions and Settings     %
 %------------------------------------------------%
 % Glue parameters and apply boundary condition
-prob = apply_PO_boundary_conditions(prob, bcs_funcs.bcs_PO);
+prob = apply_boundary_conditions_PO(prob, bcs_funcs.bcs_PO);
 
 %-------------------------%
 %     Add COCO Events     %
@@ -428,7 +428,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma'}, A_range);
 
 %=========================================================================%
 %%            Compute Floquet Bundle at Zero Phase Point (mu)            %%
-%-------------------------------------------------------------------------%
+%=========================================================================%
 % We now add the adjoint function and Floquet boundary conditions to
 % compute the adjoint (left or right idk) eigenvectors and eigenvalues.
 % This will give us the perpendicular vector to the tangent of the periodic
@@ -457,7 +457,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %--------------------------%
 %     Calculate Things     %
 %--------------------------%
-data_adjoint = calc_initial_solution_adjoint_problem(run_old, label_old);
+data_adjoint = calc_initial_solution_VAR(run_old, label_old);
 
 %------------------------------------%
 %     Setup Floquet Continuation     %
@@ -490,7 +490,7 @@ prob = ode_isol2coll(prob, 'adjoint', funcs.floquet{:}, ...
 %     Apply Boundary Conditions and Settings     %
 %------------------------------------------------%
 % Apply boundary conditions
-prob = apply_floquet_boundary_conditions(prob, bcs_funcs);
+prob = apply_boundary_conditions_VAR(prob, bcs_funcs);
 
 %-------------------------%
 %     Add COCO Events     %
@@ -551,7 +551,7 @@ prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
 %     Apply Boundary Conditions and Settings     %
 %------------------------------------------------%
 % Apply boundary conditions
-prob = apply_floquet_boundary_conditions(prob, bcs_funcs);
+prob = apply_boundary_conditions_VAR(prob, bcs_funcs);
 
 %-------------------------%
 %     Add COCO Events     %
@@ -606,7 +606,7 @@ theta_perturb = 0.5 * pi;
 phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
-data_PR = calc_PR_initial_conditions(run_old, label_old, k, theta_perturb, phi_perturb);
+data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_perturb);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -688,7 +688,7 @@ prob = ode_isol2coll(prob, 'seg4', funcs.seg4{:}, ...
 % Apply all boundary conditions, glue parameters together, and
 % all that other good COCO stuff. Looking the function file
 % if you need to know more ;)
-prob = apply_PR_boundary_conditions(prob, data_PR, bcs_funcs);
+prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 
 %-------------------------%
 %     Add COCO Events     %
@@ -733,7 +733,7 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %---------------------------------%
 % Set number of threads
 M = 0;
-parfor (run = 2 : length(label_old), M)
+parfor (run = 1 : length(label_old), M)
   % Label for this run
   this_run_label = label_old(run);
 
@@ -746,7 +746,7 @@ parfor (run = 2 : length(label_old), M)
   SP_values = [0.5, 1.5];
 
   % Run continuation
-  PTC_scan_A_perturb(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
+  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
 
 end
 
