@@ -368,8 +368,7 @@ prob = coco_set(prob, 'cont', 'NPR', 10);
 
 % Stable periodic orbit
 prob = ode_isol2coll(prob, 'initial_PO', funcs.field{:}, ...
-                     data_stable.t, data_stable.x, data_stable.pnames, data_stable.p, ...
-                     '-var', eye(3));
+                     data_stable.t, data_stable.x, data_stable.pnames, data_stable.p);
 
 % Add equilibrium points for non trivial steady states
 prob = ode_isol2ep(prob, 'xpos', funcs.field{:}, ...

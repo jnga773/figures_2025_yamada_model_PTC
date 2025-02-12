@@ -2,8 +2,7 @@ function prob_out = apply_boundary_conditions_PO(prob_in, bcs_PO_in)
   % prob_out = apply_boundary_conditions_PO(prob_in)
   %
   % This function reads index data for the stable periodic orbit segment and equilibrium points,
-  % glues the COLL and EP parameters together, applies periodic orbit boundary conditions,
-  % and adds variational problem matrix parameters.
+  % glues the COLL and EP parameters together, applies periodic orbit boundary conditions.
   %
   % Parameters
   % ----------
@@ -32,10 +31,8 @@ function prob_out = apply_boundary_conditions_PO(prob_in, bcs_PO_in)
   %-------------------%
   % Read index data for the stable periodic orbit segment
   [data_s, uidx_s] = coco_get_func_data(prob, 'initial_PO.coll', 'data', 'uidx');
-  [data_s_var, uidx_s_var] = coco_get_func_data(prob, 'initial_PO.coll.var', 'data', 'uidx');
   % Index mapping
-  maps_s     = data_s.coll_seg.maps;
-  maps_s_var = data_s_var.coll_var;
+  maps_s = data_s.coll_seg.maps;
 
   % Read index data for equilibrium points
   [data_pos, uidx_pos] = coco_get_func_data(prob, 'xpos.ep', 'data', 'uidx');
@@ -61,16 +58,6 @@ function prob_out = apply_boundary_conditions_PO(prob_in, bcs_PO_in)
                        uidx_s([maps_s.x0_idx(1:data_s.xdim); ...
                                maps_s.x1_idx(1:data_s.xdim); ...
                                maps_s.p_idx(1:data_s.pdim)]));
-
-  %------------------------%
-  %     Add Parameters     %
-  %------------------------%
-  % Add variational problem matrix parameters
-  prob = coco_add_pars(prob, 'pars_var_stable', ...
-                       uidx_s_var(maps_s_var.v0_idx,:), ...
-                       {'vars1', 'vars2', 'vars3', ...
-                        'vars4', 'vars5', 'vars6', ...
-                        'vars7', 'vars8', 'vars9'});
 
   %----------------%
   %     Output     %
