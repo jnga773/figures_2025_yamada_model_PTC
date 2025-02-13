@@ -107,4 +107,4 @@ view(45, 6);
 %     Save Figure     %
 %---------------------%
 filename_out = '../fig2a_phase_portrait.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');

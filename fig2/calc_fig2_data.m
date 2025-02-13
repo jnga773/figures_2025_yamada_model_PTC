@@ -59,7 +59,6 @@ x0 = [A; B; 0];
 % Parameter ranges
 gamma_range = [0.0, 0.25];
 A_range = [5.0, 11.0];
-p_range = {A_range, gamma_range};
 
 % State dimensions
 pdim = length(p0);

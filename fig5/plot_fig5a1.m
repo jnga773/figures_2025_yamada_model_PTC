@@ -109,4 +109,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../fig5a1_portrait1.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');

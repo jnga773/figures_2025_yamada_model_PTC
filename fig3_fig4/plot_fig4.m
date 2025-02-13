@@ -115,4 +115,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../fig4_G_PTC_single.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');
