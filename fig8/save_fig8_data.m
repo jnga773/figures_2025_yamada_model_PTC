@@ -64,6 +64,7 @@ function save_fig8_data(run_in, filename_in)
 
     % Get labels
     label_PR = coco_bd_labs(bd_PR, 'SP');
+    label_PR = label_PR(1);
 
     % Get theta_old values
     theta_old = coco_bd_val(bd_PR, label_PR, 'theta_old');

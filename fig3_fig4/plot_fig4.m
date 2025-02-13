@@ -36,15 +36,6 @@ hold(ax, 'on');
 %----------------------------%
 %     Plot: Other Things     %
 %----------------------------%
-% Straight line for intersection point theta_old
-% xline(ax, 0.3176, Color=[0.0 0.0 0.0], LineStyle='-', LineWidth=2.5, ...
-%       HandleVisibility='off')
-
-% % Points for theta_old
-% idx_3 = find(round(theta_old_run1, 4) == 0.3);
-% plot(ax, [theta_old_run1(1), theta_old_run1(idx_3)], [theta_new_run1(1), theta_new_run1(idx_3)], ...
-%      LineStyle='none', Marker='o', MarkerFaceColor='r', MarkerEdgeColor='r', MarkerSize=5);
-
 % Plot diagonal line
 plot(ax, [0, 1], [0, 1], LineStyle='-', Color=colours(3, :), LineWidth=1.5, ...
      HandleVisibility='off');
