@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
@@ -41,7 +41,7 @@ plot_colours = {[188, 189,  34] ./ 255;
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
 % Setup figure
-fig = figure(6); clf;
+fig = figure(1); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
@@ -152,5 +152,5 @@ view(45, 6.0);
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig6a1_phase_portrait.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdf/fig6a1_phase_portrait.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

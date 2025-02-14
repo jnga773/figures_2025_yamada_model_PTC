@@ -799,6 +799,15 @@ coco(prob, run_new, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_per
 % Save data for Figure 5
 save_fig5_data(run_new, '../data_files/fig5_data.mat');
 
+%----------------------%
+%     Plot Figures     %
+%----------------------%
+% Run plotting scripts
+plot_fig5a1;
+plot_fig5a2;
+plot_fig5b1;
+plot_fig5b2;
+
 %=========================================================================%
 %                               END OF FILE                               %
 %=========================================================================%

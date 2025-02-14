@@ -1,4 +1,4 @@
-close all; clear all; clc
+% close all; clear all; clc
 
 %-------------------------------------------------------------------------%
 %%                               Read Data                               %%
@@ -139,5 +139,5 @@ box(ax, 'on');
 %      Save Figure     %
 %----------------------%
 % Filename
-filename_out = '../fig6b2_G_PTCs.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdf/fig6b2_G_PTCs.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

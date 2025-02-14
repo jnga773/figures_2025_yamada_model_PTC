@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -24,7 +24,7 @@ fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
 colours = colororder();
 
 % Setup figure
-fig = figure(5); clf;
+fig = figure(4); clf;
 fig.Name = 'Phase Reset in time: Intensity';
 ax = gca();
 
@@ -99,5 +99,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig5b2_time1.pdf';
+filename_out = '../pdf/fig5b2_time1.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

@@ -800,6 +800,16 @@ save_fig3_data(run_new, '../data_files/fig3_data.mat');
 % Save data for Figure 4
 save_fig4_data(run_new, '../data_files/fig4_data.mat');
 
+%----------------------%
+%     Plot Figures     %
+%----------------------%
+% Run plotting scripts
+plot_fig3a1;
+plot_fig3a2;
+plot_fig3b1;
+plot_fig3b2;
+plot_fig4;
+
 %=========================================================================%
 %                               END OF FILE                               %
 %=========================================================================%

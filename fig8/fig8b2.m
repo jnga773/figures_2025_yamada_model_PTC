@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -23,7 +23,7 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(3); clf;
+fig = figure(4); clf;
 fig.Name = 'Phase Reset in time: Intensity';
 ax = gca();
 

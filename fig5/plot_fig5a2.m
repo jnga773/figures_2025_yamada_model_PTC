@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -24,7 +24,7 @@ fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
 colours = colororder();
 
 % Setup figure
-fig = figure(5); clf;
+fig = figure(2); clf;
 fig.Name = 'Phase Reset Phase Portrait (2D)';
 ax = gca();
 
@@ -103,5 +103,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig5a2_portrait2.pdf';
+filename_out = '../[df/fig5a2_portrait2.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

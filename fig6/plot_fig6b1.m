@@ -1,4 +1,4 @@
-close all; clear all; clc
+% close all; clear all; clc
 
 %-------------------------------------------------------------------------%
 %%                               Read Data                               %%
@@ -39,7 +39,7 @@ plot_colours = {[188, 189,  34] ./ 255;
 colours = colororder();
 
 % Setup figure
-fig = figure(6); clf;
+fig = figure(5); clf;
 fig.Name = 'PTCs';
 ax = gca();
 
@@ -136,5 +136,5 @@ box(ax, 'on');
 %      Save Figure     %
 %----------------------%
 % Filename
-filename_out = '../fig6b1_G_PTCs.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdffig6b1_G_PTCs.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

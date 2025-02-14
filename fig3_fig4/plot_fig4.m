@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %                                Read Data                                %
@@ -14,7 +14,7 @@ load('../data_files/fig4_data.mat');
 colours = colororder();
 
 % Setup figure
-fig = figure(4); clf;
+fig = figure(5); clf;
 fig.Name = 'Single PTC';
 ax = gca();
 
@@ -105,5 +105,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig4_G_PTC_single.pdf';
+filename_out = '../pdf/fig4_G_PTC_single.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

@@ -756,6 +756,17 @@ end
 % Save data for Figure 6
 save_fig6_data(run_new, '../data_files/fig6_data.mat');
 
+%----------------------%
+%     Plot Figures     %
+%----------------------%
+% Run plotting scripts
+plot_fig6a1;
+plot_fig6a1_inset;
+plot_fig6a2;
+plot_fig6a2_inset;
+plot_fig6b1;
+plot_fig6b2;
+
 %=========================================================================%
 %                               END OF FILE                               %
 %=========================================================================%

@@ -660,8 +660,15 @@ coco(prob, run_new, [], 1, {'eps', 'T1', 'T2'}, prange);
 label_plot = coco_bd_labs(coco_bd_read(run_new), '');
 label_plot = max(label_plot) - 1;
 
-% Save again as fig2_data
+% Save data to .mat file
 save_fig2_data(run_new, label_plot, '../data_files/fig2_data.mat');
+
+%----------------------%
+%     Plot Figures     %
+%----------------------%
+% Run plotting scripts
+plot_fig2a;
+plot_fig2b;
 
 %=========================================================================%
 %                               END OF FILE                               %

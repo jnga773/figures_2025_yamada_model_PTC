@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
@@ -91,5 +91,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../fig2b_periodic_orbit_temporal_trace.pdf';
+filename_out = '../pdf/fig2b_periodic_orbit_temporal_trace.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

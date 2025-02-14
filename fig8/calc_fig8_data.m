@@ -756,6 +756,15 @@ end
 % Save data for Figure 8
 save_fig8_data(run_new, '../data_files/fig8_data.mat');
 
+%----------------------%
+%     Plot Figures     %
+%----------------------%
+% Run plotting scripts
+plot_fig8a1;
+plot_fig8a2;
+plot_fig8b1;
+plot_fig8b2;
+
 %=========================================================================%
 %                               END OF FILE                               %
 %=========================================================================%
