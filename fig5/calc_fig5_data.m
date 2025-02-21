@@ -599,7 +599,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %     Read Data     %
 %-------------------%
 % Set periodicity
-k = 25;
+k = 30;
 
 % Set perturbation direction
 theta_perturb = 0.0;
@@ -615,9 +615,9 @@ data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_per
 prob = coco_prob();
 
 % Set step sizes
-% prob = coco_set(prob, 'cont', 'h_min', 5e-5);
-% prob = coco_set(prob, 'cont', 'h0', 1e-3);
-% prob = coco_set(prob, 'cont', 'h_max', 1e1);
+prob = coco_set(prob, 'cont', 'h_min', 5e-5);
+prob = coco_set(prob, 'cont', 'h0', 1e-3);
+prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive mesh
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
@@ -646,10 +646,10 @@ prob = coco_set(prob, 'cont', 'al_max', 25);
 % where 'k' is an integer. This is the perturbed segment, that may have to
 % orbit the unperturbed periodic orbit many times before "resetting". Hence
 % we have set the NTST for this segment (NTST(4)) as k * 50.
-NTST(1) = 25;
+NTST(1) = 30;
 NTST(2) = 10;
 NTST(3) = 10;
-NTST(4) = 25 * k;
+NTST(4) = 30 * k;
 
 prob = coco_set(prob, 'seg1.coll', 'NTST', NTST(1));
 prob = coco_set(prob, 'seg2.coll', 'NTST', NTST(2));
@@ -694,7 +694,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = 1.5;
+SP_values = [0.1, 1.5];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -708,105 +708,58 @@ bdtest = coco(prob, run_new, [], 1, ...
               {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T'}, prange);
 
 %-------------------------------------------------------------------------%
-%%                 Phase Transition Curve (PTC) - Single                 %%
+%%                Phase Transition Curve (PTC) - Multiple                %%
 %-------------------------------------------------------------------------%
 %------------------%
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_transition_curve = 'run09_phase_reset_PTC_single';
+run_names.phase_transition_curve = 'run09_phase_reset_PTC_scan';
 run_new = run_names.phase_transition_curve;
 % Which run this continuation continues from
 run_old = run_names.phase_reset_perturbation;
 
 % Continuation point
-label_old = coco_bd_labs(coco_bd_read(run_old), 'EP');
-label_old = label_old(end);
+label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
 
 % Print to console
 fprintf("~~~ Phase Reset: Second Run ~~~ \n");
-fprintf('Fix A_perturb and continue in theta_perturb \n');
+fprintf('Calculate phase transition curve \n');
 fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('Continuing from SP points in run: %s \n', run_old);
 
-%----------------------------%
-%     Setup Continuation     %
-%----------------------------%
-% Set up the COCO problem
-prob = coco_prob();
+%---------------------------------%
+%     Cycle through SP labels     %
+%---------------------------------%
+% Set number of threads
+M = 2;
+parfor (run = 1 : length(label_old), M)
+  % Label for this run
+  this_run_label = label_old(run);
 
-% Set tolerance
-% prob = coco_set(prob, 'corr', 'TOL', 5e-7);
+  % Data directory for this run
+  fprintf('\n Continuing from point %d in run: %s \n', this_run_label, run_old);
+  this_run_name = {run_new; sprintf('run_%02d', run)};
 
-% Set step sizes
-% prob = coco_set(prob, 'cont', 'h_min', 5e-2);
-% prob = coco_set(prob, 'cont', 'h0', 1e-1);
-prob = coco_set(prob, 'cont', 'h_max', 1e1);
+  % Array of values for special event
+  SP_values = -1.0 : 0.1 : 2.0;
 
-% Set adaptive meshR
-prob = coco_set(prob, 'cont', 'NAdapt', 10);
+  % Run continuation
+  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
 
-% Set number of steps
-prob = coco_set(prob, 'cont', 'PtMX', 750);
-
-% Set norm to int
-prob = coco_set(prob, 'cont', 'norm', inf);
-
-% % Set MaxRes and al_max
-% prob = coco_set(prob, 'cont', 'MaxRes', 10);
-% prob = coco_set(prob, 'cont', 'al_max', 25);
-
-%-------------------------------------------%
-%     Continue from Trajectory Segments     %
-%-------------------------------------------%
-% Segment 1
-prob = ode_coll2coll(prob, 'seg1', run_old, label_old);
-% Segment 2
-prob = ode_coll2coll(prob, 'seg2', run_old, label_old);
-% Segment 3
-prob = ode_coll2coll(prob, 'seg3', run_old, label_old);
-% Segment 4
-prob = ode_coll2coll(prob, 'seg4', run_old, label_old); 
-
-%------------------------------------------------%
-%     Apply Boundary Conditions and Settings     %
-%------------------------------------------------%
-% Apply all boundary conditions, glue parameters together, and
-% all that other good COCO stuff. Looking the function file
-% if you need to know more ;)
-prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
-
-%-------------------------%
-%     Add COCO Events     %
-%-------------------------%
-% Array of values for special event
-SP_values = [0.0, 0.3];
-
-% When the parameter we want (from param) equals a value in A_vec
-prob = coco_add_event(prob, 'SP', 'theta_old', SP_values);
-
-%------------------%
-%     Run COCO     %
-%------------------%
-% Run COCO continuation
-prange = {[0.0, 1.0], [], [], [0.99, 1.01], [], []};
-% prange = {[1.0, 2.0], [], [], [0.99, 1.01], [], []};
-coco(prob, run_new, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
+end
 
 %-------------------%
 %     Save Data     %
 %-------------------%
-% Save data for Figure 5
+% Save data for Figure 6
 save_fig5_data(run_new, '../data_files/fig5_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig5a1;
-plot_fig5a2;
-plot_fig5b1;
-plot_fig5b2;
+plot_fig5;
 
 %=========================================================================%
 %                               END OF FILE                               %

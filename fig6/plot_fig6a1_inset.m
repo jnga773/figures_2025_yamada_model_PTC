@@ -11,27 +11,20 @@ load('../data_files/fig6_data.mat');
 plot_idx = 1:4;
 % plot_idx = 4:7;
 
-% Default line colours
+%----------------------%
+%     Plot Colours     %
+%----------------------%
+% Default colour order
 colours = colororder();
 
 % Plot colours
-% Green     (#2ca02c) = [ 44, 160,  44] ./ 255
-% Chartreus (#bcbd22) = [188, 189,  34] ./ 255
-% Yellow    (#fafa2a) = [250, 250,  42] ./ 255
-% Orange    (#ff7f0e) = [255, 126,  14] ./ 255
-% Red       (#d62728) = [214,  39,  40] ./ 255
-% Pink      (#e38ab7) = [227, 138, 183] ./ 255
-% Purple    (#9467bd) = [148, 103, 189] ./ 255
-% Cyan      (#1bc3cc) = [ 27, 195, 204 ./ 255
-
-% Plot colours
-plot_colours = {[188, 189,  34] ./ 255;
-                [250, 250,  42] ./ 255;
-                [255, 126,  14] ./ 255;
-                [214,  39,  40] ./ 255;
-                [227, 138, 183] ./ 255;
-                [148, 103, 189] ./ 255;
-                [ 27, 195, 204] ./ 255};
+plot_colours = {'#bcbd22';    % Green-Yellow
+                '#d8a400';    % Yellow-Orange
+                '#e66119';    % Orange
+                '#d62728';    % Red
+                '#a12b6f';    % Purple-Magenta
+                '#5a5fc8';    % Blue-Violet
+                '#1f9ece'};   % Cyan
 
 %%
 %-------------------------------------------------------------------------%
@@ -95,8 +88,8 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.75, 4.0];
-ax.YAxis.Limits = [0.0, 1.0];
+ax.XAxis.Limits = [0.75, 2.5];
+ax.YAxis.Limits = [0.0, 1.5];
 ax.ZAxis.Limits = [0.0, 5];
 
 %--------------------%
@@ -141,7 +134,7 @@ ax.GridLineWidth = 0.5; ax.GridColor = 'black'; ax.GridAlpha = 0.25;
 
 % 3D plot view
 % view(45, 10.0);
-view(10, 6.0);
+view(-30, 6.0);
 
 %---------------------%
 %     Save Figure     %
