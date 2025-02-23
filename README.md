@@ -48,21 +48,25 @@ This repository is structured as follows:
   - `plot_fig2b.m`: Plots Fig. 2(b) - the three components of the Yamada model with respect to time.
   - `save_fig2_data.m`: Saves the figure data to a Matlab `.mat` file.
 
-- `fig3_fig4`
-  - `calc_fig3_fig4_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\bm{d} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 0.1$, and the phase transition curve (PTC).
+- `fig3`
+  - `calc_fig3_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\bm{d} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 0.1$, and the phase transition curve (PTC).
   - `plot_fig3a1.m`: Plots Fig. 3(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 0.1$ at $\vartheta_{\mathrm{o}} = 0.0$.
   - `plot_fig3a2.m`: Plots Fig. 3(a2) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 0.1$ at $\vartheta_{\mathrm{o}} = 0.3$.
   - `plot_fig3b1.m`: Plots Fig. 3(b1) - Temporal trace of the intensity for the phase reset in Fig. 3(a1).
   - `plot_fig3b2.m`: Plots Fig. 3(b2) - Temporal trace of the intensity for the phase reset in Fig. 3(a2).
-  - `plot_fig4.m`: Plots Fig. 4 - the PTC for the perturbation $A_{\mathrm{p}} = 0.1$.
-  - `save_fig3_fig4_data.m`: Saves the figure data to a Matlab `.mat` file.
+  - `save_fig3_data.m`: Saves the figure data to a Matlab `.mat` file.
+
+- `fig4`
+  - `calc_fig4_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\bm{d} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 1.5$, and the phase transition curve (PTC).
+  - `plot_fig4a1.m`: Plots Fig. 4(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
+  - `plot_fig4a2.m`: Plots Fig. 4(a2) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
+  - `plot_fig4b1.m`: Plots Fig. 4(b1) - Temporal trace of the intensity for the phase reset in Fig. 5(a1).
+  - `plot_fig4b2.m`: Plots Fig. 4(b2) - Temporal trace of the intensity for the phase reset in Fig. 5(a2).
+  - `save_fig4_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig5`
-  - `calc_fig5_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\bm{d} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 1.5$, and the phase transition curve (PTC).
-  - `plot_fig5a1.m`: Plots Fig. 5(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
-  - `plot_fig5a2.m`: Plots Fig. 5(a2) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
-  - `plot_fig5b1.m`: Plots Fig. 5(b1) - Temporal trace of the intensity for the phase reset in Fig. 5(a1).
-  - `plot_fig5b2.m`: Plots Fig. 5(b2) - Temporal trace of the intensity for the phase reset in Fig. 5(a2).
+  - `calc_fig5_data.m`: COCO script for generating the PTCs for gain perturbations - $\bm{d} = (1, 0, 0)$ - for two amplitudes: $A_{\mathrm{p}} = 0.1$ and $1.5$.
+  - `plot_fig5.m`: Plots Fig. 5 - PTC for two perturbation amplitudes.
   - `save_fig5_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig6`
