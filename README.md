@@ -12,11 +12,15 @@ Simply run the COCO and `plot_figX.m` scripts in Matlab. The AUTO scripts can be
 ```sh
 auto figX_data.py
 ```
-You can also run AUTO through regular python,
+You can also run AUTO through the `auto` command,
+```sh
+auto figX_data.py
+```
+or, if you have configured AUTO as a python package, with the standard python:
 ```sh
 python figX_data.py
 ```
-if you have configured AUTO as a pythong package. To do this through Conda, just run:
+To do this through Conda, just run:
 ```sh
 conda develop /path/to/auto/07p/python
 conda develop /path/to/auto/07p/python/auto
