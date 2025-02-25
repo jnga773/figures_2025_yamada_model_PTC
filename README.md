@@ -25,7 +25,7 @@ To do this through Conda, just run:
 conda develop /path/to/auto/07p/python
 conda develop /path/to/auto/07p/python/auto
 ```
-There are two lines at the top of each AUTO code which can also add the auto commands to the Python Path:
+There are also two lines at the top of each AUTO code which can also add the auto commands to the Python Path:
 ```python
 import sys
 sys.path.append('/path/to/auto/07p/python')
