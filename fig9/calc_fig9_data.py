@@ -372,7 +372,7 @@ print('\n')
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run01_phase_reset_perturbation'
+run_new_str = 'run08_phase_reset_perturbation'
 # Previous run name
 run_old_str = 'run07_floquet_wnorm'
 run_old = data_funcs.bd_read(run_old_str)
@@ -390,7 +390,7 @@ print('Run name: {}'.format(run_new_str))
 #-------------------#
 # Set initial phase resetting parameters
 # Periodicity
-k = 50
+k = 55
 
 # Perturbation direction
 from numpy import pi
@@ -404,22 +404,23 @@ x_init_PR, p_PR, pnames_PR = \
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
+# Set saved points
 from numpy import linspace, concatenate, unique
 
-# Saved points for large scan of I perturbation
-SP_points = concatenate((linspace(0.0, 1.0, 20), 
+# Saved points for large scan of G perturbation
+SP_points = concatenate((linspace(0.0, 1.0, 15), 
                          linspace(1.0, 10.0, 15),
                          linspace(10.0, 13.0, 15),
-                         linspace(13.0, 25.0, 20)))
+                         linspace(13.0, 25.0, 15)))
 SP_points = unique(SP_points)
 
 # Copy continuation script
 auto.copy('./continuation_scripts/', 'PTC_initial')
 
 # Try set up phase reset calculation lol
-run_new = auto.run(x_init_PR, PAR=p_PR, parnames=pnames_PR,
+run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
                    c='PTC_initial',
-                   NMX=2000, NTST=p_PR[6] * 50,
+                   NMX=2000, NTST=k * 50,
                    UZR={'A_perturb': SP_points},
                    UZSTOP={'A_perturb': max(SP_points) + 0.1})
 
@@ -431,6 +432,7 @@ data_funcs.save_move_data(run_new, run_new_str)
 
 # Print clear line
 print('\n')
+
 
 # %%
 #------------------------------------------------------------------------------#
@@ -516,7 +518,7 @@ for i in range(len(label_old)):
 #     Plot     #
 #--------------#
 # Save data
-import save_fig7_data as data_PTC
+import save_fig9_data as data_PTC
 data_PTC.save_PTC_scan(run_new_str, '../data_files/fig9_data.mat')
 
 # %%
