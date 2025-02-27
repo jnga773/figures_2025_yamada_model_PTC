@@ -22,11 +22,11 @@ intersection.A_perturb = 0.5576;
 %----------------------%
 % Plot colours
 plot_colours = {'#bcbd22';    % Green-Yellow
-                '#d8a400';    % Yellow-Orange
                 '#e66119';    % Orange
+                '#8c564b';    % Brown
                 '#d62728';    % Red
-                '#a12b6f';    % Purple-Magenta
-                '#5a5fc8';    % Blue-Violet
+                '#e377c2';    % Pink
+                '#bf42f5';    % Purple
                 '#1f9ece'};   % Cyan
 
 %-----------------------------------%
@@ -154,7 +154,7 @@ lw = 3.0;
 % Plot all PTCs
 for i = 1 : length(plot_idx)
   idx = plot_idx(i);
-  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, Color=plot_colours{i}, LineStyle='-');
+  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, Color=plot_colours{i}, LineWidth=lw, LineStyle='-');
 end
 
 %-------------------%

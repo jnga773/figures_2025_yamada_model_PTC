@@ -19,11 +19,11 @@ colours = colororder();
 
 % Plot colours
 plot_colours = {'#bcbd22';    % Green-Yellow
-                '#d8a400';    % Yellow-Orange
                 '#e66119';    % Orange
+                '#8c564b';    % Brown
                 '#d62728';    % Red
-                '#a12b6f';    % Purple-Magenta
-                '#5a5fc8';    % Blue-Violet
+                '#e377c2';    % Pink
+                '#bf42f5';    % Purple
                 '#1f9ece'};   % Cyan
 
 %%
