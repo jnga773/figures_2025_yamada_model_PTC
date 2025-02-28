@@ -37,6 +37,9 @@ height = width / 3;
 % Set figure size
 set_figure_dimensions(width, height);
 
+% Set axis linewidth
+ax.LineWidth = 0.8;
+
 %------------------------------%
 %     Plot: Phase Portrait     %
 %------------------------------%
@@ -45,11 +48,15 @@ hold(ax, 'on');
 
 % Plot unerperturbed orbit
 max_idx = max(find(tbp_PO_plot < 12.0));
-plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
+plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), ...
+     Color=[colours(3, :)], ...
+     LineWidth=1.0);
 
 % Plot segment 4
 max_idx = max(find(tbp4_run2 < 12.0));
-plot(ax, tbp4_run2(1:max_idx), xbp4_run2(1:max_idx, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
+plot(ax, tbp4_run2(1:max_idx), xbp4_run2(1:max_idx, 3), ...
+     Color=[0.0, 0.0, 0.0, 0.5], ...
+     LineWidth=1.0);
 
 % Hold axes
 hold(ax, 'off');

@@ -37,6 +37,9 @@ height = 1.0;
 % Set figure size
 set_figure_dimensions(width, height);
 
+% Set axis linewidth
+ax.LineWidth = 0.8;
+
 %------------------------------%
 %     Plot: Phase Portrait     %
 %------------------------------%

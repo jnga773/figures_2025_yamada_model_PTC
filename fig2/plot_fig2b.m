@@ -37,16 +37,29 @@ height = 3.0;
 % Set figure size
 set_figure_dimensions(width, height);
 
+% Set axis linewidth
+ax.LineWidth = 0.8;
+
 %--------------%
 %     Plot     %
 %--------------%
 % Hold axes
 hold(ax, 'on');
 
-% Plot original periodic orbit
-plot(ax, tbp_plot, xbp_plot(:, 1), Color=colours(1, :), LineStyle=':', LineWidth=1.5);
-plot(ax, tbp_plot, xbp_plot(:, 2), Color=colours(2, :), LineStyle='--', LineWidth=1.5);
-plot(ax, tbp_plot, xbp_plot(:, 3), Color=colours(3, :), LineStyle='-', LineWidth=1.5);
+% Plot: Gain
+plot(ax, tbp_plot, xbp_plot(:, 1), ...
+     LineStyle=':', LineWidth=1.5, ...
+     Color=colours(1, :));
+
+% Plot: Absorption
+plot(ax, tbp_plot, xbp_plot(:, 2), ...
+     LineStyle='--', LineWidth=1.5, ...
+     Color=colours(2, :));
+
+% Plot: Intensity
+plot(ax, tbp_plot, xbp_plot(:, 3), ...
+     LineStyle='-', LineWidth=1.5, ...
+     Color=colours(3, :));
 
 % Hold axes
 hold(ax, 'off');

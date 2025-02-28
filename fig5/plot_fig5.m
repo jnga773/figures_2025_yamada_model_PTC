@@ -1,4 +1,4 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %                                Read Data                                %
@@ -6,19 +6,12 @@
 % Read data from .mat file
 load('../data_files/fig5_data.mat');
 
+%----------------------%
+%     Plot Colours     %
+%----------------------%
 % Plot colours
-% Green     (#2ca02c) = [ 44, 160,  44] ./ 255
-% Chartreus (#bcbd22) = [188, 189,  34] ./ 255
-% Yellow    (#fafa2a) = [250, 250,  42] ./ 255
-% Orange    (#ff7f0e) = [255, 126,  14] ./ 255
-% Red       (#d62728) = [214,  39,  40] ./ 255
-% Pink      (#e38ab7) = [227, 138, 183] ./ 255
-% Purple    (#9467bd) = [148, 103, 189] ./ 255
-% Cyan      (#1bc3cc) = [ 27, 195, 204 ./ 255
-
-% Plot colours
-plot_colours = {[250, 250,  42] ./ 255;
-                [148, 103, 189] ./ 255};
+plot_colours = {'#d8a400';    % Yellow-Orange
+                '#5a5fc8'};   % Blue-Violet
 
 %%
 %-------------------------------------------------------------------------%
@@ -42,6 +35,9 @@ height = 7.0;
 % Set figure size
 set_figure_dimensions(width, height);
 
+% Set axis linewidth
+ax.LineWidth = 0.8;
+
 %-------------------%
 %     Hold Axis     %
 %-------------------%
@@ -50,26 +46,36 @@ hold(ax, 'on');
 %----------------------------%
 %     Plot: Other Things     %
 %----------------------------%
-% Plot diagonal line
-plot(ax, [0, 1], [0, 1], LineStyle='-', Color=colours(3, :), LineWidth=1.5, ...
-     HandleVisibility='off');
-
 % Shade fundamental domain
-patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), FaceAlpha=0.2, ...
-      EdgeColor='none', HandleVisibility='off')
+patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), ...
+      FaceAlpha=0.2, EdgeColor='none');
+
+% Plot diagonal lines
+plot(ax, [0, 1], [0, 1], LineStyle='-', LineWidth=1.5, ...
+     Color=colours(3, :));
+plot(ax, [0, 1], [-1, 0], LineStyle='-', LineWidth=1.5, ...
+     Color=colours(3, :));
+plot(ax, [0, 1], [1, 2], LineStyle='-', LineWidth=1.5, ...
+     Color=colours(3, :));
 
 % Grey lines at theta_old = 0 and 0.3
-% xline(ax, theta_old_run1, LineStyle='-', Color=[0, 0, 0, 0.5], LineWidth=1);
-xline(ax, 0.3, LineStyle='-', Color=[0, 0, 0, 0.5], LineWidth=1);
+xline(ax, 0.3, LineStyle='-', LineWidth=1, ...
+      Color=[0, 0, 0, 0.5]);
 
 %-------------------%
 %     Plot: PTC     %
 %-------------------%
 % Plot PTC: run1
 for i = 1 : length(theta_old)
-  plot(ax, theta_old{i}, theta_new{i}-1, Color=plot_colours{i}, LineStyle='-', LineWidth=1.5);
-  plot(ax, theta_old{i}, theta_new{i}, Color=plot_colours{i}, LineStyle='-', LineWidth=1.5);
-  plot(ax, theta_old{i}, theta_new{i}+1, Color=plot_colours{i}, LineStyle='-', LineWidth=1.5);
+  plot(ax, theta_old{i}, theta_new{i}-1, ...
+       LineStyle='-', LineWidth=1.5, ...
+       Color=plot_colours{i});
+  plot(ax, theta_old{i}, theta_new{i}, ...
+       LineStyle='-', LineWidth=1.5, ...
+       Color=plot_colours{i});
+  plot(ax, theta_old{i}, theta_new{i}+1, ...
+       LineStyle='-', LineWidth=1.5, ...
+       Color=plot_colours{i});
 end
 
 %-------------------%

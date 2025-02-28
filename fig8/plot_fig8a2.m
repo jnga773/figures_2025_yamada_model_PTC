@@ -23,7 +23,7 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
+fig = figure(2); clf;
 fig.Name = 'Phase Reset Phase Portrait (2D)';
 ax = gca();
 
@@ -37,6 +37,9 @@ height = 3.5;
 % Set figure size
 set_figure_dimensions(width, height);
 
+% Set axis linewidth
+ax.LineWidth = 0.8;
+
 %------------------------------%
 %     Plot: Phase Portrait     %
 %------------------------------%
@@ -44,16 +47,29 @@ set_figure_dimensions(width, height);
 hold(ax, 'on');
 
 % Plot segment 4
-plot(ax, xbp4_run1(:, 1), xbp4_run1(:, 3), Color=[0.0, 0.0, 0.0, 0.5], ...
-     LineWidth=1.0, DisplayName='Segment 4');
+plot(ax, xbp4_run2(:, 1), xbp4_run2(:, 3), ...
+     Color=[0.0, 0.0, 0.0, 0.5], ...
+     LineWidth=1.0);
 
 % Plot original periodic orbit
-plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), Color=colours(3, :), ...
-     LineWidth=2.0, DisplayName='$\Gamma$');
+plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), ...
+     Color=colours(3, :), ...
+     LineWidth=2.0);
 
 % Plot equilibrium point
-plot(ax, xpos(1), xpos(3), Marker='o', MarkerSize=4.0, LineStyle='none', ...
-      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+plot(ax, xpos(1), xpos(3), ...
+     Marker='o', MarkerSize=4.0, ...
+     MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+
+% Plot theta_old point on gamma
+plot(ax, xbp_PO(1, 1), xbp_PO(1, 3), ...
+     Marker='o', MarkerSize=4, ...
+     MarkerFaceColor=colours(3, :), MarkerEdgeColor='k');
+     
+% Plot start point of segment 4
+plot(ax, xbp4_run2(1, 1), xbp4_run2(1, 3), ...
+     Marker='o', MarkerSize=4, ...
+     MarkerFaceColor='k', MarkerEdgeColor='k');
 
 % Hold axes
 hold(ax, 'off');
@@ -102,5 +118,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../fig8a1_portrait1.pdf';
+% filename_out = '../fig8a2_portrait2.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

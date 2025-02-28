@@ -90,7 +90,7 @@ end
 %-------------------------%
 %     Figure Settings     %
 %-------------------------%
-fig = figure(7); clf;
+fig = figure(2); clf;
 fig.Name = 'PTC Scans: Gain';
 ax = gca();
 
@@ -103,6 +103,9 @@ height = 6.4;
 
 % Set figure size
 set_figure_dimensions(width, height);
+
+% Set axis linewidth
+ax.LineWidth = 0.8;
 
 %-------------------%
 %     Hold Axis     %
@@ -154,13 +157,16 @@ lw = 3.0;
 % Plot all PTCs
 for i = 1 : length(plot_idx)
   idx = plot_idx(i);
-  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, Color=plot_colours{i}, LineWidth=lw, LineStyle='-');
+  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
+        LineWidth=lw, LineStyle='-', ...
+        Color=plot_colours{i});
 end
 
 %-------------------%
 %     Hold Axis     %
 %-------------------%
 hold(ax, 'off');
+
 %---------------------%
 %     Axis Limits     %
 %---------------------%
@@ -205,10 +211,16 @@ ax.ZAxis.TickLabels = {};
 box(ax, 'on');
 grid(ax, 'on');
 
+% axis(ax, 'off');
+% set(gca, 'Color', 'none');
+
 %---------------------%
 %     Save Figure     %
 %---------------------%
 view(135, 15);
-filename_out = '../pdf/fig7b_G_PTC_surface_2.png';
 
-% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+filename_out = '../pdf/fig7b_G_PTC_surface_2.png';
+exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+
+% filename_out = '../pdf/fig7b_G_PTC_surface_2.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

@@ -43,6 +43,9 @@ height = 9.0;
 % Set figure size
 set_figure_dimensions(width, height);
 
+% Set axis linewidth
+ax.LineWidth = 0.8;
+
 %-------------------%
 %     Hold Axis     %
 %-------------------%
@@ -51,16 +54,17 @@ hold(ax, 'on');
 %----------------------------%
 %     Plot: Other Things     %
 %----------------------------%
-% Vertical line at intersection point
-xline(ax, 0.3176, Color=[0.0 0.0 0.0], LineStyle='-', LineWidth=1.0);
-
-% Plot diagonal line% Plot diagonal line
-plot(ax, [0, 1], [0, 1], LineStyle='-', Color=colours(3, :), LineWidth=1.5, ...
-     HandleVisibility='off');
-
 % Shade fundamental domain
-patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), FaceAlpha=0.2, ...
-      EdgeColor='none', HandleVisibility='off')
+patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), ...
+      FaceAlpha=0.2, EdgeColor='none');
+
+% Plot diagonal lines
+plot(ax, [0, 1], [0, 1], LineStyle='-', LineWidth=1.5, ...
+     Color=colours(3, :));
+
+% Grey lines at theta_old = 0 and 0.3
+xline(ax, 0.3176, LineStyle='-', LineWidth=1, ...
+      Color=[0, 0, 0, 0.5]);
 
 %--------------------%
 %     Plot: PTCs     %
@@ -75,7 +79,9 @@ for i = 1 : length(plot_idx)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot
-  plot(ax, theta_old{idx}, theta_new{idx}, Color=plot_colours{idx}, LineWidth=lw, LineStyle='-');
+  plot(ax, theta_old{idx}, theta_new{idx}, ...
+       LineWidth=lw, LineStyle='-', ...
+       Color=plot_colours{idx});
 end
 
 %-------------------%
