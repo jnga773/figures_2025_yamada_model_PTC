@@ -11,10 +11,9 @@ load('../data_files/fig4_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb = %.4f\n\n', A_perturb);
-
-fprintf('theta_old(1) = %.4f\n', theta_old_run1);
-fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
+fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -59,7 +58,7 @@ hold(ax, 'off');
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [-0.2, 12];
-ax.YAxis.Limits = [-0.5, 50];
+ax.YAxis.Limits = [-0.1, 20];
 
 %------------------------------%
 %     Axis Ticks: Settings     %
@@ -77,8 +76,8 @@ ax.XAxis.TickValues = 0.0 : 2.0 : 12.0;
 ax.XAxis.MinorTickValues = 0.0 : 1.0 : 12.0;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 10 : 50.0;
-ax.YAxis.MinorTickValues = 0.0 : 5 : 50.0;
+ax.YAxis.TickValues = 0.0 : 5 : 20.0;
+ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %

@@ -23,13 +23,13 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
-fig.Name = 'Phase Reset Phase Portrait (2D)';
+fig = figure(3); clf;
+fig.Name = 'Phase Reset in time: Intensity';
 ax = gca();
 
 % Axis dimensions
-width = 3.5;
-height = 3.5;
+width = 2.0;
+height = 1.0;
 
 % Add set_figure_dimensions() function to path
 % addpath('../');
@@ -43,17 +43,13 @@ set_figure_dimensions(width, height);
 % Hold axes
 hold(ax, 'on');
 
+% Plot unerperturbed orbit
+max_idx = max(find(tbp_PO_plot < 12.0));
+plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
+
 % Plot segment 4
-plot(ax, xbp4_run1(:, 1), xbp4_run1(:, 3), Color=[0.0, 0.0, 0.0, 0.5], ...
-     LineWidth=1.0, DisplayName='Segment 4');
-
-% Plot original periodic orbit
-plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), Color=colours(3, :), ...
-     LineWidth=2.0, DisplayName='$\Gamma$');
-
-% Plot equilibrium point
-plot(ax, xpos(1), xpos(3), Marker='o', MarkerSize=4.0, LineStyle='none', ...
-      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+max_idx = max(find(tbp4_run1 < 12.0));
+plot(ax, tbp4_run1(1:max_idx), xbp4_run1(1:max_idx, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
 
 % Hold axes
 hold(ax, 'off');
@@ -61,7 +57,7 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0, 5];
+ax.XAxis.Limits = [11, 11.5];
 ax.YAxis.Limits = [-0.1, 20];
 
 %------------------------------%
@@ -76,18 +72,18 @@ ax.YAxis.MinorTick = 'on';
 %     Axis Ticks: ax1 and ax2     %
 %---------------------------------%
 % X-Axis
-ax.XAxis.TickValues = 0.0 : 1 : 5.0;
-ax.XAxis.MinorTickValues = 0.0 : 0.5 : 5.0;
+ax.XAxis.TickValues = [];
+ax.XAxis.MinorTickValues = [];
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 5 : 20.0;
-ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.YAxis.TickValues = [];
+ax.YAxis.MinorTickValues = [];
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-% xlabel(ax, '$G$');
+% xlabel(ax, '$t / T_{\Gamma}$');
 % ylabel(ax, '$I$');
 
 % Turn off all tick labels
@@ -102,5 +98,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig3a1_portrait1.pdf';
+filename_out = '../pdf/fig3b1_inset.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

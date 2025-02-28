@@ -11,10 +11,9 @@ load('../data_files/fig4_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb = %.4f\n\n', A_perturb);
-
-fprintf('theta_old(1) = %.4f\n', theta_old_run1);
-fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
+fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%

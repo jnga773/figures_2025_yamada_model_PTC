@@ -11,10 +11,9 @@ load('../data_files/fig3_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb = %.4f\n\n', A_perturb);
-
-fprintf('theta_old(1) = %.4f\n', theta_old_run1);
-fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
+fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -59,11 +58,16 @@ plot(ax, xpos(1), xpos(3), Marker='o', MarkerSize=4.0, LineStyle='none', ...
 % Hold axes
 hold(ax, 'off');
 
+%----------------------------%
+%     Axis Aspect Ratios     %
+%----------------------------%
+% ax1.PlotBoxAspectRatio = [1, 1, 1];
+
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0, 5];
-ax.YAxis.Limits = [-0.1, 20];
+ax.XAxis.Limits = [0, 7];
+ax.YAxis.Limits = [-0.5, 50];
 
 %------------------------------%
 %     Axis Ticks: Settings     %
@@ -77,12 +81,12 @@ ax.YAxis.MinorTick = 'on';
 %     Axis Ticks: ax1 and ax2     %
 %---------------------------------%
 % X-Axis
-ax.XAxis.TickValues = 0.0 : 1 : 5.0;
-ax.XAxis.MinorTickValues = 0.0 : 0.5 : 5.0;
+ax.XAxis.TickValues = 0.0 : 2 : 8;
+ax.XAxis.MinorTickValues = 0.0 : 1 : 8.0;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 5 : 20.0;
-ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.YAxis.TickValues = 0.0 : 10 : 50.0;
+ax.YAxis.MinorTickValues = 0.0 : 5 : 50.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %

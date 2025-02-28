@@ -28,8 +28,8 @@ fig.Name = 'Phase Reset Phase Portrait (2D)';
 ax = gca();
 
 % Axis dimensions
-width = 3.5;
-height = 3.5;
+width = 1.5;
+height = 1.0;
 
 % Add set_figure_dimensions() function to path
 % addpath('../');
@@ -55,14 +55,20 @@ plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), Color=colours(3, :), ...
 plot(ax, xpos(1), xpos(3), Marker='o', MarkerSize=4.0, LineStyle='none', ...
       MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
+% Plot dots
+plot(ax, xbp_PO(1, 1), xbp_PO(1, 3), Marker='o', MarkerSize=4, ...
+     MarkerFaceColor=colours(3, :), MarkerEdgeColor='k');
+plot(ax, xbp4_run1(1, 1), xbp4_run1(1, 3), Marker='o', MarkerSize=4, ...
+     MarkerFaceColor='k', MarkerEdgeColor='k');
+
 % Hold axes
 hold(ax, 'off');
 
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0, 5];
-ax.YAxis.Limits = [-0.1, 20];
+ax.XAxis.Limits = [4.6, 4.75];
+ax.YAxis.Limits = [0.55, 0.65];
 
 %------------------------------%
 %     Axis Ticks: Settings     %
@@ -76,12 +82,12 @@ ax.YAxis.MinorTick = 'on';
 %     Axis Ticks: ax1 and ax2     %
 %---------------------------------%
 % X-Axis
-ax.XAxis.TickValues = 0.0 : 1 : 5.0;
-ax.XAxis.MinorTickValues = 0.0 : 0.5 : 5.0;
+ax.XAxis.TickValues = [];
+ax.XAxis.MinorTickValues = [];
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 5 : 20.0;
-ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.YAxis.TickValues = [];
+ax.YAxis.MinorTickValues = [];
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -102,5 +108,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig3a1_portrait1.pdf';
+filename_out = '../pdf/fig3a1_inset.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

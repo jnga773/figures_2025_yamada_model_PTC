@@ -11,10 +11,9 @@ load('../data_files/fig3_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb = %.4f\n\n', A_perturb);
-
-fprintf('theta_old(1) = %.4f\n', theta_old_run1);
-fprintf('theta_old(2) = %.4f\n\n', theta_old_run2);
+fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -49,7 +48,7 @@ max_idx = max(find(tbp_PO_plot < 12.0));
 plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
 
 % Plot segment 4
-max_idx = max(find(tbp4_run1 < 12.0));
+max_idx = max(find(tbp4_run2 < 12.0));
 plot(ax, tbp4_run2(1:max_idx), xbp4_run2(1:max_idx, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
 
 % Hold axes
@@ -59,7 +58,7 @@ hold(ax, 'off');
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [-0.2, 12];
-ax.YAxis.Limits = [-0.1, 20];
+ax.YAxis.Limits = [-0.5, 50];
 
 %------------------------------%
 %     Axis Ticks: Settings     %
@@ -77,8 +76,8 @@ ax.XAxis.TickValues = 0.0 : 2.0 : 12.0;
 ax.XAxis.MinorTickValues = 0.0 : 1.0 : 12.0;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 5 : 20.0;
-ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.YAxis.TickValues = 0.0 : 10 : 50.0;
+ax.YAxis.MinorTickValues = 0.0 : 5 : 50.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -99,5 +98,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig3b2_time1.pdf';
+filename_out = '../pdf/fig3b2_time2.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');
