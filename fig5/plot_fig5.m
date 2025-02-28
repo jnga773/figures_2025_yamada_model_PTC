@@ -128,5 +128,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig5_G_PTC_single.pdf';
+filename_out = '../pdf/fig5_G_two_PTCs.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');
