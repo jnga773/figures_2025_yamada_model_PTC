@@ -48,8 +48,8 @@ This repository is structured as follows:
 
 - `fig2`
   - `calc_fig2_data.m`: COCO script for generating the initial periodic orbit solution, and the stable manifold of the stationary point $q$.
-  - `plot_fig2a.m`: Plots Fig. 2(a) - the 3D phase portrait in .
-  - `plot_fig2b.m`: Plots Fig. 2(b) - the three components of the Yamada model with respect to time.
+  - `plot_fig2a.m`: Plots Fig. 2(a) - the three components of the Yamada model with respect to time.
+  - `plot_fig2b.m`: Plots Fig. 2(b) - the 3D phase portrait depicting $\Gamma, q$, and $W^{2}(q)$.
   - `save_fig2_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig3`
