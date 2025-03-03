@@ -1,4 +1,4 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -11,9 +11,9 @@ load('../data_files/fig3_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
-fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
-fprintf('theta_old = %.4f\n\n', theta_old);
+fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -23,16 +23,13 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(4); clf;
+fig = figure(6); clf;
 fig.Name = 'Phase Reset in time: Intensity';
 ax = gca();
 
 % Axis dimensions
 width = 7.8;
 height = width / 3;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -75,9 +72,9 @@ ax.XAxis.MinorTick = 'on';
 ax.YAxis.TickDirection = 'in';
 ax.YAxis.MinorTick = 'on';
 
-%---------------------------------%
-%     Axis Ticks: ax1 and ax2     %
-%---------------------------------%
+%--------------------%
+%     Axis Ticks     %
+%--------------------%
 % X-Axis
 ax.XAxis.TickValues = 0.0 : 2.0 : 12.0;
 ax.XAxis.MinorTickValues = 0.0 : 1.0 : 12.0;
@@ -106,4 +103,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig3b2_time2.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+exportgraphics(fig, filename_out, ContentType='vector');

@@ -1,4 +1,4 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
@@ -21,9 +21,6 @@ ax = gca();
 % Axis dimensions
 width = 7.5;
 height = 4.0;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -114,4 +111,4 @@ view(45, 6);
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig2a_phase_portrait.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+exportgraphics(fig, filename_out, ContentType='vector');

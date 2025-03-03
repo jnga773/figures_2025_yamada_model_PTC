@@ -1,4 +1,4 @@
-% close all; clear all; clc
+clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %%                               Read Data                               %%
@@ -36,9 +36,6 @@ ax = gca();
 % Axis dimensions
 width = 4.5;
 height = 9.0;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -132,4 +129,4 @@ box(ax, 'on');
 %----------------------%
 % Filename
 filename_out = '../pdf/fig6b1_G_PTCs.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+exportgraphics(fig, filename_out, ContentType='vector');

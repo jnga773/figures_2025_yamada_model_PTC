@@ -56,22 +56,22 @@ This repository is structured as follows:
   - `calc_fig3_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\mathbf{\mathit{d}} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 0.1$ and $1.5$, at $\vartheta_{\mathrm{o}} = 0.0$, and the phase transition curve (PTC).
   - `plot_fig3a1.m`: Plots Fig. 3(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 0.1$ at $\vartheta_{\mathrm{o}} = 0.0$.
   - `plot_fig3a1_inset.m`: Plots Fig. 3(a1, inset) - zoomed-in section of Fig. 3(a1).
-  - `plot_fig3a2.m`: Plots Fig. 3(a2) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
-  - `plot_fig3b1.m`: Plots Fig. 3(b1) - Temporal trace of the intensity for the phase reset in Fig. 3(a1).
-  - `plot_fig3b1_inset.m`: Plots Fig. 3(b1, inset) - zoomed-in section of Fig. 3(b1).
-  - `plot_fig3b2.m`: Plots Fig. 3(b2) - Temporal trace of the intensity for the phase reset in Fig. 3(a2).
-  - `plot_fig3b2_inset.m`: Plots Fig. 3(b2, inset) - zoomed-in section of Fig. 3(b2).
+  - `plot_fig3a2.m`: Plots Fig. 3(a2) - Temporal trace of the intensity for the phase reset in Fig. 3(a1).
+  - `plot_fig3a3.m`: Plots Fig. 3(a3) - zoomed-in section of Fig. 3(a2).
+  - `plot_fig3b1.m`: Plots Fig. 3(b1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
+  - `plot_fig3b2.m`: Plots Fig. 3(b2) - Temporal trace of the intensity for the phase reset in Fig. 3(b1).
+  - `plot_fig3b3.m`: Plots Fig. 3(b3) - zoomed-in section of Fig. 3(b2).
   - `save_fig3_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig4`
   - `calc_fig4_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\mathbf{\mathit{d}} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 0.1$ and $1.5$, at $\vartheta_{\mathrm{o}} = 0.3$, and the phase transition curve (PTC).
   - `plot_fig4a1.m`: Plots Fig. 4(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 0.1$ at $\vartheta_{\mathrm{o}} = 0.3$.
   - `plot_fig4a1_inset.m`: Plots Fig. 4(a1, inset) - zoomed-in section of Fig. 4(a1).
-  - `plot_fig4a2.m`: Plots Fig. 4(a2) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
-  - `plot_fig4b1.m`: Plots Fig. 4(b1) - Temporal trace of the intensity for the phase reset in Fig. 4(a1).
-  - `plot_fig4b1_inset.m`: Plots Fig. 4(b1, inset) - zoomed-in section of Fig. 4(b1).
-  - `plot_fig4b2.m`: Plots Fig. 4(b2) - Temporal trace of the intensity for the phase reset in Fig. 4a2).
-  - `plot_fig4b2_inset.m`: Plots Fig. 4(b2, inset) - zoomed-in section of Fig. 4(b2).
+  - `plot_fig4a2.m`: Plots Fig. 4(a2) - Temporal trace of the intensity for the phase reset in Fig. 4(a1).
+  - `plot_fig4a3.m`: Plots Fig. 4(a3) - zoomed-in section of Fig. 4(a2).
+  - `plot_fig4b1.m`: Plots Fig. 4(b1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
+  - `plot_fig4b2.m`: Plots Fig. 4(b2) - Temporal trace of the intensity for the phase reset in Fig. 4(b1).
+  - `plot_fig4b3.m`: Plots Fig. 4(b3) - zoomed-in section of Fig. 4(b2).
   - `save_fig4_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig5`

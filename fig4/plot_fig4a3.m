@@ -1,19 +1,19 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
 % Read from data structure file
-load('../data_files/fig3_data.mat');
+load('../data_files/fig4_data.mat');
 
 %-------------------------%
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
-fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
-fprintf('theta_old = %.4f\n\n', theta_old);
+fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -23,16 +23,13 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(3); clf;
+fig = figure(4); clf;
 fig.Name = 'Phase Reset in time: Intensity';
 ax = gca();
 
 % Axis dimensions
-width = 2.0;
-height = 1.0;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
+width = 3.8;
+height = 1.5;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -47,12 +44,10 @@ ax.LineWidth = 0.8;
 hold(ax, 'on');
 
 % Plot unerperturbed orbit
-max_idx = max(find(tbp_PO_plot < 12.0));
-plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), Color=[colours(3, :)], LineWidth=1.0);
+plot(ax, tbp_PO_plot, xbp_PO_plot, Color=[colours(3, :)], LineWidth=1.0);
 
 % Plot segment 4
-max_idx = max(find(tbp4_run1 < 12.0));
-plot(ax, tbp4_run1(1:max_idx), xbp4_run1(1:max_idx, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
+plot(ax, tbp4_run1, xbp4_run1(:, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
 
 % Hold axes
 hold(ax, 'off');
@@ -60,7 +55,7 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [11, 11.5];
+ax.XAxis.Limits = [26.9, 28.4];
 ax.YAxis.Limits = [-0.1, 20];
 
 %------------------------------%
@@ -71,16 +66,16 @@ ax.XAxis.MinorTick = 'on';
 ax.YAxis.TickDirection = 'in';
 ax.YAxis.MinorTick = 'on';
 
-%---------------------------------%
-%     Axis Ticks: ax1 and ax2     %
-%---------------------------------%
+%--------------------%
+%     Axis Ticks     %
+%--------------------%
 % X-Axis
-ax.XAxis.TickValues = [];
-ax.XAxis.MinorTickValues = [];
+ax.XAxis.TickValues = ax.XAxis.Limits;
+ax.XAxis.MinorTickValues = ax.XAxis.Limits(1) : 0.5 : ax.XAxis.Limits(2);
 
 % Y-Axis
-ax.YAxis.TickValues = [];
-ax.YAxis.MinorTickValues = [];
+ax.YAxis.TickValues = 0.0 : 10 : 20.0;
+ax.YAxis.MinorTickValues = 0.0 : 5 : 20.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -101,5 +96,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig3b1_inset.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdf/fig4a3_zoom.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

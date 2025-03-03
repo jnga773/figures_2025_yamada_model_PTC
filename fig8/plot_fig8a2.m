@@ -1,4 +1,4 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -11,9 +11,9 @@ load('../data_files/fig8_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
-fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
-fprintf('theta_old = %.4f\n\n', theta_old);
+fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -30,9 +30,6 @@ ax = gca();
 % Axis dimensions
 width = 3.5;
 height = 3.5;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -107,8 +104,8 @@ ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 % ylabel(ax, '$I$');
 
 % Turn off all tick labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -118,5 +115,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-% filename_out = '../fig8a2_portrait2.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../fig8a2_portrait2.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

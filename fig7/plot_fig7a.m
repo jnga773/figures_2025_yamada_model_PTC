@@ -1,5 +1,4 @@
-% Clear stuff
-clear all; close all;
+clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %%                             Read Data                                 %%
@@ -97,9 +96,6 @@ ax = gca();
 % Axis dimensions
 width = 8.0;
 height = 6.4;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
 
 % Set figure size
 set_figure_dimensions(width, height);

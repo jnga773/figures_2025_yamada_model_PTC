@@ -750,6 +750,9 @@ parfor (run = 1 : length(label_old), M)
 
 end
 
+%=========================================================================%
+%                           SAVE AND PLOT DATA                            %
+%=========================================================================%
 %-------------------%
 %     Save Data     %
 %-------------------%
@@ -761,9 +764,12 @@ save_fig4_data(run_new, '../data_files/fig4_data.mat');
 %----------------------%
 % Run plotting scripts
 plot_fig4a1;
+plot_fig4a1_inset
 plot_fig4a2;
+plot_fig4a3;
 plot_fig4b1;
 plot_fig4b2;
+plot_fig4b3;
 
 %=========================================================================%
 %                               END OF FILE                               %

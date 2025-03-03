@@ -1,4 +1,4 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -11,9 +11,9 @@ load('../data_files/fig3_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
-fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
-fprintf('theta_old = %.4f\n\n', theta_old);
+fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -23,16 +23,13 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(1); clf;
+fig = figure(2); clf;
 fig.Name = 'Phase Reset Phase Portrait (2D)';
 ax = gca();
 
 % Axis dimensions
 width = 1.5;
 height = 1.0;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -62,7 +59,7 @@ plot(ax, xpos(1), xpos(3), ...
      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 % Plot theta_old point on gamma
-plot(ax, xbp_PO(1, 1), xbp_PO(1, 3), ...
+plot(ax, xbp3_run1(1, 1), xbp3_run1(1, 3), ...
      Marker='o', MarkerSize=4, ...
      MarkerFaceColor=colours(3, :), MarkerEdgeColor='k');
 
@@ -77,7 +74,7 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [4.6, 4.75];
+ax.XAxis.Limits = [4.6, 4.73];
 ax.YAxis.Limits = [0.55, 0.65];
 
 %------------------------------%
@@ -88,9 +85,9 @@ ax.XAxis.MinorTick = 'on';
 ax.YAxis.TickDirection = 'in';
 ax.YAxis.MinorTick = 'on';
 
-%---------------------------------%
-%     Axis Ticks: ax1 and ax2     %
-%---------------------------------%
+%--------------------%
+%     Axis Ticks     %
+%--------------------%
 % X-Axis
 ax.XAxis.TickValues = [];
 ax.XAxis.MinorTickValues = [];
@@ -119,4 +116,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig3a1_inset.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+exportgraphics(fig, filename_out, ContentType='vector');

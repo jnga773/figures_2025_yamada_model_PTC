@@ -29,9 +29,6 @@ ax = gca();
 width = 6.0;
 height = 7.0;
 
-% Add set_figure_dimensions() function to path
-% addpath('../');
-
 % Set figure size
 set_figure_dimensions(width, height);
 
@@ -129,4 +126,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig5_G_two_PTCs.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+exportgraphics(fig, filename_out, ContentType='vector');

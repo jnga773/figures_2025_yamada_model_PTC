@@ -1,4 +1,4 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -11,9 +11,9 @@ load('../data_files/fig3_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
-fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
-fprintf('theta_old = %.4f\n\n', theta_old);
+fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
+fprintf('theta_old = %.4f\n', theta_old);
 
 %%
 %-------------------------------------------------------------------------%
@@ -23,16 +23,13 @@ fprintf('theta_old = %.4f\n\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(2); clf;
-fig.Name = 'Phase Reset Phase Portrait (2D)';
+fig = figure(3); clf;
+fig.Name = 'Phase Reset in time: Intensity';
 ax = gca();
 
 % Axis dimensions
-width = 3.5;
-height = 3.5;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
+width = 7.8;
+height = width / 3;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -46,44 +43,26 @@ ax.LineWidth = 0.8;
 % Hold axes
 hold(ax, 'on');
 
-% Plot segment 4
-plot(ax, xbp4_run2(:, 1), xbp4_run2(:, 3), ...
-     Color=[0.0, 0.0, 0.0, 0.5], ...
+% Plot unerperturbed orbit
+max_idx = max(find(tbp_PO_plot < 12.0));
+plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), ...
+     Color=[colours(3, :)], ...
      LineWidth=1.0);
 
-% Plot original periodic orbit
-plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), ...
-     Color=colours(3, :), ...
-     LineWidth=2.0);
-
-% Plot equilibrium point
-plot(ax, xpos(1), xpos(3), ...
-     Marker='o', MarkerSize=4.0, ...
-     MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
-
-% Plot theta_old point on gamma
-plot(ax, xbp_PO(1, 1), xbp_PO(1, 3), ...
-     Marker='o', MarkerSize=4, ...
-     MarkerFaceColor=colours(3, :), MarkerEdgeColor='k');
-     
-% Plot start point of segment 4
-plot(ax, xbp4_run2(1, 1), xbp4_run2(1, 3), ...
-     Marker='o', MarkerSize=4, ...
-     MarkerFaceColor='k', MarkerEdgeColor='k');
+% Plot segment 4
+max_idx = max(find(tbp4_run1 < 12.0));
+plot(ax, tbp4_run1(1:max_idx), xbp4_run1(1:max_idx, 3), ...
+     Color=[0.0, 0.0, 0.0, 0.5], ...
+     LineWidth=1.0);
 
 % Hold axes
 hold(ax, 'off');
 
-%----------------------------%
-%     Axis Aspect Ratios     %
-%----------------------------%
-% ax1.PlotBoxAspectRatio = [1, 1, 1];
-
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0, 7];
-ax.YAxis.Limits = [-0.5, 50];
+ax.XAxis.Limits = [-0.2, 12];
+ax.YAxis.Limits = [-0.1, 20];
 
 %------------------------------%
 %     Axis Ticks: Settings     %
@@ -93,22 +72,22 @@ ax.XAxis.MinorTick = 'on';
 ax.YAxis.TickDirection = 'in';
 ax.YAxis.MinorTick = 'on';
 
-%---------------------------------%
-%     Axis Ticks: ax1 and ax2     %
-%---------------------------------%
+%--------------------%
+%     Axis Ticks     %
+%--------------------%
 % X-Axis
-ax.XAxis.TickValues = 0.0 : 2 : 8;
-ax.XAxis.MinorTickValues = 0.0 : 1 : 8.0;
+ax.XAxis.TickValues = 0.0 : 2.0 : 12.0;
+ax.XAxis.MinorTickValues = 0.0 : 1.0 : 12.0;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 10 : 50.0;
-ax.YAxis.MinorTickValues = 0.0 : 5 : 50.0;
+ax.YAxis.TickValues = 0.0 : 5 : 20.0;
+ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
-% xlabel(ax, '$G$');
+% xlabel(ax, '$t / T_{\Gamma}$');
 % ylabel(ax, '$I$');
 
 % Turn off all tick labels
@@ -123,5 +102,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig3a2_portrait2.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdf/fig3a2_time1.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

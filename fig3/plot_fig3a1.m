@@ -1,4 +1,4 @@
-% clear all; close all; clc;
+clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -11,8 +11,8 @@ load('../data_files/fig3_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
-fprintf('A_perturb(1) = %.4f\n\n', A_perturb_run1);
-fprintf('A_perturb(2) = %.4f\n\n', A_perturb_run2);
+fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
 fprintf('theta_old = %.4f\n\n', theta_old);
 
 %%
@@ -28,11 +28,8 @@ fig.Name = 'Phase Reset Phase Portrait (2D)';
 ax = gca();
 
 % Axis dimensions
-width = 3.5;
-height = 3.5;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
+width = 3.7;
+height = 3.7;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -88,9 +85,9 @@ ax.XAxis.MinorTick = 'on';
 ax.YAxis.TickDirection = 'in';
 ax.YAxis.MinorTick = 'on';
 
-%---------------------------------%
-%     Axis Ticks: ax1 and ax2     %
-%---------------------------------%
+%--------------------%
+%     Axis Ticks     %
+%--------------------%
 % X-Axis
 ax.XAxis.TickValues = 0.0 : 1 : 5.0;
 ax.XAxis.MinorTickValues = 0.0 : 0.5 : 5.0;
@@ -119,4 +116,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig3a1_portrait1.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+exportgraphics(fig, filename_out, ContentType='vector');
