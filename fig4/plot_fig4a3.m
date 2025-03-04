@@ -55,7 +55,8 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [26.9, 28.4];
+% ax.XAxis.Limits = [26.9, 28.4];
+ax.XAxis.Limits = [27.5, 29.3];
 ax.YAxis.Limits = [-0.1, 20];
 
 %------------------------------%
@@ -71,10 +72,11 @@ ax.YAxis.MinorTick = 'on';
 %--------------------%
 % X-Axis
 ax.XAxis.TickValues = ax.XAxis.Limits;
-ax.XAxis.MinorTickValues = ax.XAxis.Limits(1) : 0.5 : ax.XAxis.Limits(2);
+% ax.XAxis.MinorTickValues = ax.XAxis.Limits(1) : 0.5 : ax.XAxis.Limits(2);
+ax.XAxis.MinorTickValues = ax.XAxis.Limits(1) : 0.3 : ax.XAxis.Limits(2);
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 10 : 20.0;
+ax.YAxis.TickValues = ax.YAxis.Limits;
 ax.YAxis.MinorTickValues = 0.0 : 5 : 20.0;
 
 %------------------------------%
