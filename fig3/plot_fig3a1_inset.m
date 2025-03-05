@@ -43,15 +43,15 @@ ax.LineWidth = 0.8;
 % Hold axes
 hold(ax, 'on');
 
-% Plot segment 4
-plot(ax, xbp4_run1(:, 1), xbp4_run1(:, 3), ...
-     Color=[0.0, 0.0, 0.0, 0.5], ...
-     LineWidth=1.0);
-
 % Plot original periodic orbit
 plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), ...
      Color=colours(3, :), ...
      LineWidth=2.0);
+
+% Plot segment 4
+plot(ax, xbp4_run1(:, 1), xbp4_run1(:, 3), ...
+     Color=[0.0, 0.0, 0.0, 0.5], ...
+     LineWidth=0.5);
 
 % Plot equilibrium point
 plot(ax, xpos(1), xpos(3), ...
@@ -74,16 +74,8 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [4.6, 4.73];
-ax.YAxis.Limits = [0.55, 0.65];
-
-%------------------------------%
-%     Axis Ticks: Settings     %
-%------------------------------%
-ax.XAxis.TickDirection = 'in';
-ax.XAxis.MinorTick = 'on';
-ax.YAxis.TickDirection = 'in';
-ax.YAxis.MinorTick = 'on';
+ax.XAxis.Limits = [4.46 4.6];
+ax.YAxis.Limits = [0.6, 0.7];
 
 %--------------------%
 %     Axis Ticks     %

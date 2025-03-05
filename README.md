@@ -46,6 +46,12 @@ This repository is structured as follows:
 - `data_files`  
   After a succesful run of the data generating scripts, the relevant figure data will be saved to `data_files/figX_data.mat`.
 
+- `fig1`
+  - `calc_fig1_data.m`: COCO script for calculating the bifurcation diagram in Fig. 1(b).
+  - `plot_fig1b.m`: Plots Fig. 1(b) - The non-sketch version of the bifurcation diagram.
+  - `plot_fig1b_inset.m`: Plots inset to Fig. 1(b) - Zoomed-in section around regions 5-8.
+  - `save_fig1_data.m`: Saves the figure data to a Matlab `.mat`file.
+
 - `fig2`
   - `calc_fig2_data.m`: COCO script for generating the initial periodic orbit solution, and the stable manifold of the stationary point $q$.
   - `plot_fig2a.m`: Plots Fig. 2(a) - the three components of the Yamada model with respect to time.
@@ -106,4 +112,4 @@ This repository is structured as follows:
   - `plot_fig9.m`: Plots Fig. 9 - Surface of PTCs from one viewpoint.
   - `save_fig9_data.m`: Saves the figure data to a Matlab `.mat` file.
 
-- `set_figure_dimensions.m`: Matlab function file to define the dimensions of the 'Position' property of the figure axis in a way that works for me :)
+- `set_figure_dimensions.m`: Matlab function file to define the dimensions of the 'Position' property of the figure axis in a way that works for me :). You should probably add this to your path as it doesn't live in each folder.

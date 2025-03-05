@@ -45,6 +45,10 @@ a = 1.8;
 gamma = 0.10;
 A = 6.6;
 
+% Parameters for the periodic orbit
+gamma_PO = 3.5e-2;
+A_PO     = 7.4;
+
 %-----------------------%
 %     Problem Setup     %
 %-----------------------%
@@ -248,8 +252,8 @@ prob = ode_HB2HB(prob, '', run_old, label_old);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
-% Saved-point solution for A = 7.3757
-prob = coco_add_event(prob, 'H_PT', 'A', 7.3757);
+% Saved-point solution for A_PO
+prob = coco_add_event(prob, 'H_PT', 'A', A_PO);
 
 %------------------%
 %     Run COCO     %
@@ -336,9 +340,8 @@ prob = glue_parameters_PO(prob);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
-% Saved point for solution for gamma = 2.54e-2
-prob = coco_add_event(prob, 'PO_PT', 'gamma', 3.54e-2);
-% prob = coco_add_event(prob, 'PO_PT', 'gamma', 2.5e-2);
+% Saved point for solution for gamma_PO
+prob = coco_add_event(prob, 'PO_PT', 'gamma', gamma_PO);
 
 %------------------%
 %     Run COCO     %
@@ -732,8 +735,8 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 2;
-parfor (run = 1 : length(label_old), M)
+M = 0;
+parfor (run = 2 : length(label_old), M)
   % Label for this run
   this_run_label = label_old(run);
 
@@ -750,7 +753,7 @@ parfor (run = 1 : length(label_old), M)
 end
 
 %=========================================================================%
-%                           SAVE AND PLOT DATA                            %
+%%                          SAVE AND PLOT DATA                           %%
 %=========================================================================%
 %-------------------%
 %     Save Data     %

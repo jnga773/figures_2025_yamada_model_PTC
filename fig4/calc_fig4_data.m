@@ -45,6 +45,10 @@ a = 1.8;
 gamma = 0.10;
 A = 6.6;
 
+% Parameters for the periodic orbit
+gamma_PO = 3.5e-2;
+A_PO     = 7.4;
+
 %-----------------------%
 %     Problem Setup     %
 %-----------------------%
@@ -205,7 +209,7 @@ coco(prob, run_new, [], 1, 'A', A_range);
 %%                           Move Hopf A Value                           %%
 %-------------------------------------------------------------------------%
 % Continuing from a Hopf bifurcation with 'ode_HB2HB', we vary
-% the 'A' parameter to A = 7.3757
+% the 'A' parameter to A = 7.4
 
 %------------------%
 %     Run Name     %
@@ -248,8 +252,8 @@ prob = ode_HB2HB(prob, '', run_old, label_old);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
-% Saved-point solution for A = 7.3757
-prob = coco_add_event(prob, 'H_PT', 'A', 7.3757);
+% Saved-point solution for A_PO
+prob = coco_add_event(prob, 'H_PT', 'A', A_PO);
 
 %------------------%
 %     Run COCO     %
@@ -336,9 +340,8 @@ prob = glue_parameters_PO(prob);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
-% Saved point for solution for gamma = 2.54e-2
-prob = coco_add_event(prob, 'PO_PT', 'gamma', 3.54e-2);
-% prob = coco_add_event(prob, 'PO_PT', 'gamma', 2.5e-2);
+% Saved point for solution for gamma_PO
+prob = coco_add_event(prob, 'PO_PT', 'gamma', gamma_PO);
 
 %------------------%
 %     Run COCO     %
@@ -772,5 +775,5 @@ plot_fig4b2;
 plot_fig4b3;
 
 %=========================================================================%
-%                               END OF FILE                               %
+%%                              END OF FILE                              %%
 %=========================================================================%

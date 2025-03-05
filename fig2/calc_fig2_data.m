@@ -44,6 +44,10 @@ a = 1.8;
 gamma = 0.10;
 A = 6.6;
 
+% Parameters for the periodic orbit
+gamma_PO = 3.5e-2;
+A_PO     = 7.4;
+
 %-----------------------%
 %     Problem Setup     %
 %-----------------------%
@@ -221,8 +225,8 @@ prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 % Initial solution to periodic orbit (COLL Toolbox)
 prob = ode_HB2HB(prob, '', run_old, label_old);
 
-% Saved-point solution for A = 7.3757
-prob = coco_add_event(prob, 'H_PT', 'A', 7.3757);
+% Saved-point solution for A_PO
+prob = coco_add_event(prob, 'H_PT', 'A', A_PO);
 
 %------------------%
 %     Run COCO     %
@@ -303,9 +307,8 @@ prob = ode_isol2ep(prob, 'x0',   funcs.field{:}, ...
 % Glue parameters (defined in './continuation_scripts/glue_parameters.m')
 prob = glue_parameters_PO(prob);
 
-% Saved point for solution for gamma = 3.54e-2
-prob = coco_add_event(prob, 'PO_PT', 'gamma', 3.54e-2);
-% prob = coco_add_event(prob, 'PO_PT', 'gamma', 2.5e-2);
+% Saved point for solution for gamma_PO
+prob = coco_add_event(prob, 'PO_PT', 'gamma', gamma_PO);
 
 %------------------%
 %     Run COCO     %
@@ -654,7 +657,7 @@ prange = {[1e-8, eps], [], []};
 coco(prob, run_new, [], 1, {'eps', 'T1', 'T2'}, prange);
 
 %=========================================================================%
-%                           SAVE AND PLOT DATA                            %
+%%                          SAVE AND PLOT DATA                           %%
 %=========================================================================%
 %------------------%
 %    Save Data     %
