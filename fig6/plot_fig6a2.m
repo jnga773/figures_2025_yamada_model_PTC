@@ -14,6 +14,9 @@ plot_idx = 4:7;
 %----------------------%
 %     Plot Colours     %
 %----------------------%
+% Default colour order
+colours = colororder();
+
 % Plot colours
 plot_colours = {'#bcbd22';    % Green-Yellow
                 '#e66119';    % Orange

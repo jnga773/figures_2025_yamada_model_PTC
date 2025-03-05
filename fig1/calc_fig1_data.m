@@ -861,15 +861,6 @@ p_range = {[-20, 0], [0, 1e3], []};
 % Run COCO continuation
 coco(prob, run_new, [], 1, {'seg_s', 'T2', 'T1'}, p_range);
 
-%--------------%
-%     Plot     %
-%--------------%
-% Grab solution label to plot
-label_plot = coco_bd_labs(coco_bd_read(run_new), 'DelS');
-
-% Plot
-plot_homoclinic_manifold_run(run_new, label_plot, data_lins);
-
 %-------------------------------------------------------------------------%
 %%                          Closing the Lin Gap                          %%
 %-------------------------------------------------------------------------%
@@ -1003,7 +994,7 @@ prob = coco_set(prob, 'coll', 'MXCL', false);
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set Continuation steps
-PtMX = 500;
+PtMX = 200;
 prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 
 % Set frequency of saved solutions
@@ -1101,7 +1092,7 @@ prob = coco_set(prob, 'coll', 'MXCL', false);
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set Continuation steps
-PtMX = 500;
+PtMX = 300;
 prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 
 % Set frequency of saved solutions
@@ -1261,7 +1252,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma', 'eps1', 'eps2', 'theta', 'seg_u'}, p_r
 %    Save Data     %
 %------------------%
 % Save data to .mat file
-save_fig2_data(run_names, '../data_files/fig1_data.mat');
+save_fig1_data(run_names, '../data_files/fig1_data.mat');
 
 %----------------------%
 %     Plot Figures     %

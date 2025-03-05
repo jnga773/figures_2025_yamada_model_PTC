@@ -735,8 +735,8 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 0;
-parfor (run = 2 : length(label_old), M)
+M = 2;
+parfor (run = 1 : length(label_old), M)
   % Label for this run
   this_run_label = label_old(run);
 

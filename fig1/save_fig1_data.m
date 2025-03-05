@@ -22,7 +22,7 @@ function save_fig1_data(run_names_in, filename_in)
   bd_S        = coco_bd_read(S_run);
   bd_T        = coco_bd_read(T_run);
   bd_L_approx = coco_bd_read(L_run_approx);
-  bd_L_lins   = coco_bd_read(L_run_lins)
+  bd_L_lins   = coco_bd_read(L_run_lins);
   bd_D        = coco_bd_read(D_run);
 
   %----------------------------------------%
@@ -36,16 +36,16 @@ function save_fig1_data(run_names_in, filename_in)
   [~, idx] = min(A_run8);
 
   % Neutral saddle bifurcations
-  A_NSA     = A_run8(1:idx)
+  A_NSA     = A_run8(1:idx);
   gamma_NSA = gamma_run8(1:idx);
 
   % Hopf bifurcations
-  A_H     = A_run8(idx+1:end)
+  A_H     = A_run8(idx+1:end);
   gamma_H = gamma_run8(idx+1:end);
 
   % Saddle-Node bifurcation line (A_S)
-  A_SN     = coco_bd_col(bd_S, 'A');
-  gamma_SN = coco_bd_col(bd_S, 'gamma');
+  A_S     = coco_bd_col(bd_S, 'A');
+  gamma_S = coco_bd_col(bd_S, 'gamma');
 
   % Transcritical bifurcation line (A_T)
   A_T     = coco_bd_col(bd_T, 'A');
