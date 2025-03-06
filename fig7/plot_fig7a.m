@@ -98,7 +98,7 @@ width = 8.0;
 height = 6.4;
 
 % Set figure size
-set_figure_dimensions(width, height);
+set_figure_dimensions(width, height, scale=4);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -197,9 +197,9 @@ ax.ZAxis.MinorTickValues = 0.0 : 0.25 : 3.0;
 % zlabel(ax, '$\theta_{\mathrm{n}}$');
 
 % Turn off all axis labels
-ax.XAxis.TickLabels = {};
-ax.YAxis.TickLabels = {};
-ax.ZAxis.TickLabels = {};
+% ax.XAxis.TickLabels = {};
+% ax.YAxis.TickLabels = {};
+% ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -216,7 +216,7 @@ grid(ax, 'on');
 view(315, 15);
 
 filename_out = '../pdf/fig7a_G_PTC_surface_1.png';
-exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
 % filename_out = '../pdf/fig7a_G_PTC_surface_1.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

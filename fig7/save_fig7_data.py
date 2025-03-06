@@ -65,7 +65,7 @@ def check_runs_MX(bd_list_in):
     not_MX_gt1 = []
     not_MX_lt1 = []
     
-    for idx, bd in enumerate(bd_list_in): 
+    for idx, bd in enumerate(bd_list_in):
         # Reset checks
         MX_gt1_check = False
         MX_lt1_check = False
@@ -78,7 +78,7 @@ def check_runs_MX(bd_list_in):
         sol_gt1_UZ = bd_gt1('UZ')
         sol_gt1_UZ = sol_gt1_UZ[-1]
         
-        if sol_gt1_UZ['theta_old'] > 2.0 or round(sol_gt1_UZ['theta_old'], 3) == 2.0:
+        if round(sol_gt1_UZ['theta_old'], 3) > 2.0 or round(sol_gt1_UZ['theta_old'], 3) == 2.0:
             not_MX_gt1.append(idx)
         else:
             MX_gt1_check = True
@@ -87,7 +87,7 @@ def check_runs_MX(bd_list_in):
         sol_lt1_UZ = bd_lt1('UZ')
         sol_lt1_UZ = sol_lt1_UZ[-1]
         
-        if sol_lt1_UZ['theta_old'] < 0.0 or round(sol_lt1_UZ['theta_old'], 3) == 0.0:
+        if round(sol_lt1_UZ['theta_old'], 3) < 0.0 or round(sol_lt1_UZ['theta_old'], 3) == 0.0:
             not_MX_lt1.append(idx)
         else:
             MX_lt1_check = True
@@ -333,6 +333,12 @@ def sort_data_holes(theta_old_in, theta_new_in, bd_list_in, A_perturb_in, which)
             if i > MX_both[-1]:
                 # Save indices
                 after_hole_labels.append(i)
+                
+                # Check if theta_new > 1. If so, lower it
+                if min(new_lt1[i]) > 1.0:
+                    new_lt1[i] += -1.0
+                if min(new_gt1[i]) > 1.0:
+                    new_gt1[i] += -1.0
                 
                 if i in not_MX_gt1 and i in not_MX_lt1:
                     # print(str(i).zfill(3), 'full runs in both gt1 and lt1')

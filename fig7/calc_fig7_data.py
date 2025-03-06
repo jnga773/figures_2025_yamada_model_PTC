@@ -31,6 +31,10 @@ p0 = {1: gamma, 2: A, 3: B, 4: a}
 # Initial solution is the 'off' state
 x0 = [A, B, 0]
 
+# Parameters to save the periodic orbit for
+gamma_PO = 3.5e-2
+A_PO     = 7.4
+
 #------------------------------------------------------------------------------#
 #                           Compute Equilibrium Point                          #
 #------------------------------------------------------------------------------#
@@ -137,7 +141,7 @@ run_new = auto.run(run_old(label_old), ISW=2,
                    UZSTOP={'gamma': [0.0, 0.4], 'A': [5.0, 20.0]},
                    DSMIN=5e-3, DS=5e-3, DSMAX=5e-3,
                    NMX=500, NPR=50,
-                   UZR={'A': 7.37570000})
+                   UZR={'A': A_PO})
 
 #-------------------#
 #     Save Data     #
@@ -175,15 +179,12 @@ print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Gamma value for saved point
-SP = 3.54e-2
-
 # Follow periodic orbits
 run_new = auto.run(run_old(label_old), ISW=-1, IPS=2, LAB=1,
                    ICP=['gamma'],
                    NTST=50, DSMIN=1e-1, DS=1e-1, DSMAX=1e-1,
                    NMX=500, NPR=50,
-                   UZR={'gamma': SP})
+                   UZR={'gamma': gamma_PO})
 
 #-------------------#
 #     Save Data     #
@@ -480,7 +481,8 @@ def calculate_PTC(i):
     print('Continuing from point {} in run: {}'.format(this_label, run_old_str))
     
     # Set saved solutions for theta_old
-    SP_points = arange(0.1, 2.0, 0.1)
+    SP_points = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
+                 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9]
     theta_old_stop = [0.0, 2.0]
     theta_new_stop = [-1.0, 3.0]
 
@@ -489,7 +491,7 @@ def calculate_PTC(i):
                         ICP=['theta_old', 'theta_new', 'eta', 'mu_s', 'T'],
                         UZSTOP={'theta_old': theta_old_stop, 'theta_new': theta_new_stop},
                         UZR={'theta_old': SP_points},
-                        DSMIN=1e-2, DS=1e-1, DSMAX=1e0,
+                        DSMIN=5e-3, DS=5e-2, DSMAX=5e-1,
                         EPSL=1e-7, EPSU=1e-7, EPSS=1e-4,
                         NMX=8000, NPR=100)
     run_scan += auto.run(DS='-')

@@ -151,12 +151,30 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 lw = 3.0;
 
 % Plot all PTCs
-for i = 1 : length(plot_idx)
-  idx = plot_idx(i);
-  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
-        LineWidth=lw, LineStyle='-', ...
-        Color=plot_colours{i});
-end
+% for i = 1 : length(plot_idx)
+%   idx = plot_idx(i);
+%   plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
+%         LineWidth=lw, LineStyle='-', ...
+%         Color=plot_colours{i});
+% end
+
+% for i = 1 : length(data_after_hole.theta_old)
+%   A_plot = data_after_hole.A_perturb(i) * ones(length(data_after_hole.theta_old{i}));
+%   plot3(ax, data_after_hole.theta_old{i}, A_plot, data_after_hole.theta_new{i}, ...
+%         Color='r', LineStyle='-', LineWidth=2.0);
+% end
+
+% for i = 1 : length(data_hole_lt1.theta_old)
+%   A_plot = data_hole_lt1.A_perturb(i) * ones(length(data_hole_lt1.theta_old{i}));
+%   plot3(ax, data_hole_lt1.theta_old{i}, A_plot, data_hole_lt1.theta_new{i}, ...
+%         Color='r', LineStyle='-', LineWidth=2.0);
+% end
+
+% for i = 1 : length(data_hole_gt1.theta_old)
+%   A_plot = data_hole_gt1.A_perturb(i) * ones(length(data_hole_gt1.theta_old{i}));
+%   plot3(ax, data_hole_gt1.theta_old{i}, A_plot, data_hole_gt1.theta_new{i}, ...
+%         Color='r', LineStyle='-', LineWidth=2.0);
+% end
 
 %-------------------%
 %     Hold Axis     %
@@ -216,7 +234,7 @@ grid(ax, 'on');
 view(135, 15);
 
 filename_out = '../pdf/fig7b_G_PTC_surface_2.png';
-exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
 % filename_out = '../pdf/fig7b_G_PTC_surface_2.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');
