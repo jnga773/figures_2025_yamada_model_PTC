@@ -602,7 +602,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 %     Read Data     %
 %-------------------%
 % Set periodicity
-k = 30;
+k = 35;
 
 % Set perturbation direction
 theta_perturb = 0.0;

@@ -71,11 +71,11 @@ ax.YAxis.MinorTick = 'on';
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickValues = 27.5 : 1 : 29.5;
-ax.XAxis.MinorTickValues = 27.5 : 0.25 : 29.5;
+ax.XAxis.TickValues = ax.XAxis.Limits;
+ax.XAxis.MinorTickValues = ax.XAxis.Limits(1) : 0.1 : ax.XAxis.Limits(2);
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 10 : 20.0;
+ax.YAxis.TickValues = ax.YAxis.Limits;
 ax.YAxis.MinorTickValues = 0.0 : 5 : 20.0;
 
 %------------------------------%

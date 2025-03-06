@@ -34,15 +34,15 @@ function run_PTC_continuation(run_new_in, run_old_in, label_old_in, data_PR_in, 
   % prob = coco_set(prob, 'corr', 'TOL', 5e-7);
 
   % Set step sizes
-  prob = coco_set(prob, 'cont', 'h_min', 5e-2);
-  prob = coco_set(prob, 'cont', 'h0', 1e-1);
-  prob = coco_set(prob, 'cont', 'h_max', 1e0);
+  prob = coco_set(prob, 'cont', 'h_min', 5e-3);
+  prob = coco_set(prob, 'cont', 'h0', 1e-2);
+  prob = coco_set(prob, 'cont', 'h_max', 5e-1);
 
   % Set adaptive meshR
   prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
   % Set number of steps
-  prob = coco_set(prob, 'cont', 'PtMX', 750);
+  prob = coco_set(prob, 'cont', 'PtMX', 1500);
 
  % Set norm to int
  prob = coco_set(prob, 'cont', 'norm', inf);

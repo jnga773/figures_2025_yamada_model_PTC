@@ -10,8 +10,8 @@ load('../data_files/fig5_data.mat');
 %     Plot Colours     %
 %----------------------%
 % Plot colours
-plot_colours = {'#d8a400';    % Yellow-Orange
-                '#5a5fc8'};   % Blue-Violet
+plot_colours = {'#e66119';    % Orange
+                '#bf42f5'};   % Purple
 
 %%
 %-------------------------------------------------------------------------%
