@@ -698,7 +698,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 % Array of values for special event
 % SP_values = [0.05, 0.1, 0.2, 0.55, 1.0, 1.5, 2.0];
-SP_values = [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0];
+SP_values = [0.05, 0.1, 0.15, 0.542686, 1.0, 1.5, 2.0];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);

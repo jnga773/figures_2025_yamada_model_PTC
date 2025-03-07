@@ -1024,8 +1024,8 @@ prob = apply_manifold_conditions(prob, data_eps_eig, bcs_funcs);
 
 % Calculate Lin gap and vector
 data_lingap = read_lingap_data(run_old, label_old);
-% Initial lingap
-lingap = data_lingap.lingap0;
+% % Initial lingap
+% lingap = data_lingap.lingap0;
 
 % Apply Lin's conditions
 prob = glue_lingap_conditions(prob, data_lingap, bcs_funcs);
