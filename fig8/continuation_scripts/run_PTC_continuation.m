@@ -80,7 +80,7 @@ function run_PTC_continuation(run_new_in, run_old_in, label_old_in, data_PR_in, 
   %     Add COCO Events     %
   %-------------------------%
   % Run COCO continuation
-  prange = {[1.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
   coco(prob, run_new_in, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
 
 end

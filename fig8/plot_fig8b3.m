@@ -23,13 +23,13 @@ fprintf('theta_old = %.4f\n', theta_old);
 colours = colororder();
 
 % Setup figure
-fig = figure(6); clf;
+fig = figure(7); clf;
 fig.Name = 'Phase Reset in time: Intensity';
 ax = gca();
 
 % Axis dimensions
-width = 7.8;
-height = width / 3;
+width = 3.8;
+height = 1.5;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -44,16 +44,10 @@ ax.LineWidth = 0.8;
 hold(ax, 'on');
 
 % Plot unerperturbed orbit
-max_idx = max(find(tbp_PO_plot < 12.0));
-plot(ax, tbp_PO_plot(1:max_idx), xbp_PO_plot(1:max_idx), ...
-     Color=[colours(3, :)], ...
-     LineWidth=1.0);
+plot(ax, tbp_PO_plot, xbp_PO_plot, Color=[colours(3, :)], LineWidth=1.0);
 
 % Plot segment 4
-max_idx = max(find(tbp4_run2 < 12.0));
-plot(ax, tbp4_run2(1:max_idx), xbp4_run2(1:max_idx, 3), ...
-     Color=[0.0, 0.0, 0.0, 0.5], ...
-     LineWidth=1.0);
+plot(ax, tbp4_run2, xbp4_run2(:, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
 
 % Hold axes
 hold(ax, 'off');
@@ -61,7 +55,8 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [-0.2, 12];
+% ax.XAxis.Limits = [29, 30];
+ax.XAxis.Limits = [27.5, 29.5];
 ax.YAxis.Limits = [-0.1, 20];
 
 %------------------------------%
@@ -76,12 +71,12 @@ ax.YAxis.MinorTick = 'on';
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickValues = 0.0 : 2.0 : 12.0;
-ax.XAxis.MinorTickValues = 0.0 : 1.0 : 12.0;
+ax.XAxis.TickValues = ax.XAxis.Limits;
+ax.XAxis.MinorTickValues = ax.XAxis.Limits(1) : 0.5 : ax.XAxis.Limits(2);
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 5 : 20.0;
-ax.YAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.YAxis.TickValues = 0.0 : 10 : 20.0;
+ax.YAxis.MinorTickValues = 0.0 : 5 : 20.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -102,5 +97,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig8b2_time2.pdf';
+filename_out = '../pdf/fig8b3_zoom.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');

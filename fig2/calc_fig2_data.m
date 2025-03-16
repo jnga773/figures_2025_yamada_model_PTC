@@ -47,6 +47,8 @@ A = 6.6;
 % Parameters for the periodic orbit
 gamma_PO = 3.5e-2;
 A_PO     = 7.4;
+% gamma_PO   = 2.5e-2;
+% A_PO       = 7.5;
 
 %-----------------------%
 %     Problem Setup     %
@@ -283,8 +285,8 @@ prob = coco_set(prob, 'cont', 'NAdapt', 1);
 prob = coco_set(prob, 'coll', 'MXCL', false);
 
 % Set PtMX steps
-PtMX = 200;
-prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
+PtMX = 800;
+prob = coco_set(prob, 'cont', 'PtMX', [PtMX, 0]);
 
 % % Set step sizes
 % h_size = 1e0;
@@ -362,7 +364,7 @@ prob = coco_set(prob, 'coll', 'NTST', 250);
 prob = coco_set(prob, 'coll', 'MXCL', false);
 
 % Set PtMX steps
-PtMX = 100;
+PtMX = 200;
 prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 
 % Set frequency of saved solutions

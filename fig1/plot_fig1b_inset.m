@@ -19,7 +19,7 @@ ax = gca();
 
 % Axis dimensions
 width = 7.5;
-height = 3.0;
+height = 4;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -68,29 +68,30 @@ plot(ax, A_D, gamma_D, ...
      LineStyle='-', LineWidth=1.5, ...
      Color=colours(3, :));
 
+% Add dot for phase resetting parameters
+plot(ax, 7.4, 3.5e-2, Marker='pentagram', MarkerFaceColor='b', MarkerEdgeColor='k');
+
 % Turn off axis hold
 hold(ax, 'off');
 
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [6.5, 7.4];
-ax.YAxis.Limits = [0.04, 0.10];
+ax.XAxis.Limits = [6.65, 7.5];
+ax.YAxis.Limits = [0.03, 0.08];
 
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickDirection = 'in';
-ax.XAxis.TickValues = 6.6 : 0.2 : 7.6;
+ax.XAxis.TickValues = 6.7 : 0.2 : 7.5;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 6.5 : 0.05 : 7.6;
+ax.XAxis.MinorTickValues = 6.7 : 0.1 : 7.5;
 
 % Y-Axis
-ax.YAxis.TickDirection = 'in';
-ax.YAxis.TickValues = 0.04 : 0.01 : 1.11;
+ax.YAxis.TickValues = 0.03 : 0.01 : 0.08;
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.042 : 0.002 : 1.11;
+ax.YAxis.MinorTickValues = 0.03 : 0.005 : 0.08;
 
 %------------------------------%
 %     Axis and Tick Labels     %
