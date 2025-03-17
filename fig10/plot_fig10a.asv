@@ -60,11 +60,6 @@ plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
       Color=colours(1, :), ...
       LineWidth=2.0);
 
-% Plot equilibrium point
-plot3(ax, xpos(1), xpos(2), xpos(3), ...
-      Marker='o', MarkerSize=4, ...
-      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
-
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
@@ -81,24 +76,32 @@ I_surf = I_plot(theta_idx, :);
 
 % Plot surface
 surf(ax, G_surf, Q_surf, I_surf, ...
-     EdgeColor='none', FaceColor=colours(4, :), FaceAlpha=0.25);
+     EdgeColor='none', FaceColor=colours(5, :), FaceAlpha=0.25);
 
-% Plot specific ones
-[~, min_idx] = min(theta_perturb(theta_idx));
-[~, max_idx] = max(theta_perturb(theta_idx));
-[~, mid_idx] = min(abs(theta_perturb(theta_idx) - 0.25 * pi));
-theta_idx_2 = [min_idx, mid_idx, max_idx];
+% % Plot specific ones
+% [~, min_idx] = min(theta_perturb(theta_idx));
+% [~, max_idx] = max(theta_perturb(theta_idx));
+% [~, mid_idx] = min(abs(theta_perturb(theta_idx) - 0.25 * pi));
+% theta_idx_2 = [min_idx, mid_idx, max_idx];
 
-for i = 1 : length(theta_idx_2)
-  idx = theta_idx_2(i);
-  plot3(ax, G_surf(idx, :), Q_surf(idx, :), I_surf(idx, :), ...
-        LineStyle='-', Color=colours(4, :), LineWidth=lw);
-end
+% for i = 1 : length(theta_idx_2)
+%   idx = theta_idx_2(i);
+%   plot3(ax, G_surf(idx, :), Q_surf(idx, :), I_surf(idx, :), ...
+%         LineStyle='-', Color=colours(4, :), LineWidth=lw);
+% end
 
 plot3(ax, G_surf(:, 1), Q_surf(:, 1), I_surf(:, 1), ...
-      LineStyle='-', Color=colours(4, :), LineWidth=lw);
+      LineStyle='-', Color=colours(5, :), LineWidth=lw);
 plot3(ax, G_surf(:, 2), Q_surf(:, 2), I_surf(:, 2), ...
-      LineStyle='-', Color=colours(4, :), LineWidth=lw);
+      LineStyle='-', Color=colours(5, :), LineWidth=lw);
+
+%---------------------------------%
+%     Plot: Equilibrium Point     %
+%---------------------------------%
+% Plot equilibrium point
+plot3(ax, xpos(1), xpos(2), xpos(3), ...
+      Marker='o', MarkerSize=4, ...
+      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 %-------------------%
 %     Hold Axis     %
@@ -165,4 +168,4 @@ view(45, 6.0);
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig10a_portrait1.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+exportgraphics(fig, filename_out, ContentType='vector');
