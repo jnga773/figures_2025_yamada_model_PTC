@@ -20,9 +20,9 @@ intersection.A_perturb = 0.542686;
 %     Plot Colours     %
 %----------------------%
 % Plot colours
-plot_colours = {'#bcbd22';    % Green-Yellow
-                '#e66119';    % Orange
-                '#8c564b';    % Brown
+plot_colours = {'#92b700';    % Green-Yellow
+                '#e6b400';    % Yellow
+                '#eb5e00';    % Orange
                 '#d62728';    % Red
                 '#e377c2';    % Pink
                 '#bf42f5';    % Purple

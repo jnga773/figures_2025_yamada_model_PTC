@@ -20,9 +20,9 @@ intersection.A_perturb = 0.542686;
 %     Plot Colours     %
 %----------------------%
 % Plot colours
-plot_colours = {'#bcbd22';    % Green-Yellow
-                '#e66119';    % Orange
-                '#8c564b';    % Brown
+plot_colours = {'#92b700';    % Green-Yellow
+                '#e6b400';    % Yellow
+                '#eb5e00';    % Orange
                 '#d62728';    % Red
                 '#e377c2';    % Pink
                 '#bf42f5';    % Purple
@@ -157,6 +157,39 @@ for i = 1 : length(plot_idx)
         LineWidth=lw, LineStyle='-', ...
         Color=plot_colours{i});
 end
+
+% %-----------------------------------------%
+% %     Plot: Surface (One level lower)     %
+% %-----------------------------------------%
+% % Surface: Hole (theta_old < 1)
+% [X, Y, Z] = pad_data(data_hole_lt1, -1, 'lt1');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% 
+% % Surface: Hole (theta_old > 1)
+% [X, Y, Z] = pad_data(data_hole_gt1, -1, 'gt1');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% 
+% % Surface: Before hole
+% [X, Y, Z] = pad_data(data_before_hole, -1, 'none');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% 
+% % Surface: After hole
+% [X, Y, Z] = pad_data(data_after_hole, -1, 'none');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+
+% %--------------------------------------------%
+% %     Plot: PTC Curves (One level lower)     %
+% %--------------------------------------------%
+% % Linewidth
+% lw = 3.0;
+% 
+% % Plot all PTCs
+% for i = 1 : length(plot_idx)
+%   idx = plot_idx(i);
+%   plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}-1, ...
+%         LineWidth=lw, LineStyle='-', ...
+%         Color=plot_colours{i});
+% end
 
 %-------------------%
 %     Hold Axis     %
