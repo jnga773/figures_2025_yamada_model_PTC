@@ -6,10 +6,6 @@ clear all; close all; clc;
 % Load data
 load('../data_files/fig9_data.mat');
 
-% Data indices to plot
-plot_idx = 1:4;
-% plot_idx = 4:7;
-
 %----------------------%
 %     Plot Colours     %
 %----------------------%
@@ -60,7 +56,7 @@ plot(ax, [0, 1], [0, 1], LineStyle='-', LineWidth=1.5, ...
      Color=colours(3, :));
 
 % Grey lines at theta_old = 0 and 0.3
-xline(ax, 0.3176, LineStyle='-', LineWidth=1, ...
+xline(ax, 0.5163, LineStyle='-', LineWidth=1, ...
       Color=[0, 0, 0, 0.5]);
 
 %--------------------%
@@ -70,9 +66,7 @@ xline(ax, 0.3176, LineStyle='-', LineWidth=1, ...
 lw = 1.5;
 
 % Plot all PTCs
-for i = 1 : length(plot_idx)
-  idx = plot_idx(i);
-
+for idx = 1 : length(plot_colours)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot
