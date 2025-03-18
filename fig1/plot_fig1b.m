@@ -18,8 +18,10 @@ fig.Name = 'Yamada - Bifurcations';
 ax = gca();
 
 % Axis dimensions
-width = 7.5;
-height = 4;
+% width = 7.5;
+% height = 4;
+width = 4.5;
+height = 2.5;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -30,6 +32,7 @@ ax.LineWidth = 0.8;
 %--------------%
 %     Plot     %
 %--------------%
+% Hold axis
 hold(ax, 'on');
 
 % Plot: Saddle-node bifurcations
@@ -68,7 +71,7 @@ plot(ax, A_D, gamma_D, ...
      Color=colours(3, :));
 
 % Add dot for phase resetting parameters
-plot(ax, 7.4, 3.5e-2, Marker='pentagram', MarkerFaceColor='b', MarkerEdgeColor='k');
+plot(ax, 7.4, 3.5e-2, Marker='pentagram', MarkerFaceColor='k', MarkerEdgeColor='k');
 
 % Turn off axis hold
 hold(ax, 'off');
@@ -76,22 +79,21 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [5.8, 7.9];
-ax.YAxis.Limits = [0.0, 0.25];
+ax.XAxis.Limits = [6.65, 7.5];
+ax.YAxis.Limits = [0.03, 0.08];
 
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickDirection = 'in';
-ax.XAxis.TickValues = 5.8 : 0.7 : 7.9;
+ax.XAxis.TickValues = 6.7 : 0.2 : 7.5;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 5.8 : 0.35 : 8.0;
+ax.XAxis.MinorTickValues = 6.7 : 0.1 : 7.5;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 0.1 : 0.30;
+ax.YAxis.TickValues = 0.03 : 0.01 : 0.08;
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.00 : 0.05 : 0.30;
+ax.YAxis.MinorTickValues = 0.03 : 0.005 : 0.08;
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -112,5 +114,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig1b_bifurcation_diagram.pdf';
+filename_out = '../pdf/fig1b_zoomed_bifurcation_diagram.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');

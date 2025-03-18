@@ -30,7 +30,6 @@ ax.LineWidth = 0.8;
 %--------------%
 %     Plot     %
 %--------------%
-% Hold axis
 hold(ax, 'on');
 
 % Plot: Saddle-node bifurcations
@@ -68,8 +67,14 @@ plot(ax, A_D, gamma_D, ...
      LineStyle='-', LineWidth=1.5, ...
      Color=colours(3, :));
 
-% Add dot for phase resetting parameters
-plot(ax, 7.4, 3.5e-2, Marker='pentagram', MarkerFaceColor='b', MarkerEdgeColor='k');
+% % Add dot for phase resetting parameters
+% plot(ax, 7.4, 3.5e-2, Marker='pentagram', MarkerFaceColor='k', MarkerEdgeColor='k');
+
+% Plot box for zoom
+rectangle(ax, Position=[6.65, 0.03, 7.5-6.65, 0.08-0.03], LineWidth=0.8, ...
+          EdgeColor='k');
+% ax.XAxis.Limits = [6.65, 7.5];
+% ax.YAxis.Limits = [0.03, 0.08];
 
 % Turn off axis hold
 hold(ax, 'off');
@@ -77,21 +82,22 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [6.65, 7.5];
-ax.YAxis.Limits = [0.03, 0.08];
+ax.XAxis.Limits = [5.8, 11];
+ax.YAxis.Limits = [0.0, 0.25];
 
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickValues = 6.7 : 0.2 : 7.5;
+ax.XAxis.TickDirection = 'in';
+ax.XAxis.TickValues = 6 : 1 : 11;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 6.7 : 0.1 : 7.5;
+ax.XAxis.MinorTickValues = 6 : 0.5 : 11;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.03 : 0.01 : 0.08;
+ax.YAxis.TickValues = 0.0 : 0.1 : 0.30;
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.03 : 0.005 : 0.08;
+ax.YAxis.MinorTickValues = 0.00 : 0.05 : 0.30;
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -112,5 +118,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig1b_zoomed_bifurcation_diagram.pdf';
+filename_out = '../pdf/fig1a_bifurcation_diagram.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');
