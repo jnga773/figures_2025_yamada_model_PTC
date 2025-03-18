@@ -153,5 +153,5 @@ view(-70, 6);
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig10b_inset.pdf';
+filename_out = '../pdf/fig11b_inset.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');

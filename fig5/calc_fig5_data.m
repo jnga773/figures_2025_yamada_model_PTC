@@ -765,7 +765,8 @@ save_fig5_data(run_new, '../data_files/fig5_data.mat');
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig5;
+plot_fig5a;
+plot_fig5b;
 
 %=========================================================================%
 %                               END OF FILE                               %

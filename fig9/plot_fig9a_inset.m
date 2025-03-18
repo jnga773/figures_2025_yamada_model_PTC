@@ -1,21 +1,15 @@
-close all; clear; clc;
+clear all; close all; clc;
 
-%%
 %-------------------------------------------------------------------------%
-%                              Calculate Data                             %
+%                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
-load('../data_files/fig2_data.mat', 'xbp_PO', 'Wq_s', 'xpos');
+% Load data
+load('../data_files/fig2_data.mat', 'Wq_s');
+load('../data_files/fig9_data.mat');
 
-% Calculate data
-[theta_old, theta_perturb, A_perturb] = calc_intersection_points();
-
-% Get perturbation vector
-d_vec = A_perturb .* [cos(theta_perturb), sin(theta_perturb)];
-
-% Plotting vector
-G_plot = [xbp_PO(:, 1), xbp_PO(:, 1) + d_vec(:, 1)];
-Q_plot = [xbp_PO(:, 2), xbp_PO(:, 2)];
-I_plot = [xbp_PO(:, 3), xbp_PO(:, 3) + d_vec(:, 2)];
+% List of perturbations to plot
+plot_idx = 1:4;
+% plot_idx = 4:7;
 
 %----------------------%
 %     Plot Colours     %
@@ -23,12 +17,21 @@ I_plot = [xbp_PO(:, 3), xbp_PO(:, 3) + d_vec(:, 2)];
 % Default colour order
 colours = colororder();
 
+% Plot colours
+plot_colours = {'#92b700';    % Green-Yellow
+                '#e6b400';    % Yellow
+                '#eb5e00';    % Orange
+                '#d62728';    % Red
+                '#e377c2';    % Pink
+                '#bf42f5';    % Purple
+                '#1f9ece'};   % Cyan
+
 %%
 %-------------------------------------------------------------------------%
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
 % Setup figure
-fig = figure(1); clf;
+fig = figure(2); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
@@ -60,48 +63,26 @@ plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
       Color=colours(1, :), ...
       LineWidth=2.0);
 
-%-----------------------%
-%     Plot: Surface     %
-%-----------------------%
-% Linewidth
-lw = 2.5;
-
-% Get indices for theta_perturb <= 0.5 pi
-theta_idx = theta_perturb <= 0.5 * pi;
-
-% Get surface data
-G_surf = G_plot(theta_idx, :);
-Q_surf = Q_plot(theta_idx, :);
-I_surf = I_plot(theta_idx, :);
-
-% Plot surface
-surf(ax, G_surf, Q_surf, I_surf, ...
-     EdgeColor='none', FaceColor=colours(5, :), FaceAlpha=0.25);
-
-% % Plot specific ones
-% [~, min_idx] = min(theta_perturb(theta_idx));
-% [~, max_idx] = max(theta_perturb(theta_idx));
-% [~, mid_idx] = min(abs(theta_perturb(theta_idx) - 0.25 * pi));
-% theta_idx_2 = [min_idx, mid_idx, max_idx];
-
-% for i = 1 : length(theta_idx_2)
-%   idx = theta_idx_2(i);
-%   plot3(ax, G_surf(idx, :), Q_surf(idx, :), I_surf(idx, :), ...
-%         LineStyle='-', Color=colours(4, :), LineWidth=lw);
-% end
-
-plot3(ax, G_surf(:, 1), Q_surf(:, 1), I_surf(:, 1), ...
-      LineStyle='-', Color=colours(5, :), LineWidth=lw);
-plot3(ax, G_surf(:, 2), Q_surf(:, 2), I_surf(:, 2), ...
-      LineStyle='-', Color=colours(5, :), LineWidth=lw);
-
-%---------------------------------%
-%     Plot: Equilibrium Point     %
-%---------------------------------%
 % Plot equilibrium point
 plot3(ax, xpos(1), xpos(2), xpos(3), ...
       Marker='o', MarkerSize=4, ...
       MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+
+%----------------------------%
+%     Plot: Perturbation     %
+%----------------------------%
+lw = 1.0;
+
+% Plot all PTCs
+for i = 1 : length(plot_idx)
+  idx = plot_idx(i);
+
+  fprintf('A_p = %.3f\n', A_perturb(idx));
+
+  % Plot
+  plot3(ax, smooth(xbp_PO(:, 1)+A_perturb(idx)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)), ...
+        Color=plot_colours{idx}, LineStyle='-', LineWidth=lw);
+end
 
 %-------------------%
 %     Hold Axis     %
@@ -111,8 +92,8 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.0, 3.0];
-ax.YAxis.Limits = [0.0, 3.0];
+ax.XAxis.Limits = [0.75, 2.5];
+ax.YAxis.Limits = [0.0, 1.5];
 ax.ZAxis.Limits = [0.0, 5];
 
 %--------------------%
@@ -120,12 +101,18 @@ ax.ZAxis.Limits = [0.0, 5];
 %--------------------%
 % X-Axis
 ax.XAxis.TickValues = [];
+ax.XAxis.MinorTick = 'on';
+ax.XAxis.MinorTickValues = [];
 
 % Y-Axis
 ax.YAxis.TickValues = [];
+ax.YAxis.MinorTick = 'on';
+ax.YAxis.MinorTickValues = [];
 
 % Z-Axis
 ax.ZAxis.TickValues = [];
+ax.ZAxis.MinorTick = 'on';
+ax.ZAxis.MinorTickValues = [];
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -144,19 +131,14 @@ ax.ZAxis.TickLabels = {};
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
-% grid(ax, 'on');
-
-% Grid lines
-% ax.GridLineWidth = 0.5;
-% ax.GridColor = 'black';
-% ax.GridAlpha = 0.25;
+grid(ax, 'on');
 
 % 3D plot view
-view(45, 6.0);
-% view(-45, 6);
+% view(45, 10.0);
+view(-30, 6.0);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig10a_inset.pdf';
+filename_out = '../pdf/fig9a_inset.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');

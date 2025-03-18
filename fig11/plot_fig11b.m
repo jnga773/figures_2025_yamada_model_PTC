@@ -37,7 +37,7 @@ width = 7.5;
 height = 4.0;
 
 % Set figure size
-set_figure_dimensions(width, height);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -161,11 +161,12 @@ ax.GridColor = 'black';
 ax.GridAlpha = 0.25;
 
 % 3D plot view
-view(45, 6.0);
-% view(-45, 6);
+% view(45, 6.0);
+% view(-41, -4);
+view(-70, 6)
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig10a_portrait1.pdf';
+filename_out = '../pdf/fig11b_portrait1.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');

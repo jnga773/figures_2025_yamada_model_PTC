@@ -1,86 +1,88 @@
-% Clear stuff
-clear all; close all;
+clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
-%%                             Read Data                                 %%
+%                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
-%-------------------%
-%     Read Data     %
-%-------------------%
-% Load big PTC scan data
+% Load data
+load('../data_files/fig2_data.mat', 'Wq_s');
 load('../data_files/fig9_data.mat');
 
-%--------------------------------%
-%     Coordinates for 'Hole'     %
-%--------------------------------%
-% G-direction
-intersection.theta_old = 0.516315;
-intersection.A_perturb = 4.120311;
+% List of perturbations to plot
+plot_idx = 1:4;
+% plot_idx = 4:7;
 
+%----------------------%
+%     Plot Colours     %
+%----------------------%
+% Default colour order
+colours = colororder();
+
+% Plot colours
+plot_colours = {'#92b700';    % Green-Yellow
+                '#e6b400';    % Yellow
+                '#eb5e00';    % Orange
+                '#d62728';    % Red
+                '#e377c2';    % Pink
+                '#bf42f5';    % Purple
+                '#1f9ece'};   % Cyan
+
+%%
 %-------------------------------------------------------------------------%
-%%                             Plot Data                                 %%
+%                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
-%-------------------------%
-%     Figure Settings     %
-%-------------------------%
-fig = figure(7); clf;
-fig.Name = 'PTC Scans: Gain';
+% Setup figure
+fig = figure(1); clf;
+fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
 % Axis dimensions
-width = 8.0;
-height = 6.4;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
+width = 7.5;
+height = 4.0;
 
 % Set figure size
 set_figure_dimensions(width, height);
+
+% Set axis linewidth
+ax.LineWidth = 0.8;
 
 %-------------------%
 %     Hold Axis     %
 %-------------------%
 hold(ax, 'on');
 
-%-------------------------------------------------%
-%     Plot: Stable Manifold Intersection Pole     %
-%-------------------------------------------------%
-plot3(ax, [intersection.theta_old, intersection.theta_old], ...
-     [intersection.A_perturb, intersection.A_perturb], ...
-     [-5, 5], ...
-     Color='k', LineWidth=2.5, LineStyle='-');
+%--------------%
+%     Plot     %
+%--------------%
+% Plot original periodic orbit
+plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
+      Color=colours(3, :), ...
+      LineWidth=2.0);
 
-%--------------------------%
-%     Surface Settings     %
-%--------------------------%
-% Set colour map
-colormap(scale_colour_map(2.0));
+% Plot stable manifold
+plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
+      Color=colours(1, :), ...
+      LineWidth=2.0);
 
-% Shading of surface
-shading(ax, 'interp');
+% Plot equilibrium point
+plot3(ax, xpos(1), xpos(2), xpos(3), ...
+      Marker='o', MarkerSize=4, ...
+      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
-%-----------------------%
-%     Plot: Surface     %
-%-----------------------%
-% Surface: Hole (theta_old < 1)
-[X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+%----------------------------%
+%     Plot: Perturbation     %
+%----------------------------%
+lw = 1.0;
 
-% Surface: Hole (theta_old > 1)
-[X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Plot all PTCs
+for i = 1 : length(plot_idx)
+  idx = plot_idx(i);
 
-% Surface: Before hole
-for i = 1 : length(data_before_hole.theta_new)
-  data_before_hole.theta_new{i} = data_before_hole.theta_new{i} - 1.0;
+  fprintf('A_p = %.3f\n', A_perturb(idx));
+
+  % Plot
+  plot3(ax, smooth(xbp_PO(:, 1)+A_perturb(idx)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)), ...
+        Color=plot_colours{idx}, LineStyle='-', LineWidth=lw);
 end
-data_before_hole.theta_old
-[X, Y, Z] = pad_data(data_before_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% Surface: After hole
-[X, Y, Z] = pad_data(data_after_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 %-------------------%
 %     Hold Axis     %
@@ -90,37 +92,40 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.0, 1.0];
-ax.YAxis.Limits = [0.0, 25.0];
-ax.ZAxis.Limits = [0.25, 3.0];
+ax.XAxis.Limits = [0.0, 7.0];
+ax.YAxis.Limits = [0.0, 4.0];
+ax.ZAxis.Limits = [0.0, 20];
 
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickValues = 0.0 : 0.5 : 1.0;
+ax.XAxis.TickDirection = 'in';
+ax.XAxis.TickValues = 0.0 : 2.0 : 8.0;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 0.0 : 0.25 : 1.0;
+ax.XAxis.MinorTickValues = 0.0 : 1.0 : 7.0;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 5.0 : 25.0;
+ax.YAxis.TickDirection = 'in';
+ax.YAxis.TickValues = 0.0 : 2.0 : 4.0;
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.0 : 2.5 : 25.0;
+ax.YAxis.MinorTickValues = 0.0 : 1.0 : 4.0;
 
 % Z-Axis
-ax.ZAxis.TickValues = 0.0 : 0.5 : 3.0;
+ax.ZAxis.TickDirection = 'in';
+ax.ZAxis.TickValues = 0.0 : 5.0 : 20.0;
 ax.ZAxis.MinorTick = 'on';
-ax.ZAxis.MinorTickValues = 0.0 : 0.25 : 3.0;
+ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
-% % Axis labels
-% xlabel(ax, '$\theta_{\mathrm{o}}$');
-% ylabel(ax, '$A_{\mathrm{p}}$');
-% zlabel(ax, '$\theta_{\mathrm{n}}$');
+% Axis labels
+% xlabel(ax, '$G$');
+% ylabel(ax, '$Q$');
+% zlabel(ax, '$I$');
 
-% Turn off all axis labels
+% Turn off all tick labels
 ax.XAxis.TickLabels = {};
 ax.YAxis.TickLabels = {};
 ax.ZAxis.TickLabels = {};
@@ -131,10 +136,17 @@ ax.ZAxis.TickLabels = {};
 box(ax, 'on');
 grid(ax, 'on');
 
+% Grid lines
+ax.GridLineWidth = 0.5;
+ax.GridColor = 'black';
+ax.GridAlpha = 0.25;
+
+% 3D plot view
+% view(45, 10.0);
+view(45, 6.0);
+
 %---------------------%
 %     Save Figure     %
 %---------------------%
-view(315, 15);
-
-filename_out = '../pdf/fig9a_I_PTC_surface_1.png';
-% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+filename_out = '../pdf/fig9a_phase_portrait.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

@@ -48,8 +48,8 @@ This repository is structured as follows:
 
 - `fig1`
   - `calc_fig1_data.m`: COCO script for calculating the bifurcation diagram in Fig. 1(b).
-  - `plot_fig1b.m`: Plots Fig. 1(b) - The non-sketch version of the bifurcation diagram.
-  - `plot_fig1b_inset.m`: Plots inset to Fig. 1(b) - Zoomed-in section around regions 5-8.
+  - `plot_fig1a.m`: Plots Fig. 1(a) - The non-sketch version of the bifurcation diagram.
+  - `plot_fig1a_inset.m`: Plots inset to Fig. 1(a) - Zoomed-in section around regions 5-8.
   - `save_fig1_data.m`: Saves the figure data to a Matlab `.mat`file.
 
 - `fig2`
@@ -59,38 +59,39 @@ This repository is structured as follows:
   - `save_fig2_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig3`
-  - `calc_fig3_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\mathbf{\mathit{d}} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 0.1$ and $1.5$, at $\vartheta_{\mathrm{o}} = 0.0$, and the phase transition curve (PTC).
-  - `plot_fig3a1.m`: Plots Fig. 3(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 0.1$ at $\vartheta_{\mathrm{o}} = 0.0$.
+  - `calc_fig3_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\mathbf{\mathit{d}} = (1, 0, 0)$ - with $A = 0.1$ and $1.5$, at $\vartheta_{\mathrm{o}} = 0.0$, and the phase transition curve (PTC).
+  - `plot_fig3a1.m`: Plots Fig. 3(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A = 0.1$ at $\vartheta_{\mathrm{o}} = 0.0$.
   - `plot_fig3a1_inset.m`: Plots Fig. 3(a1, inset) - zoomed-in section of Fig. 3(a1).
   - `plot_fig3a2.m`: Plots Fig. 3(a2) - Temporal trace of the intensity for the phase reset in Fig. 3(a1).
   - `plot_fig3a3.m`: Plots Fig. 3(a3) - zoomed-in section of Fig. 3(a2).
-  - `plot_fig3b1.m`: Plots Fig. 3(b1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
+  - `plot_fig3b1.m`: Plots Fig. 3(b1) - the phase portrait of the perturbed orbit in the $G-I$ for $A = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
   - `plot_fig3b2.m`: Plots Fig. 3(b2) - Temporal trace of the intensity for the phase reset in Fig. 3(b1).
   - `plot_fig3b3.m`: Plots Fig. 3(b3) - zoomed-in section of Fig. 3(b2).
   - `save_fig3_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig4`
-  - `calc_fig4_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\mathbf{\mathit{d}} = (1, 0, 0)$ - with $A_{\mathrm{p}} = 0.1$ and $1.5$, at $\vartheta_{\mathrm{o}} = 0.3$, and the phase transition curve (PTC).
-  - `plot_fig4a1.m`: Plots Fig. 4(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 0.1$ at $\vartheta_{\mathrm{o}} = 0.3$.
+  - `calc_fig4_data.m`: COCO script for generating the phase reset for a gain perturbation -  $\mathbf{\mathit{d}} = (1, 0, 0)$ - with $A = 0.1$ and $1.5$, at $\vartheta_{\mathrm{o}} = 0.3$, and the phase transition curve (PTC).
+  - `plot_fig4a1.m`: Plots Fig. 4(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A = 0.1$ at $\vartheta_{\mathrm{o}} = 0.3$.
   - `plot_fig4a1_inset.m`: Plots Fig. 4(a1, inset) - zoomed-in section of Fig. 4(a1).
   - `plot_fig4a2.m`: Plots Fig. 4(a2) - Temporal trace of the intensity for the phase reset in Fig. 4(a1).
   - `plot_fig4a3.m`: Plots Fig. 4(a3) - zoomed-in section of Fig. 4(a2).
-  - `plot_fig4b1.m`: Plots Fig. 4(b1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
+  - `plot_fig4b1.m`: Plots Fig. 4(b1) - the phase portrait of the perturbed orbit in the $G-I$ for $A = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
   - `plot_fig4b2.m`: Plots Fig. 4(b2) - Temporal trace of the intensity for the phase reset in Fig. 4(b1).
   - `plot_fig4b3.m`: Plots Fig. 4(b3) - zoomed-in section of Fig. 4(b2).
   - `save_fig4_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig5`
-  - `calc_fig5_data.m`: COCO script for generating the PTCs for gain perturbations - $\mathbf{\mathit{d}} = (1, 0, 0)$ - for two amplitudes: $A_{\mathrm{p}} = 0.1$ and $1.5$.
-  - `plot_fig5.m`: Plots Fig. 5 - PTC for two perturbation amplitudes.
+  - `calc_fig5_data.m`: COCO script for generating the PTCs for gain perturbations - $\mathbf{\mathit{d}} = (1, 0, 0)$ - for two amplitudes: $A = 0.1$ and $1.5$.
+  - `plot_fig5a.m`: Plots Fig. 5(a) - PTC for two perturbation amplitudes.
+  - `plot_fig5b.m`: Plots Fig. 5(b) - the phase portraits of the two perturbation sets in Fig. 5(a).
   - `save_fig5_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig6`
-  - `calc_fig6_data.m`: COCO script for generating the PTCs for a few different perturbation amplitudes: $A_{\mathrm{p}} = 0.05, 0.1, 0.2, 0.55, 1.0, 1.5$, and $2.0$.
-  - `plot_fig6a1.m`: Plots Fig. 6(a1) - the phase portrait of the shifted periodic orbits for the "weaker" perturbation ampltiude, $A_{\mathrm{p}} \leq A_{\mathrm{p}}^{*} \approx 0.55$
-  - `plot_fig6a2.m`: Plots Fig. 6(a2) - the phase portrait of the shifted periodic orbits for the "stronger" perturbation ampltiude, $A_{\mathrm{p}} \geq A_{\mathrm{p}}^{*} \approx 0.55$
-  - `plot_fig6b1.m`: Plots Fig. 6(b1) - PTCs of the "weaker" perturbation ampltiude, $A_{\mathrm{p}} \leq A_{\mathrm{p}}^{*} \approx 0.55$
-  - `plot_fig6b2.m`: Plots Fig. 6(b2) - PTCs of the "stronger" perturbation ampltiude, $A_{\mathrm{p}} \geq A_{\mathrm{p}}^{*} \approx 0.55$
+  - `calc_fig6_data.m`: COCO script for generating the PTCs for a few different perturbation amplitudes positive-$G$ direction: $A = 0.05, 0.1, 0.2, 0.5427, 1.0, 1.5$, and $2.0$.
+  - `plot_fig6a1.m`: Plots Fig. 6(a1) - the phase portrait of the perturbation sets for the "weaker" perturbation ampltiude, $A \leq A^{*} \approx 0.54$
+  - `plot_fig6a2.m`: Plots Fig. 6(a2) - the phase portrait of the perturbation sets for the "stronger" perturbation ampltiude, $A \geq A^{*} \approx 0.54$
+  - `plot_fig6b1.m`: Plots Fig. 6(b1) - PTCs of the "weaker" perturbation ampltiude, $A \leq A^{*} \approx 0.54$
+  - `plot_fig6b2.m`: Plots Fig. 6(b2) - PTCs of the "stronger" perturbation ampltiude, $A \geq A^{*} \approx 0.54$
   - `save_fig6_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig7`
@@ -100,16 +101,23 @@ This repository is structured as follows:
   - `save_fig7_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig8`
-  - `calc_fig8_data.m`: COCO script for generating the phase reset for an intensity perturbation - $\mathbf{\mathit{d}} = (0, 0, 1)$ - with $A_{\mathrm{p}} = 1.5$, and the phase transition curve (PTC).
-  - `plot_fig8a1.m`: Plots Fig. 8(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
-  - `plot_fig8a2.m`: Plots Fig. 8(a2) - the phase portrait of the perturbed orbit in the $G-I$ for $A_{\mathrm{p}} = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
+  - `calc_fig8_data.m`: COCO script for generating the phase reset for an intensity perturbation - $\mathbf{\mathit{d}} = (0, 0, 1)$ - with $A = 1.5$, and the phase transition curve (PTC).
+  - `plot_fig8a1.m`: Plots Fig. 8(a1) - the phase portrait of the perturbed orbit in the $G-I$ for $A = 1.5$ at $\vartheta_{\mathrm{o}} = 0.0$.
+  - `plot_fig8a2.m`: Plots Fig. 8(a2) - the phase portrait of the perturbed orbit in the $G-I$ for $A = 1.5$ at $\vartheta_{\mathrm{o}} = 0.3$.
   - `plot_fig8b1.m`: Plots Fig. 8(b1) - Temporal trace of the intensity for the phase reset in Fig. 8(a1).
   - `plot_fig8b2.m`: Plots Fig. 8(b2) - Temporal trace of the intensity for the phase reset in Fig. 8(a2).
   - `save_fig5_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig9`
-  - `calc_fig9_data.py`: AUTO script for generating a whole lot of PTCs for increasing perturbation amplitudes for an $I$-perturbation.
-  - `plot_fig9.m`: Plots Fig. 9 - Surface of PTCs from one viewpoint.
+  - `calc_fig9_data.m`: COCO script for generating the PTCs for a few different perturbation amplitudes in the positive-$I$ direction: $A = 0.05, 0.1, 0.2, 0.55, 1.0, 1.5$, and $2.0$.
+  - `plot_fig9a.m`: Plots Fig. 9(a) - the phase portrait of the perturbation sets for the saved perturbation amplitudes.
+  - `plot_fig9b.m`: Plots Fig. 9(b) - PTCs of the peturbation sets in Fig. 9(a).
   - `save_fig9_data.m`: Saves the figure data to a Matlab `.mat` file.
+
+- `fig10`
+  - `calc_fig10_data.py`: AUTO script for generating a whole lot of PTCs for increasing perturbation amplitudes for an $I$-perturbation.
+  - `plot_fig10a.m`: Plots Fig. 10(a) - Surface of PTCs from one viewpoint.
+  - `plot_fig10b.m`: Plots Fig. 10(b) - The same surface of PTCs from another viewpoint.
+  - `save_fig10_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `set_figure_dimensions.m`: Matlab function file to define the dimensions of the 'Position' property of the figure axis in a way that works for me :). You should probably add this to your path as it doesn't live in each folder.

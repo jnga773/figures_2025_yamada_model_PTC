@@ -1,135 +1,132 @@
-% Clear stuff
-clear all; close all;
+clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
-%%                             Read Data                                 %%
+%%                               Read Data                               %%
 %-------------------------------------------------------------------------%
-%-------------------%
-%     Read Data     %
-%-------------------%
-% Load big PTC scan data
+% Load data
 load('../data_files/fig9_data.mat');
 
-%--------------------------------%
-%     Coordinates for 'Hole'     %
-%--------------------------------%
-% G-direction
-intersection.theta_old = 0.503722;
-intersection.A_perturb = 4.142870;
+% Data indices to plot
+plot_idx = 1:4;
+% plot_idx = 4:7;
+
+%----------------------%
+%     Plot Colours     %
+%----------------------%
+% Plot colours
+plot_colours = {'#92b700';    % Green-Yellow
+                '#e6b400';    % Yellow
+                '#eb5e00';    % Orange
+                '#d62728';    % Red
+                '#e377c2';    % Pink
+                '#bf42f5';    % Purple
+                '#1f9ece'};   % Cyan
 
 %-------------------------------------------------------------------------%
-%%                             Plot Data                                 %%
+%%                               Plot Data                               %%
 %-------------------------------------------------------------------------%
-%-------------------------%
-%     Figure Settings     %
-%-------------------------%
-fig = figure(7); clf;
-fig.Name = 'PTC Scans: Gain';
+% Default colour order (matplotlib)
+colours = colororder();
+
+% Setup figure
+fig = figure(5); clf;
+fig.Name = 'PTCs';
 ax = gca();
 
 % Axis dimensions
-width = 8.0;
-height = 6.4;
-
-% Add set_figure_dimensions() function to path
-% addpath('../');
+width = 4.5;
+height = 9.0;
 
 % Set figure size
 set_figure_dimensions(width, height);
+
+% Set axis linewidth
+ax.LineWidth = 0.8;
 
 %-------------------%
 %     Hold Axis     %
 %-------------------%
 hold(ax, 'on');
 
-%-------------------------------------------------%
-%     Plot: Stable Manifold Intersection Pole     %
-%-------------------------------------------------%
-plot3(ax, [intersection.theta_old, intersection.theta_old], ...
-     [intersection.A_perturb, intersection.A_perturb], ...
-     [-5, 5], ...
-     Color='k', LineWidth=2.5, LineStyle='-');
+%----------------------------%
+%     Plot: Other Things     %
+%----------------------------%
+% Shade fundamental domain
+patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), ...
+      FaceAlpha=0.2, EdgeColor='none');
 
-%--------------------------%
-%     Surface Settings     %
-%--------------------------%
-% Set colour map
-colormap(scale_colour_map(0.75));
+% Plot diagonal lines
+plot(ax, [0, 1], [0, 1], LineStyle='-', LineWidth=1.5, ...
+     Color=colours(3, :));
 
-% Shading of surface
-shading(ax, 'interp');
+% Grey lines at theta_old = 0 and 0.3
+xline(ax, 0.3176, LineStyle='-', LineWidth=1, ...
+      Color=[0, 0, 0, 0.5]);
 
-%-----------------------%
-%     Plot: Surface     %
-%-----------------------%
-% Surface: Hole (theta_old < 1)
-[X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+%--------------------%
+%     Plot: PTCs     %
+%--------------------%
+% Linewidth
+lw = 1.5;
 
-% Surface: Hole (theta_old > 1)
-[X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Plot all PTCs
+for i = 1 : length(plot_idx)
+  idx = plot_idx(i);
 
-% Surface: Before hole
-[X, Y, Z] = pad_data(data_before_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+  fprintf('A_p = %.3f\n', A_perturb(idx));
 
-% Surface: After hole
-[X, Y, Z] = pad_data(data_after_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+  % Plot
+  plot(ax, theta_old{idx}, theta_new{idx}, ...
+       LineWidth=lw, LineStyle='-', ...
+       Color=plot_colours{idx});
+end
 
 %-------------------%
 %     Hold Axis     %
 %-------------------%
 hold(ax, 'off');
-%---------------------%
-%     Axis Limits     %
-%---------------------%
-ax.XAxis.Limits = [0.0, 1.0];
-ax.YAxis.Limits = [0.0, 25.0];
-ax.ZAxis.Limits = [0.25, 3.0];
+
+%---------------------------%
+%     Data Aspect Ratio     %
+%---------------------------%
+ax.DataAspectRatio = [1, 1, 1];
 
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
-% X-Axis
-ax.XAxis.TickValues = 0.0 : 0.5 : 1.0;
+ax.XAxis.TickValues = -0.5 : 0.5 : 1.0;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 0.0 : 0.25 : 1.0;
+ax.XAxis.MinorTickValues = -0.5 : 0.25 : 1.0;
 
-% Y-Axis
-ax.YAxis.TickValues = 0.0 : 5.0 : 25.0;
+ax.YAxis.TickValues = -0.5 : 0.5 : 2.5;
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.0 : 2.5 : 25.0;
-
-% Z-Axis
-ax.ZAxis.TickValues = 0.0 : 0.5 : 3.0;
-ax.ZAxis.MinorTick = 'on';
-ax.ZAxis.MinorTickValues = 0.0 : 0.25 : 3.0;
+ax.YAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
-% % Axis labels
+% Axis labels
 % xlabel(ax, '$\theta_{\mathrm{o}}$');
-% ylabel(ax, '$A_{\mathrm{p}}$');
-% zlabel(ax, '$\theta_{\mathrm{n}}$');
+% ylabel(ax, '$\theta_{\mathrm{n}}$');
 
-% Turn off all axis labels
+% Turn off all tick labels
 ax.XAxis.TickLabels = {};
 ax.YAxis.TickLabels = {};
-ax.ZAxis.TickLabels = {};
+
+%---------------------%
+%     Axis Limits     %
+%---------------------%
+ax.XAxis.Limits = [0, 1.0];
+ax.YAxis.Limits = [-0.25, 2.0];
 
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
-grid(ax, 'on');
 
-%---------------------%
-%     Save Figure     %
-%---------------------%
-view(135, 15);
-
-filename_out = '../pdf/fig9b_I_PTC_surface_2.png';
-% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+%----------------------%
+%      Save Figure     %
+%----------------------%
+% Filename
+filename_out = '../pdf/fig9b_G_PTCs.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

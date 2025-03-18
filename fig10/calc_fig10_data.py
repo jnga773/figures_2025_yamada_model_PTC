@@ -519,8 +519,8 @@ for i in range(len(label_old)):
 #     Plot     #
 #--------------#
 # Save data
-import save_fig9_data as data_PTC
-data_PTC.save_PTC_scan(run_new_str, '../data_files/fig9_data.mat')
+import save_fig10_data as data_PTC
+data_PTC.save_PTC_scan(run_new_str, '../data_files/fig10_data.mat')
 
 # %%
 #==============================================================================#
