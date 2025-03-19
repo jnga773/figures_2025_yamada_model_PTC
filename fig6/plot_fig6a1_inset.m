@@ -71,7 +71,7 @@ plot3(ax, xpos(1), xpos(2), xpos(3), ...
 %----------------------------%
 %     Plot: Perturbation     %
 %----------------------------%
-lw = 1.0;
+lw = 2.0;
 
 % Plot all PTCs
 for i = 1 : length(plot_idx)

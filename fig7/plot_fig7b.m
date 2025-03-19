@@ -31,12 +31,12 @@ plot_colours = {'#92b700';    % Green-Yellow
 %-----------------------------------%
 %     Sort Out Single Plot Data     %
 %-----------------------------------%
-plot_A_perturb = [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0];
+plot_A_perturb = [0.05, 0.1, 0.15, 0.5427, 1.0, 1.5, 2.0];
 
 % Find plotting indices
 plot_idx = zeros(length(plot_A_perturb), 1);
 for i = 1 : length(plot_A_perturb)
-  plot_idx(i) = find(round(A_perturb, 3) == plot_A_perturb(i));
+  plot_idx(i) = find(round(A_perturb, 4) == plot_A_perturb(i));
 end
 
 % Empty cells for plotting data
@@ -89,16 +89,16 @@ end
 %-------------------------%
 %     Figure Settings     %
 %-------------------------%
-fig = figure(2); clf;
+fig = figure(1); clf;
 fig.Name = 'PTC Scans: Gain';
 ax = gca();
 
 % Axis dimensions
-width = 8.0;
-height = 6.4;
+width = 7.8;
+height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -128,21 +128,21 @@ shading(ax, 'interp');
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
-% Surface: Hole (theta_old < 1)
-[X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% Surface: Hole (theta_old > 1)
-[X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% Surface: Before hole
-[X, Y, Z] = pad_data(data_before_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% Surface: After hole
-[X, Y, Z] = pad_data(data_after_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% % Surface: Hole (theta_old < 1)
+% [X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% 
+% % Surface: Hole (theta_old > 1)
+% [X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% 
+% % Surface: Before hole
+% [X, Y, Z] = pad_data(data_before_hole, 0, 'none');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% 
+% % Surface: After hole
+% [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 %--------------------------%
 %     Plot: PTC Curves     %
@@ -151,30 +151,12 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 lw = 3.0;
 
 % Plot all PTCs
-% for i = 1 : length(plot_idx)
-%   idx = plot_idx(i);
-%   plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
-%         LineWidth=lw, LineStyle='-', ...
-%         Color=plot_colours{i});
-% end
-
-% for i = 1 : length(data_after_hole.theta_old)
-%   A_plot = data_after_hole.A_perturb(i) * ones(length(data_after_hole.theta_old{i}));
-%   plot3(ax, data_after_hole.theta_old{i}, A_plot, data_after_hole.theta_new{i}, ...
-%         Color='r', LineStyle='-', LineWidth=2.0);
-% end
-
-% for i = 1 : length(data_hole_lt1.theta_old)
-%   A_plot = data_hole_lt1.A_perturb(i) * ones(length(data_hole_lt1.theta_old{i}));
-%   plot3(ax, data_hole_lt1.theta_old{i}, A_plot, data_hole_lt1.theta_new{i}, ...
-%         Color='r', LineStyle='-', LineWidth=2.0);
-% end
-
-% for i = 1 : length(data_hole_gt1.theta_old)
-%   A_plot = data_hole_gt1.A_perturb(i) * ones(length(data_hole_gt1.theta_old{i}));
-%   plot3(ax, data_hole_gt1.theta_old{i}, A_plot, data_hole_gt1.theta_new{i}, ...
-%         Color='r', LineStyle='-', LineWidth=2.0);
-% end
+for i = 1 : length(plot_idx)
+  idx = plot_idx(i);
+  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
+        LineWidth=lw, LineStyle='-', ...
+        Color=plot_colours{i});
+end
 
 %-------------------%
 %     Hold Axis     %
@@ -222,19 +204,18 @@ ax.ZAxis.TickLabels = {};
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
-box(ax, 'on');
-grid(ax, 'on');
+% box(ax, 'on');
+% grid(ax, 'on');
 
-% axis(ax, 'off');
-% set(gca, 'Color', 'none');
+axis(ax, 'off');
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
 view(135, 15);
 
-filename_out = '../pdf/fig7b_G_PTC_surface_2.png';
+% filename_out = '../pdf/fig7b_G_PTC_surface_2.png';
 % exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
-% filename_out = '../pdf/fig7b_G_PTC_surface_2.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdf/fig7b_G_PTC_surface_2.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');

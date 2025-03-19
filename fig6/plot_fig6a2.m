@@ -71,7 +71,7 @@ plot3(ax, xpos(1), xpos(2), xpos(3), ...
 %----------------------------%
 %     Plot: Perturbation     %
 %----------------------------%
-lw = 1.0;
+lw = 2.0;
 
 % Plot all PTCs
 for i = 1 : length(plot_idx)
@@ -94,7 +94,7 @@ hold(ax, 'off');
 %---------------------%
 ax.XAxis.Limits = [0.0, 7.0];
 ax.YAxis.Limits = [0.0, 4.0];
-ax.ZAxis.Limits = [0.0, 20];
+ax.ZAxis.Limits = [0.0, 16.1];
 
 %--------------------%
 %     Axis Ticks     %
@@ -113,9 +113,9 @@ ax.YAxis.MinorTickValues = 0.0 : 1.0 : 4.0;
 
 % Z-Axis
 ax.ZAxis.TickDirection = 'in';
-ax.ZAxis.TickValues = 0.0 : 5.0 : 20.0;
+ax.ZAxis.TickValues = 0.0 : 4.0 : 16.0;
 ax.ZAxis.MinorTick = 'on';
-ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.ZAxis.MinorTickValues = 0.0 : 2.0 : 16.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %

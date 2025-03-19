@@ -55,18 +55,18 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.0, 6.0];
+ax.XAxis.Limits = [0.0, 5.0];
 ax.YAxis.Limits = [0.0, 4.0];
-ax.ZAxis.Limits = [0.0, 20];
+ax.ZAxis.Limits = [0.0, 16.1];
 
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
 ax.XAxis.TickDirection = 'in';
-ax.XAxis.TickValues = 0.0 : 2.0 : 6.0;
+ax.XAxis.TickValues = 0.0 : 2.5 : 5.0;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 0.0 : 1.0 : 6.0;
+ax.XAxis.MinorTickValues = 0.0 : 1.25 : 6.0;
 
 % Y-Axis
 ax.YAxis.TickDirection = 'in';
@@ -76,9 +76,9 @@ ax.YAxis.MinorTickValues = 0.0 : 1.0 : 4.0;
 
 % Z-Axis
 ax.ZAxis.TickDirection = 'in';
-ax.ZAxis.TickValues = 0.0 : 5.0 : 20.0;
+ax.ZAxis.TickValues = 0.0 : 4.0 : 16.0;
 ax.ZAxis.MinorTick = 'on';
-ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.ZAxis.MinorTickValues = 0.0 : 2.0 : 16.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %

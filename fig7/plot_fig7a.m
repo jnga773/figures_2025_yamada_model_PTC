@@ -94,11 +94,11 @@ fig.Name = 'PTC Scans: Gain';
 ax = gca();
 
 % Axis dimensions
-width = 8.0;
-height = 6.4;
+width = 7.8;
+height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=4);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -158,39 +158,6 @@ for i = 1 : length(plot_idx)
         Color=plot_colours{i});
 end
 
-% %-----------------------------------------%
-% %     Plot: Surface (One level lower)     %
-% %-----------------------------------------%
-% % Surface: Hole (theta_old < 1)
-% [X, Y, Z] = pad_data(data_hole_lt1, -1, 'lt1');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% 
-% % Surface: Hole (theta_old > 1)
-% [X, Y, Z] = pad_data(data_hole_gt1, -1, 'gt1');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% 
-% % Surface: Before hole
-% [X, Y, Z] = pad_data(data_before_hole, -1, 'none');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% 
-% % Surface: After hole
-% [X, Y, Z] = pad_data(data_after_hole, -1, 'none');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% %--------------------------------------------%
-% %     Plot: PTC Curves (One level lower)     %
-% %--------------------------------------------%
-% % Linewidth
-% lw = 3.0;
-% 
-% % Plot all PTCs
-% for i = 1 : length(plot_idx)
-%   idx = plot_idx(i);
-%   plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}-1, ...
-%         LineWidth=lw, LineStyle='-', ...
-%         Color=plot_colours{i});
-% end
-
 %-------------------%
 %     Hold Axis     %
 %-------------------%
@@ -230,9 +197,9 @@ ax.ZAxis.MinorTickValues = 0.0 : 0.25 : 3.0;
 % zlabel(ax, '$\theta_{\mathrm{n}}$');
 
 % Turn off all axis labels
-% ax.XAxis.TickLabels = {};
-% ax.YAxis.TickLabels = {};
-% ax.ZAxis.TickLabels = {};
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
+ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
@@ -241,7 +208,6 @@ box(ax, 'on');
 grid(ax, 'on');
 
 % axis(ax, 'off');
-% set(gca, 'Color', 'none');
 
 %---------------------%
 %     Save Figure     %

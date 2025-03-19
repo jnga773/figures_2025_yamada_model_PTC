@@ -115,8 +115,8 @@ function save_fig6_data(run_in, filename_in)
 
     % If both are false, merge the two together with a NaN in between
     if ~lt1_check && ~gt1_check
-      % Check if A_perturb < 4.1203
-      if A_perturb < 4.1203
+      % Check if A_perturb > 4.1203
+      if A_perturb > 4.1203
         % Move theta_new down by one
         theta_new_gt1 = theta_new_gt1 - 1.0;
       end
