@@ -391,7 +391,7 @@ print('Run name: {}'.format(run_new_str))
 #-------------------#
 # Set initial phase resetting parameters
 # Periodicity
-k = 55
+k = 60
 
 # Perturbation direction
 from numpy import pi
@@ -409,11 +409,11 @@ x_init_PR, p_PR, pnames_PR = \
 from numpy import linspace, concatenate, unique
 
 # Saved points for large scan of G perturbation
-SP_points = concatenate((linspace(0.0, 0.25, 25),
-                         linspace(0.30, 1.0, 25),
+SP_points = concatenate((linspace(0.0, 0.15, 20),
+                         linspace(0.15, 1.0, 25),
                          linspace(1.0, 1.3, 25),
-                         linspace(1.3, 2.0, 25)))
-SP_points = concatenate((SP_points, [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0]))
+                         linspace(1.3, 2.0, 20)))
+SP_points = concatenate((SP_points, [0.05, 0.1, 0.15, 0.5427, 1.0, 1.5, 2.0]))
 SP_points = unique(SP_points)
 
 # Copy continuation script
@@ -422,7 +422,7 @@ auto.copy('./continuation_scripts/', 'PTC_initial')
 # Try set up phase reset calculation lol
 run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
                    c='PTC_initial',
-                   NMX=2000, NTST=k * 50,
+                   NMX=2000, NTST=k * 60,
                    UZR={'A_perturb': SP_points},
                    UZSTOP={'A_perturb': max(SP_points) + 0.1})
 
@@ -491,7 +491,7 @@ def calculate_PTC(i):
                         ICP=['theta_old', 'theta_new', 'eta', 'mu_s', 'T'],
                         UZSTOP={'theta_old': theta_old_stop, 'theta_new': theta_new_stop},
                         UZR={'theta_old': SP_points},
-                        DSMIN=5e-3, DS=5e-2, DSMAX=5e-1,
+                        DSMIN=1e-3, DS=2e-3, DSMAX=5e-2,
                         EPSL=1e-7, EPSU=1e-7, EPSS=1e-4,
                         NMX=8000, NPR=100)
     run_scan += auto.run(DS='-')

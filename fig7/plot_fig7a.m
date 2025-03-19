@@ -31,12 +31,12 @@ plot_colours = {'#92b700';    % Green-Yellow
 %-----------------------------------%
 %     Sort Out Single Plot Data     %
 %-----------------------------------%
-plot_A_perturb = [0.05, 0.1, 0.15, 0.55, 1.0, 1.5, 2.0];
+plot_A_perturb = [0.05, 0.1, 0.15, 0.5427, 1.0, 1.5, 2.0];
 
 % Find plotting indices
 plot_idx = zeros(length(plot_A_perturb), 1);
 for i = 1 : length(plot_A_perturb)
-  plot_idx(i) = find(round(A_perturb, 3) == plot_A_perturb(i));
+  plot_idx(i) = find(round(A_perturb, 4) == plot_A_perturb(i));
 end
 
 % Empty cells for plotting data
