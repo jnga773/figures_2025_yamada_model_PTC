@@ -75,8 +75,8 @@ xdim = length(x0);
 funcs.field = yamada_symbolic();
 
 % Adjoint equations: Functions (for floquet_mu and floquet_wnorm)
-% funcs.floquet = {@floquet_adjoint};
-funcs.floquet = floquet_symbolic();
+% func.VAR = {@VAR};
+func.VAR = VAR_symbolic();
 
 % Phase Reset Segment 1: Functions
 % func.seg1 = {@func_seg1};
@@ -103,12 +103,12 @@ bcs_funcs.bcs_T = bcs_T_symbolic();
 bcs_funcs.bcs_PO = bcs_PO_symbolic();
 
 % Boundary conditions: Floquet multipliers
-% bcs_funcs.bcs_floquet = {@bcs_floquet};
-bcs_funcs.bcs_floquet = bcs_floquet_symbolic();
+% bcs_funcs.bcs_VAR = {@bcs_VAR};
+bcs_funcs.bcs_VAR = bcs_VAR_symbolic();
 
 % Boundary conditions: Phase-resetting segments
-% bcs_funcs.bcs_segs = {@bcs_PR_segs};
-bcs_funcs.bcs_segs = bcs_PR_segs_symbolic();
+% bcs_funcs.bcs_PR = {@bcs_PR};
+bcs_funcs.bcs_PR = bcs_PR_symbolic();
 
 %=========================================================================%
 %                    CALCULATE INITIAL PERIODIC ORBIT                     %
@@ -482,7 +482,7 @@ prob = coco_set(prob, 'cont', 'NAdapt', 1);
 prob = coco_set(prob, 'coll', 'MXCL', 'off');
 
 % Add segment as initial solution
-prob = ode_isol2coll(prob, 'adjoint', funcs.floquet{:}, ...
+prob = ode_isol2coll(prob, 'adjoint', func.VAR{:}, ...
                      data_adjoint.t0, data_adjoint.x0, ...
                      data_adjoint.pnames, data_adjoint.p0);
 
