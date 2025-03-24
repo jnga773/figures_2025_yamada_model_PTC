@@ -70,11 +70,11 @@ plot(ax, A_D, gamma_D, ...
 % % Add dot for phase resetting parameters
 % plot(ax, 7.4, 3.5e-2, Marker='pentagram', MarkerFaceColor='k', MarkerEdgeColor='k');
 
-% Plot box for zoom
-rectangle(ax, Position=[6.65, 0.03, 7.5-6.65, 0.08-0.03], LineWidth=0.8, ...
-          EdgeColor='k');
-% ax.XAxis.Limits = [6.65, 7.5];
-% ax.YAxis.Limits = [0.03, 0.08];
+% % Plot box for zoom
+% rectangle(ax, Position=[6.65, 0.03, 7.5-6.65, 0.08-0.03], LineWidth=0.8, ...
+%           EdgeColor='k');
+% % ax.XAxis.Limits = [6.65, 7.5];
+% % ax.YAxis.Limits = [0.03, 0.08];
 
 % Turn off axis hold
 hold(ax, 'off');

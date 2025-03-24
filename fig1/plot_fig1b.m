@@ -86,14 +86,10 @@ ax.YAxis.Limits = [0.03, 0.08];
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickValues = 6.7 : 0.2 : 7.5;
-ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 6.7 : 0.1 : 7.5;
+ax.XAxis.TickValues =[];
 
 % Y-Axis
-ax.YAxis.TickValues = 0.03 : 0.01 : 0.08;
-ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.03 : 0.005 : 0.08;
+ax.YAxis.TickValues = [];
 
 %------------------------------%
 %     Axis and Tick Labels     %
