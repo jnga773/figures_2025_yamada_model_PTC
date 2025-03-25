@@ -48,8 +48,8 @@ This repository is structured as follows:
 
 - `fig1`
   - `calc_fig1_data.m`: COCO script for calculating the bifurcation diagram in Fig. 1(b).
-  - `plot_fig1a.m`: Plots Fig. 1(a) - The non-sketch version of the bifurcation diagram.
-  - `plot_fig1a_inset.m`: Plots inset to Fig. 1(a) - Zoomed-in section around regions 5-8.
+  - `plot_fig1b.m`: Plots Fig. 1(b) - The non-sketch version of the bifurcation diagram.
+  - `plot_fig1b_inset.m`: Plots inset to Fig. 1(b) - Zoomed-in section around regions 5-8.
   - `save_fig1_data.m`: Saves the figure data to a Matlab `.mat`file.
 
 - `fig2`
@@ -88,10 +88,10 @@ This repository is structured as follows:
 
 - `fig6`
   - `calc_fig6_data.m`: COCO script for generating the PTCs for a few different perturbation amplitudes positive-$G$ direction: $A = 0.05, 0.1, 0.2, 0.5427, 1.0, 1.5$, and $2.0$.
-  - `plot_fig6a1.m`: Plots Fig. 6(a1) - the phase portrait of the perturbation sets for the "weaker" perturbation ampltiude, $A \leq A^{*} \approx 0.54$
-  - `plot_fig6a2.m`: Plots Fig. 6(a2) - the phase portrait of the perturbation sets for the "stronger" perturbation ampltiude, $A \geq A^{*} \approx 0.54$
-  - `plot_fig6b1.m`: Plots Fig. 6(b1) - PTCs of the "weaker" perturbation ampltiude, $A \leq A^{*} \approx 0.54$
-  - `plot_fig6b2.m`: Plots Fig. 6(b2) - PTCs of the "stronger" perturbation ampltiude, $A \geq A^{*} \approx 0.54$
+  - `plot_fig6a1.m`: Plots Fig. 6(a1) - the phase portrait of the perturbation sets for the "weaker" perturbation ampltiude, $A \leq A \approx 0.54$
+  - `plot_fig6a2.m`: Plots Fig. 6(a2) - the phase portrait of the perturbation sets for the "stronger" perturbation ampltiude, $A \geq A \approx 0.54$
+  - `plot_fig6b1.m`: Plots Fig. 6(b1) - PTCs of the "weaker" perturbation ampltiude, $A \leq A \approx 0.54$
+  - `plot_fig6b2.m`: Plots Fig. 6(b2) - PTCs of the "stronger" perturbation ampltiude, $A \geq A \approx 0.54$
   - `save_fig6_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig7`

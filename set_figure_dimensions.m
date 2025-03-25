@@ -31,14 +31,14 @@ function set_figure_dimensions(width, height, options)
   
   % Default value for units
   arguments
-    width    = 6.0;
-    height   = 4.0;
+    width double   = 6.0;
+    height double  = 4.0;
 
     % Optional arguments
-    options.padding  = 1.0;
-    options.scale    = 1.0;
-    options.fontsize = 9;
-    options.units    = 'centimeters';
+    options.padding double  = 1.0;
+    options.scale double    = 1.0;
+    options.fontsize double = 9;
+    options.units double    = 'centimeters';
   end
 
   % Get Matlab figure and axis properties
