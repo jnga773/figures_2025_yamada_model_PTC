@@ -1,12 +1,12 @@
 function set_figure_dimensions(width, height, options)
   % set_figure_dimensions(width, height)
   %
-  % Sets the dimensions of the axis borders to width_in x height_in. This
+  % Sets the dimensions of the axis borders to width x height. This
   % allows for more precise control over the output of the figure when
   % putting the figure into Inkscape to edit.
   %
   % This is done by setting the width and height of the 'Position' property
-  % of the axis to 'width_in' and 'height_in', respectively. The actual
+  % of the axis to 'width' and 'height', respectively. The actual
   % figure size (fig.Position) is a little bit large to allow for axis
   % labelling and tick labelling.
   %
@@ -38,7 +38,7 @@ function set_figure_dimensions(width, height, options)
     options.padding double  = 1.0;
     options.scale double    = 1.0;
     options.fontsize double = 9;
-    options.units double    = 'centimeters';
+    options.units char    = 'centimeters';
   end
 
   % Get Matlab figure and axis properties

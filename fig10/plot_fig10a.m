@@ -14,8 +14,8 @@ load('../data_files/fig10_data.mat');
 %     Coordinates for 'Hole'     %
 %--------------------------------%
 % G-direction
-intersection.theta_old = 0.516315;
-intersection.A_perturb = 4.120311;
+intersection.theta_old = 0.5148;
+intersection.A_perturb = 4.0737;
 
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%

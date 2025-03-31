@@ -413,7 +413,7 @@ SP_points = concatenate((linspace(0.0, 0.15, 20),
                          linspace(0.15, 1.0, 25),
                          linspace(1.0, 1.3, 25),
                          linspace(1.3, 2.0, 20)))
-SP_points = concatenate((SP_points, [0.05, 0.1, 0.15, 0.5427, 1.0, 1.5, 2.0]))
+SP_points = concatenate((SP_points, [0.05, 0.1, 0.15, 0.5432, 1.0, 1.5, 2.0]))
 SP_points = unique(SP_points)
 
 # Copy continuation script
