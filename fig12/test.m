@@ -439,7 +439,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 k = 30;
 
 % Set perturbation direction
-theta_perturb = 0.0;
+theta_perturb = 0.5 * pi;
 phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
@@ -531,7 +531,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.1, 1.5];
+SP_values = [0.5, 15.0];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -543,71 +543,3 @@ prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
 prange = {[-1e-4, max(SP_values)+0.01], [], [], [0.99, 1.01], []};
 bdtest = coco(prob, run_new, [], 1, ...
               {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T'}, prange);
-
-%-------------------------------------------------------------------------%
-%%                Phase Transition Curve (PTC) - Multiple                %%
-%-------------------------------------------------------------------------%
-%------------------%
-%     Run Name     %
-%------------------%
-% Current run name
-run_names.phase_transition_curve = 'run06_phase_reset_PTC_scan';
-run_new = run_names.phase_transition_curve;
-% Which run this continuation continues from
-run_old = run_names.phase_reset_perturbation;
-
-% Continuation point
-label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
-
-% Print to console
-fprintf("~~~ Phase Reset: Second Run ~~~ \n");
-fprintf('Calculate phase transition curve \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from SP points in run: %s \n', run_old);
-
-%---------------------------------%
-%     Cycle through SP labels     %
-%---------------------------------%
-% Set number of threads
-M = 0;
-parfor (run = 1 : length(label_old), M)
-  % Label for this run
-  this_run_label = label_old(run);
-
-  % Data directory for this run
-  fprintf('\n Continuing from point %d in run: %s \n', this_run_label, run_old);
-
-  this_run_name = {run_new; sprintf('run_%02d', run)};
-
-  % Saved solution points for theta_old
-  SP_values = [0.3, 1.3];
-
-  % Run continuation
-  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
-
-end
-
-%=========================================================================%
-%                           SAVE AND PLOT DATA                            %
-%=========================================================================%
-%-------------------%
-%     Save Data     %
-%-------------------%
-% Save data for Figure 4
-save_fig4_data(run_new, '../data_files/fig4_data.mat');
-
-%----------------------%
-%     Plot Figures     %
-%----------------------%
-% Run plotting scripts
-plot_fig4a1;
-plot_fig4a1_inset
-plot_fig4a2;
-plot_fig4a3;
-plot_fig4b1;
-plot_fig4b2;
-plot_fig4b3;
-
-%=========================================================================%
-%%                              END OF FILE                              %%
-%=========================================================================%

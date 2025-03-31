@@ -7,7 +7,7 @@ function save_fig8_data(run_in, filename_in)
   %     Read Initial Periodic Orbit Data     %
   %------------------------------------------%
   % Run string identifier
-  run_PO = 'run02_initial_periodic_orbit';
+  run_PO = 'run05_initial_periodic_orbit';
   % Bifurcation data
   bd_PO = coco_bd_read(run_PO);
 

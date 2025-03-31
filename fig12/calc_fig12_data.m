@@ -439,7 +439,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 k = 30;
 
 % Set perturbation direction
-theta_perturb = 0.0;
+theta_perturb = 0.5 * pi;
 phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
@@ -531,7 +531,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.1, 1.5];
+SP_values = [0.5, 15.0];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -544,6 +544,7 @@ prange = {[-1e-4, max(SP_values)+0.01], [], [], [0.99, 1.01], []};
 bdtest = coco(prob, run_new, [], 1, ...
               {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T'}, prange);
 
+
 %-------------------------------------------------------------------------%
 %%                Phase Transition Curve (PTC) - Multiple                %%
 %-------------------------------------------------------------------------%
@@ -551,7 +552,7 @@ bdtest = coco(prob, run_new, [], 1, ...
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_transition_curve = 'run06_phase_reset_PTC_scan';
+run_names.phase_transition_curve = 'run09_phase_reset_PTC_scan';
 run_new = run_names.phase_transition_curve;
 % Which run this continuation continues from
 run_old = run_names.phase_reset_perturbation;
@@ -580,7 +581,7 @@ parfor (run = 1 : length(label_old), M)
   this_run_name = {run_new; sprintf('run_%02d', run)};
 
   % Saved solution points for theta_old
-  SP_values = [0.3, 1.3];
+  SP_values = [0.5, 1.5];
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
@@ -588,26 +589,23 @@ parfor (run = 1 : length(label_old), M)
 end
 
 %=========================================================================%
-%                           SAVE AND PLOT DATA                            %
+%%                          SAVE AND PLOT DATA                           %%
 %=========================================================================%
 %-------------------%
 %     Save Data     %
 %-------------------%
-% Save data for Figure 4
-save_fig4_data(run_new, '../data_files/fig4_data.mat');
+% Save data for Figure 8
+save_fig8_data(run_new, '../data_files/fig8_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig4a1;
-plot_fig4a1_inset
-plot_fig4a2;
-plot_fig4a3;
-plot_fig4b1;
-plot_fig4b2;
-plot_fig4b3;
+plot_fig8a1;
+plot_fig8a2;
+plot_fig8b1;
+plot_fig8b2;
 
 %=========================================================================%
-%%                              END OF FILE                              %%
+%                               END OF FILE                               %
 %=========================================================================%
