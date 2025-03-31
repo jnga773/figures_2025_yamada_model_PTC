@@ -40,6 +40,17 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   % --------
   % coll_read_solution
 
+  %-------------------%
+  %     Arguments     %
+  %-------------------%
+  arguments
+    run_in char
+    label_in double
+    k_in double
+    theta_perturb_in double
+    phi_perturb_in double = 0.0
+  end
+
   %-----------------------------------------------------------------------%
   %                            Read Data                                  %
   %-----------------------------------------------------------------------%

@@ -382,7 +382,9 @@ prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 prob = coco_set(prob, 'cont', 'NPR', 100);
 
 % Continue coll from previous branching point
-prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
+% prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
+prob = coco_set(prob, 'cont', 'branch', 'switch');
+prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -417,8 +419,8 @@ coco(prob, run_new, [], 1, {'w_norm', 'mu_s', 'T'}, {[-1e-4, 1.1], [], []});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_reset_perturbation = 'run05_phase_reset_perturbation';
-run_new = run_names.phase_reset_perturbation;
+run_names.phase_reset_orbit = 'run05_phase_reset_orbit';
+run_new = run_names.phase_reset_orbit;
 % Which run this continuation continues from
 run_old = run_names.compute_floquet_2;
 
@@ -428,7 +430,7 @@ label_old = label_old(1);
 
 % Print to console
 fprintf("~~~ Phase Transition Curve: First Run ~~~ \n");
-fprintf('Increase perturbation amplitude \n');
+fprintf('Move along periodic orbit \n');
 fprintf('Run name: %s \n', run_new);
 fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 
@@ -438,12 +440,12 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 % Set periodicity
 k = 30;
 
-% Set perturbation direction
-theta_perturb = 0.5 * pi;
+% Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
+theta_perturb = 0.25 * pi;
 phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
-data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_perturb);
+data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -460,8 +462,7 @@ prob = coco_set(prob, 'cont', 'h_max', 1e0);
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
-PtMX = 1000;
-prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
+prob = coco_set(prob, 'cont', 'PtMX', 200);
 
 % Set number of stored solutions
 prob = coco_set(prob, 'cont', 'NPR', 10);
@@ -530,23 +531,103 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
-% Array of values for special event
-SP_values = [0.5, 15.0];
-
-% When the parameter we want (from param) equals a value in A_vec
-prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
+% Save solution at phase along \Gamma where there WILL BE an intersection
+% with the stable manifold of q.
+prob = coco_add_event(prob, 'SP', 'theta_old', 0.339413);
 
 %------------------%
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-prange = {[-1e-4, max(SP_values)+0.01], [], [], [0.99, 1.01], []};
+prange = {[0.0, 1.0], [0.0, 1.0], [], [0.99, 1.01], []};
 bdtest = coco(prob, run_new, [], 1, ...
-              {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T'}, prange);
-
+              {'theta_old', 'theta_new', 'eta', 'mu_s', 'T'}, prange);
 
 %-------------------------------------------------------------------------%
-%%                Phase Transition Curve (PTC) - Multiple                %%
+%%                   Increasing Pertubation Amplitude                    %%
+%-------------------------------------------------------------------------%
+%------------------%
+%     Run Name     %
+%------------------%
+% Current run name
+run_names.phase_reset_perturbation = 'run06_phase_reset_perturbation';
+run_new = run_names.phase_reset_perturbation;
+% Which run this continuation continues from
+run_old = run_names.phase_reset_orbit;
+
+% Continuation point
+label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
+label_old = label_old(1);
+
+% Print to console
+fprintf("~~~ Phase Transition Curve: Second Run ~~~ \n");
+fprintf('Increase perturbation amplitude \n');
+fprintf('Run name: %s \n', run_new);
+fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+
+%----------------------------%
+%     Setup Continuation     %
+%----------------------------%
+% Set up the COCO problem
+prob = coco_prob();
+
+% Set tolerance
+% prob = coco_set(prob, 'corr', 'TOL', 5e-7);
+
+% Set step sizes
+prob = coco_set(prob, 'cont', 'h_min', 5e-2);
+prob = coco_set(prob, 'cont', 'h0', 1e-1);
+prob = coco_set(prob, 'cont', 'h_max', 1e0);
+
+% Set adaptive meshR
+prob = coco_set(prob, 'cont', 'NAdapt', 10);
+
+% Set number of steps
+prob = coco_set(prob, 'cont', 'PtMX', 200);
+
+% Set norm to int
+prob = coco_set(prob, 'cont', 'norm', inf);
+
+% Set MaxRes and al_max
+prob = coco_set(prob, 'cont', 'MaxRes', 10);
+prob = coco_set(prob, 'cont', 'al_max', 25);
+
+%-------------------------------------------%
+%     Continue from Trajectory Segments     %
+%-------------------------------------------%
+% Segment 1
+prob = ode_coll2coll(prob, 'seg1', run_old, label_old);
+% Segment 2
+prob = ode_coll2coll(prob, 'seg2', run_old, label_old);
+% Segment 3
+prob = ode_coll2coll(prob, 'seg3', run_old, label_old);
+% Segment 4
+prob = ode_coll2coll(prob, 'seg4', run_old, label_old);
+
+%------------------------------------------------%
+%     Apply Boundary Conditions and Settings     %
+%------------------------------------------------%
+% Apply all boundary conditions, glue parameters together, and
+% all that other good COCO stuff. Looking the function file
+% if you need to know more ;)
+prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
+
+%-------------------------%
+%     Add COCO Events     %
+%-------------------------%
+% List of perturbation amplitudes to save solutions for
+SP_values = [0.543235, 0.763750, 4.073735];
+prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
+
+%-------------------------%
+%     Add COCO Events     %
+%-------------------------%
+% Run COCO continuation
+prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+coco(prob, run_new, [], 1, {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
+
+%-------------------------------------------------------------------------%
+%%             Directional Transition Curve (DTC) - Multiple             %%
 %-------------------------------------------------------------------------%
 %------------------%
 %     Run Name     %
