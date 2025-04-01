@@ -575,15 +575,15 @@ prob = coco_prob();
 % prob = coco_set(prob, 'corr', 'TOL', 5e-7);
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 5e-2);
-prob = coco_set(prob, 'cont', 'h0', 1e-1);
-prob = coco_set(prob, 'cont', 'h_max', 1e0);
+% prob = coco_set(prob, 'cont', 'h_min', 5e-2);
+% prob = coco_set(prob, 'cont', 'h0', 1e-1);
+% prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive meshR
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
-prob = coco_set(prob, 'cont', 'PtMX', 200);
+prob = coco_set(prob, 'cont', 'PtMX', 1000);
 
 % Set norm to int
 prob = coco_set(prob, 'cont', 'norm', inf);
@@ -665,7 +665,7 @@ parfor (run = 1 : length(label_old), M)
   SP_values = [0.5, 1.5];
 
   % Run continuation
-  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
+  % run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
 
 end
 
@@ -676,16 +676,16 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 8
-save_fig8_data(run_new, '../data_files/fig8_data.mat');
+% save_fig8_data(run_new, '../data_files/fig8_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig8a1;
-plot_fig8a2;
-plot_fig8b1;
-plot_fig8b2;
+% plot_fig8a1;
+% plot_fig8a2;
+% plot_fig8b1;
+% plot_fig8b2;
 
 %=========================================================================%
 %                               END OF FILE                               %
