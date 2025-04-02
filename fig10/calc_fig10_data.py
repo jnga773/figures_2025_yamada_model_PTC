@@ -275,7 +275,7 @@ run_old = data_funcs.bd_read(run_old_str)
 label_old = 1
 
 # Print to console
-print('~~~ Floquet Bundle: First Run (c.floquet_variational) ~~~')
+print('~~~ Floquet Bundle: First Run (c.initial_VAR) ~~~')
 print('Calculate Floquet bundle (mu) ')
 print('Run name: {}'.format(run_new_str))
 print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
@@ -290,11 +290,11 @@ x_init_VAR, p_VAR, pnames_VAR = data_funcs.calc_initial_solution_VAR(run_old(lab
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./continuation_scripts/', 'floquet_variational')
+auto.copy('./continuation_scripts/', 'initial_VAR')
 
 # Run continuation
 run_new = auto.run(x_init_VAR, PAR=p_VAR, parnames=pnames_VAR,
-                   c='floquet_variational', NPR=50,
+                   c='initial_VAR', NPR=50,
                    DSMIN=1e-4, DS=1e-4, DSMAX=1e-3)
 
 #-------------------#
@@ -416,11 +416,11 @@ SP_points = concatenate((linspace(0.0, 1.0, 15),
 SP_points = unique(SP_points)
 
 # Copy continuation script
-auto.copy('./continuation_scripts/', 'PTC_initial')
+auto.copy('./continuation_scripts/', 'initial_PTC')
 
 # Try set up phase reset calculation lol
 run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
-                   c='PTC_initial',
+                   c='initial_PTC',
                    NMX=2000, NTST=k * 50,
                    UZR={'A_perturb': SP_points},
                    UZSTOP={'A_perturb': max(SP_points) + 0.1})
