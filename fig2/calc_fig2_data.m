@@ -355,7 +355,7 @@ data_stable = calc_initial_solution_PO(run_old, label_old);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 250);
+prob = coco_set(prob, 'coll', 'NTST', 500);
 
 % Set NAdpat
 % prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -364,7 +364,7 @@ prob = coco_set(prob, 'coll', 'NTST', 250);
 prob = coco_set(prob, 'coll', 'MXCL', false);
 
 % Set PtMX steps
-PtMX = 200;
+PtMX = 50;
 prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 
 % Set frequency of saved solutions
@@ -444,7 +444,7 @@ data_isol = calc_initial_solution_Wsq(run_old, label_old);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 250);
+prob = coco_set(prob, 'coll', 'NTST', 500);
 
 % Set NAdpat
 % prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -524,7 +524,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 250);
+prob = coco_set(prob, 'coll', 'NTST', 500);
 
 % Set NAdpat
 % prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -606,7 +606,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 250);
+prob = coco_set(prob, 'coll', 'NTST', 500);
 
 % Set NAdpat
 % prob = coco_set(prob, 'cont', 'NAdapt', 1);

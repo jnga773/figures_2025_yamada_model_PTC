@@ -106,7 +106,6 @@ function bcs_coco_out = bcs_PR_symbolic()
   % Adjoint Boundary Conditions - Segments 1 and 2
   a_bcs_seg12_1 = w1_seg1 - w0_seg2;
   a_bcs_seg12_2 = (mu_s * w0_seg1) - w1_seg2;
-  % a_bcs_seg12_3 = norm(w1_seg1) - 1;
   a_bcs_seg12_3 = norm(w1_seg2) - 1;
 
   %-------------------%
@@ -118,24 +117,22 @@ function bcs_coco_out = bcs_PR_symbolic()
   %-------------------%
   %     Segment 4     %
   %-------------------%
-  % d_vec = [cos(theta_perturb) * sin(phi_perturb);
-  %          sin(theta_perturb) * sin(phi_perturb);
-  %          cos(phi_perturb)];
-  d_vec = [cos(theta_perturb);
+  % d_vec = [cos(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
+  %          sin(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
+  %          cos(phi_perturb * pi)];
+  d_vec = [cos(theta_perturb * (2.0 * pi));
            0.0;
-           sin(theta_perturb)];
+           sin(theta_perturb) * (2.0 * pi)];
 
   % Boundary Conditions - Segment 4
   bcs_seg4_1 = x0_seg4 - x0_seg3 - (A_perturb * d_vec);
   bcs_seg4_2 = dot(x1_seg4 - x0_seg2, w0_seg2);
-  % bcs_seg4_3 = norm(x1_seg4 - x0_seg2) - eta;
 
   % The last boundary condition has a singularity in the Jacobian for the initial
   % vector, as the norm is zero. We then redfine this boundary condition as the
   % square.
   diff_vec = x1_seg4 - x0_seg2;
   bcs_seg4_3 = (diff_vec(1) ^ 2) + (diff_vec(2) ^ 2) + (diff_vec(3) ^ 2) - eta;
-  % bcs_seg4_3 = ((x1_seg4(1) - x0_seg2(1)) ^ 2) + ((x1_seg4(2) - x0_seg2(2)) ^ 2) + ((x1_seg4(3) - x0_seg2(3)) ^ 2) - eta;
 
   %============================================================================%
   %                                   OUTPUT                                   %

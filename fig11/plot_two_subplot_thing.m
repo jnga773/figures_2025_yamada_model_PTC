@@ -57,6 +57,7 @@ A_perturb     = [A_perturb; A_perturb; A_perturb];
 % Ranges
 range_min = -1.0;
 range_max = 2.5;
+drange    = 1e-2;
 
 % Get data over range theta_perturb in [-0.5, 1.0]
 range_idx = theta_perturb >= range_min & theta_perturb <= range_max;
@@ -72,7 +73,7 @@ theta_old_small_range = theta_old_small_range(unique_idx);
 A_perturb_small_range = A_perturb_small_range(unique_idx);
 
 % Smooth theta_perturb data to interpolate over
-theta_perturb_interpolate = range_min : 0.001 : range_max;
+theta_perturb_interpolate = range_min : drange : range_max;
 theta_perturb_interpolate = theta_perturb_interpolate';
 % theta_perturb_interpolate = unique(theta_perturb_interpolate);
 

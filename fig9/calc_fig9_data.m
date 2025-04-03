@@ -30,22 +30,6 @@ addpath('./functions/symcoco/');
 % Add continuation scripts
 addpath('./continuation_scripts/');
 
-%--------------------%
-%     Parameters     %
-%--------------------%
-% Because we will only be looking at the (A, \gamma) plane, we will be
-% setting values for a and B.
-B = 5.8;
-a = 1.8;
-
-% Set some initial values for \gamma and A
-gamma = 0.10;
-A = 6.6;
-
-% Parameters for the periodic orbit
-gamma_PO = 3.5e-2;
-A_PO     = 7.4;
-
 %-----------------------%
 %     Problem Setup     %
 %-----------------------%
@@ -197,7 +181,7 @@ prob = coco_add_event(prob, 'PO_PT', 'A', A_PO);
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-coco(prob, run_new, [], 1, {'A', 'gamma'});
+bdtest = coco(prob, run_new, [], 1, {'A', 'gamma'});
 
 %-------------------------------------------------------------------------%
 %%                   Re-Solve for Rotated Perioid Orbit                  %%
@@ -454,8 +438,8 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 % Set periodicity
 k = 35;
 
-% Set perturbation direction
-theta_perturb = 0.5 * pi;
+% Set perturbation direction (in units of 2 pi)
+theta_perturb = 0.25;
 phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
@@ -547,7 +531,8 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.15, 1.5, 4.1203, 15.0, 25.0]; 
+% SP_values = [0.15, 1.5, 4.078572, 15.0, 25.0]; 
+SP_values = [0.1, 0.5, 4.4078572, 10.0, 20.0];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);

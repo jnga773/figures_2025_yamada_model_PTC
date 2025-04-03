@@ -10,13 +10,18 @@ load('../data_files/fig9_data.mat');
 %     Plot Colours     %
 %----------------------%
 % Plot colours
+% plot_colours = {'#92b700';    % Green-Yellow
+%                 '#e6b400';    % Yellow
+%                 '#eb5e00';    % Orange
+%                 '#d62728';    % Red
+%                 '#e377c2';    % Pink
+%                 '#bf42f5';    % Purple
+%                 '#1f9ece'};   % Cyan
 plot_colours = {'#92b700';    % Green-Yellow
                 '#e6b400';    % Yellow
-                '#eb5e00';    % Orange
                 '#d62728';    % Red
                 '#e377c2';    % Pink
-                '#bf42f5';    % Purple
-                '#1f9ece'};   % Cyan
+                '#bf42f5'};   % Purple
 
 %-------------------------------------------------------------------------%
 %%                               Plot Data                               %%
@@ -56,7 +61,7 @@ plot(ax, [0, 1], [0, 1], LineStyle='-', LineWidth=1.5, ...
      Color=colours(3, :));
 
 % Grey lines at theta_old = 0 and 0.3
-xline(ax, 0.5163, LineStyle='-', LineWidth=1, ...
+xline(ax, 0.5148, LineStyle='-', LineWidth=1, ...
       Color=[0, 0, 0, 0.5]);
 
 %--------------------%
@@ -66,7 +71,7 @@ xline(ax, 0.5163, LineStyle='-', LineWidth=1, ...
 lw = 1.5;
 
 % Plot all PTCs
-for idx = 1 : length(plot_colours)
+for idx = 1 : length(A_perturb)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot
@@ -122,5 +127,5 @@ box(ax, 'on');
 %      Save Figure     %
 %----------------------%
 % Filename
-filename_out = '../pdf/fig9b_G_PTCs.pdf';
+filename_out = '../pdf/fig9b_I_PTCs.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');

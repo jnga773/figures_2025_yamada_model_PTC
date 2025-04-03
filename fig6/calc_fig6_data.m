@@ -438,7 +438,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 % Set periodicity
 k = 35;
 
-% Set perturbation direction
+% Set perturbation direction (in units of 2 pi)
 theta_perturb = 0.0;
 phi_perturb = 0.0;
 
