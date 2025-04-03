@@ -393,10 +393,9 @@ print('Run name: {}'.format(run_new_str))
 # Periodicity
 k = 55
 
-# Perturbation direction
-from numpy import pi
-# theta_perturb = 0.0
-theta_perturb = 0.5 * pi
+# Perturbation direction (in units of 2 \pi)
+theta_perturb = 0.0
+# theta_perturb = 0.25
 
 # Calculate initial solution
 x_init_PR, p_PR, pnames_PR = \
