@@ -18,13 +18,18 @@ plot_idx = 1:4;
 colours = colororder();
 
 % Plot colours
+% plot_colours = {'#92b700';    % Green-Yellow
+%                 '#e6b400';    % Yellow
+%                 '#eb5e00';    % Orange
+%                 '#d62728';    % Red
+%                 '#e377c2';    % Pink
+%                 '#bf42f5';    % Purple
+%                 '#1f9ece'};   % Cyan
 plot_colours = {'#92b700';    % Green-Yellow
                 '#e6b400';    % Yellow
-                '#eb5e00';    % Orange
                 '#d62728';    % Red
                 '#e377c2';    % Pink
-                '#bf42f5';    % Purple
-                '#1f9ece'};   % Cyan
+                '#bf42f5'};   % Purple
 
 %%
 %-------------------------------------------------------------------------%
@@ -80,7 +85,7 @@ for i = 1 : length(plot_idx)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot
-  plot3(ax, smooth(xbp_PO(:, 1)+A_perturb(idx)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)), ...
+  plot3(ax, smooth(xbp_PO(:, 1)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)+A_perturb(idx)), ...
         Color=plot_colours{idx}, LineStyle='-', LineWidth=lw);
 end
 

@@ -18,13 +18,18 @@ plot_idx = 1:4;
 colours = colororder();
 
 % Plot colours
+% plot_colours = {'#92b700';    % Green-Yellow
+%                 '#e6b400';    % Yellow
+%                 '#eb5e00';    % Orange
+%                 '#d62728';    % Red
+%                 '#e377c2';    % Pink
+%                 '#bf42f5';    % Purple
+%                 '#1f9ece'};   % Cyan
 plot_colours = {'#92b700';    % Green-Yellow
                 '#e6b400';    % Yellow
-                '#eb5e00';    % Orange
                 '#d62728';    % Red
                 '#e377c2';    % Pink
-                '#bf42f5';    % Purple
-                '#1f9ece'};   % Cyan
+                '#bf42f5'};   % Purple
 
 %%
 %-------------------------------------------------------------------------%
@@ -37,7 +42,7 @@ ax = gca();
 
 % Axis dimensions
 width = 7.5;
-height = 4.0;
+height = 6.0;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -80,7 +85,7 @@ for i = 1 : length(plot_idx)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot
-  plot3(ax, smooth(xbp_PO(:, 1)+A_perturb(idx)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)), ...
+  plot3(ax, smooth(xbp_PO(:, 1)), smooth(xbp_PO(:, 2)), smooth(xbp_PO(:, 3)+A_perturb(idx)), ...
         Color=plot_colours{idx}, LineStyle='-', LineWidth=lw);
 end
 
@@ -94,7 +99,7 @@ hold(ax, 'off');
 %---------------------%
 ax.XAxis.Limits = [0.0, 7.0];
 ax.YAxis.Limits = [0.0, 4.0];
-ax.ZAxis.Limits = [0.0, 20];
+ax.ZAxis.Limits = [0.0, 30];
 
 %--------------------%
 %     Axis Ticks     %
@@ -113,9 +118,9 @@ ax.YAxis.MinorTickValues = 0.0 : 1.0 : 4.0;
 
 % Z-Axis
 ax.ZAxis.TickDirection = 'in';
-ax.ZAxis.TickValues = 0.0 : 5.0 : 20.0;
+ax.ZAxis.TickValues = 0.0 : 5.0 : 30.0;
 ax.ZAxis.MinorTick = 'on';
-ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 20.0;
+ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 30.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %
