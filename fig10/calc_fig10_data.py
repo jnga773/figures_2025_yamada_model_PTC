@@ -394,8 +394,8 @@ print('Run name: {}'.format(run_new_str))
 k = 55
 
 # Perturbation direction (in units of 2 \pi)
-theta_perturb = 0.0
-# theta_perturb = 0.25
+# theta_perturb = 0.0
+theta_perturb = 0.25
 
 # Calculate initial solution
 x_init_PR, p_PR, pnames_PR = \
@@ -412,6 +412,7 @@ SP_points = concatenate((linspace(0.0, 1.0, 15),
                          linspace(1.0, 10.0, 15),
                          linspace(10.0, 13.0, 15),
                          linspace(13.0, 25.0, 15)))
+SP_points = concatenate((SP_points, [0.1, 0.5, 4.408, 10, 20]))
 SP_points = unique(SP_points)
 
 # Copy continuation script
