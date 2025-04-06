@@ -41,7 +41,7 @@ plot_colours = {'#92b700';    % Green-Yellow
 %-----------------------------------%
 %     Sort Out Single Plot Data     %
 %-----------------------------------%
-plot_A_perturb = [0.1, 0.5, 4.078572, 10, 20];
+plot_A_perturb = [0.1, 0.5, 4.0786, 10, 20];
 
 % Find plotting indices
 plot_idx = zeros(length(plot_A_perturb), 1);
