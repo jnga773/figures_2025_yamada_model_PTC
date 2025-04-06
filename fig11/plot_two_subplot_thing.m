@@ -57,7 +57,7 @@ A_perturb     = [A_perturb; A_perturb; A_perturb];
 % Ranges
 range_min = -1.0;
 range_max = 2.5;
-drange    = 1e-2;
+drange    = 1e-3;
 
 % Get data over range theta_perturb in [-0.5, 1.0]
 range_idx = theta_perturb >= range_min & theta_perturb <= range_max;
@@ -165,14 +165,14 @@ plot(ax(1), theta_perturb_interpolate(idx_half), theta_old_interpolate(idx_half)
      MarkerFaceColor='k', MarkerEdgeColor='k');
 
 % Add text
-plot_text = sprintf('$\\theta_{\\mathrm{o}} = %.6f$', theta_old_interpolate(idx_G));
+plot_text = sprintf('$\\vartheta_{\\mathrm{o}}^{(0^{\\circ})} = %.6f$', theta_old_interpolate(idx_G));
 text(ax(1), theta_perturb_interpolate(idx_G), theta_old_interpolate(idx_G)-0.05, ...
      plot_text);
-plot_text = sprintf('$\\theta_{\\mathrm{o}} = %.6f$', theta_old_interpolate(idx_I));
+plot_text = sprintf('$\\vartheta_{\\mathrm{o}}^{(90^{\\circ})} = %.6f$', theta_old_interpolate(idx_I));
 text(ax(1), theta_perturb_interpolate(idx_I)+0.03, theta_old_interpolate(idx_I), ...
      plot_text);
-plot_text = sprintf('$\\theta_{\\mathrm{o}} = %.6f$', theta_old_interpolate(idx_half));
-text(ax(1), theta_perturb_interpolate(idx_half)-0.15, theta_old_interpolate(idx_half)+0.05, ...
+plot_text = sprintf('$\\vartheta_{\\mathrm{o}}^{(45^{\\circ})} = %.6f$', theta_old_interpolate(idx_half));
+text(ax(1), theta_perturb_interpolate(idx_half)-0.2, theta_old_interpolate(idx_half)+0.05, ...
      plot_text);
 
 hold(ax(1), 'off')
@@ -210,14 +210,14 @@ plot(ax(2), theta_perturb_interpolate(idx_half), A_perturb_interpolate(idx_half)
      MarkerFaceColor='k', MarkerEdgeColor='k');
 
 % Add text
-plot_text = sprintf('$A_{\\mathrm{p}} = %.6f$', A_perturb_interpolate(idx_G));
+plot_text = sprintf('$A^{(0^{\\circ})} = %.6f$', A_perturb_interpolate(idx_G));
 text(ax(2), theta_perturb_interpolate(idx_G)-0.2, A_perturb_interpolate(idx_G)+0.75, ...
      plot_text);
-plot_text = sprintf('$A_{\\mathrm{p}} = %.6f$', A_perturb_interpolate(idx_I));
-text(ax(2), theta_perturb_interpolate(idx_I)-0.3, A_perturb_interpolate(idx_I), ...
+plot_text = sprintf('$A^{(90^{\\circ})} = %.6f$', A_perturb_interpolate(idx_I));
+text(ax(2), theta_perturb_interpolate(idx_I)-0.35, A_perturb_interpolate(idx_I), ...
      plot_text);
-plot_text = sprintf('$A_{\\mathrm{p}} = %.6f$', A_perturb_interpolate(idx_half));
-text(ax(2), theta_perturb_interpolate(idx_half)-0.15, A_perturb_interpolate(idx_half)+1, ...
+plot_text = sprintf('$A^{(45^{\\circ})} = %.6f$', A_perturb_interpolate(idx_half));
+text(ax(2), theta_perturb_interpolate(idx_half)-0.2, A_perturb_interpolate(idx_half)+1.5, ...
      plot_text);
 
 hold(ax(2), 'off')
