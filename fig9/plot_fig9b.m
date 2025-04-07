@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %%                               Read Data                               %%
@@ -74,8 +74,14 @@ lw = 1.5;
 for idx = 1 : length(A_perturb)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
+  if idx == 2
+    temp = -1;
+  else
+    temp = 0;
+  end
+
   % Plot
-  plot(ax, theta_old{idx}, theta_new{idx}, ...
+  plot(ax, theta_old{idx}, theta_new{idx}+temp, ...
        LineWidth=lw, LineStyle='-', ...
        Color=plot_colours{idx});
 end

@@ -34,7 +34,7 @@ function run_PTC_continuation(run_new_in, run_old_in, label_old_in, data_PR_in, 
   % prob = coco_set(prob, 'corr', 'TOL', 5e-7);
 
   % Set step sizes
-  prob = coco_set(prob, 'cont', 'h_min', 5e-3);
+  prob = coco_set(prob, 'cont', 'h_min', 5e-5);
   prob = coco_set(prob, 'cont', 'h0', 1e-2);
   prob = coco_set(prob, 'cont', 'h_max', 5e-1);
 

@@ -7,10 +7,6 @@ clear all; close all; clc;
 load('../data_files/fig2_data.mat', 'Wq_s');
 load('../data_files/fig9_data.mat');
 
-% List of perturbations to plot
-plot_idx = 1:5;
-% plot_idx = 4:7;
-
 %----------------------%
 %     Plot Colours     %
 %----------------------%
@@ -41,7 +37,7 @@ fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
 % Axis dimensions
-width = 5.0;
+width = 4.0;
 height = 7.0;
 
 % Set figure size
@@ -79,8 +75,7 @@ plot3(ax, xpos(1), xpos(2), xpos(3), ...
 lw = 1.0;
 
 % Plot all PTCs
-for i = 1 : length(plot_idx)
-  idx = plot_idx(i);
+for idx = 1 : length(A_perturb)
 
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
@@ -97,7 +92,7 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.0, 7.0];
+ax.XAxis.Limits = [0.0, 5.0];
 ax.YAxis.Limits = [0.0, 4.0];
 ax.ZAxis.Limits = [0.0, 40];
 
@@ -106,9 +101,9 @@ ax.ZAxis.Limits = [0.0, 40];
 %--------------------%
 % X-Axis
 ax.XAxis.TickDirection = 'in';
-ax.XAxis.TickValues = 0.0 : 2.0 : 8.0;
+ax.XAxis.TickValues = 0.0 : 2.5 : 5.0;
 ax.XAxis.MinorTick = 'on';
-ax.XAxis.MinorTickValues = 0.0 : 1.0 : 7.0;
+ax.XAxis.MinorTickValues = 0.0 : 1.25 : 5.0;
 
 % Y-Axis
 ax.YAxis.TickDirection = 'in';

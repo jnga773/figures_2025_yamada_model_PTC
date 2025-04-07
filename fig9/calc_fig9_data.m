@@ -531,7 +531,8 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event\
-SP_values = [0.1, 0.5, 4.078572, 10.0, 20.0];
+% SP_values = [0.1, 0.5, 4.078572, 10.0, 20.0];
+SP_values = [0.5];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -569,8 +570,9 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 6;
-parfor (run = 1 : length(label_old), M)
+% M = 6;
+% parfor (run = 1 : length(label_old), M)
+for run = 1
   % Label for this run
   this_run_label = label_old(run);
 
