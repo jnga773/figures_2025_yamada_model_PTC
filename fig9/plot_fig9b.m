@@ -35,8 +35,8 @@ fig.Name = 'PTCs';
 ax = gca();
 
 % Axis dimensions
-width = 4.5;
-height = 9.0;
+width = 3.0;
+height = 7.0;
 
 % Set figure size
 set_figure_dimensions(width, height);

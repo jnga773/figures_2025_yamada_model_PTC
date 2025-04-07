@@ -100,8 +100,8 @@ fig.Name = 'PTC Scans: Gain';
 ax = gca();
 
 % Axis dimensions
-width = 8.0;
-height = 6.4;
+width = 7.8;
+height = 6.0;
 
 % Add set_figure_dimensions() function to path
 % addpath('../');
@@ -138,6 +138,8 @@ shading(ax, 'interp');
 %     Plot: Surface     %
 %-----------------------%
 % Surface: Hole (theta_old < 1)
+% "fix up data_hole_lt1" merge point
+data_hole_lt1.theta_new{1} = data_hole_lt1.theta_new{1} - 0.1;
 [X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
@@ -146,7 +148,7 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: Before hole
-[X, Y, Z] = pad_data(data_before_hole, 0, 'none');
+[X, Y, Z] = pad_data(data_before_hole, -1, 'none');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: After hole
@@ -157,12 +159,17 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 %     Plot: PTC Curves     %
 %--------------------------%
 % Linewidth
-lw = 3.0;
+lw = 2.0;
 
 % Plot all PTCs
 for i = 1 : length(plot_idx)
   idx = plot_idx(i);
-  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
+  if i < 3
+    temp = -1;
+  else
+    temp = 0;
+  end
+  plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}+temp, ...
         LineWidth=lw, LineStyle='-', ...
         Color=plot_colours{i});
 end
@@ -177,7 +184,7 @@ hold(ax, 'off');
 %---------------------%
 ax.XAxis.Limits = [0.0, 1.0];
 ax.YAxis.Limits = [0.0, 25.0];
-ax.ZAxis.Limits = [0.25, 3.0];
+ax.ZAxis.Limits = [0.0, 3.0];
 
 %--------------------%
 %     Axis Ticks     %
@@ -223,7 +230,8 @@ grid(ax, 'on');
 %---------------------%
 view(315, 15);
 
-filename_out = '../pdf/fig10a_I_PTC_surface_1.png';
+% filename_out = '../pdf/fig10a_I_PTC_surface_1.png';
 % exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+
 % filename_out = '../pdf/fig10a_I_PTC_surface_1.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

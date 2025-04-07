@@ -8,7 +8,7 @@ load('../data_files/fig2_data.mat', 'Wq_s');
 load('../data_files/fig9_data.mat');
 
 % List of perturbations to plot
-plot_idx = 1:4;
+plot_idx = 1:5;
 % plot_idx = 4:7;
 
 %----------------------%
@@ -41,8 +41,8 @@ fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
 % Axis dimensions
-width = 7.5;
-height = 6.0;
+width = 5.0;
+height = 7.0;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -99,7 +99,7 @@ hold(ax, 'off');
 %---------------------%
 ax.XAxis.Limits = [0.0, 7.0];
 ax.YAxis.Limits = [0.0, 4.0];
-ax.ZAxis.Limits = [0.0, 30];
+ax.ZAxis.Limits = [0.0, 40];
 
 %--------------------%
 %     Axis Ticks     %
@@ -118,9 +118,9 @@ ax.YAxis.MinorTickValues = 0.0 : 1.0 : 4.0;
 
 % Z-Axis
 ax.ZAxis.TickDirection = 'in';
-ax.ZAxis.TickValues = 0.0 : 5.0 : 30.0;
+ax.ZAxis.TickValues = 0.0 : 10.0 : 40.0;
 ax.ZAxis.MinorTick = 'on';
-ax.ZAxis.MinorTickValues = 0.0 : 2.5 : 30.0;
+ax.ZAxis.MinorTickValues = 0.0 : 5.0 : 40.0;
 
 %------------------------------%
 %     Axis and Tick Labels     %

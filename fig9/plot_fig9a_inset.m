@@ -7,10 +7,6 @@ clear all; close all; clc;
 load('../data_files/fig2_data.mat', 'Wq_s');
 load('../data_files/fig9_data.mat');
 
-% List of perturbations to plot
-plot_idx = 1:4;
-% plot_idx = 4:7;
-
 %----------------------%
 %     Plot Colours     %
 %----------------------%
@@ -42,7 +38,7 @@ ax = gca();
 
 % Axis dimensions
 width = 3.0;
-height = 1.6;
+height = 4;
 
 % Set figure size
 set_figure_dimensions(width, height);
@@ -79,9 +75,7 @@ plot3(ax, xpos(1), xpos(2), xpos(3), ...
 lw = 1.0;
 
 % Plot all PTCs
-for i = 1 : length(plot_idx)
-  idx = plot_idx(i);
-
+for idx = 1 : length(plot_colours)
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot
@@ -97,9 +91,9 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.75, 2.5];
-ax.YAxis.Limits = [0.0, 1.5];
-ax.ZAxis.Limits = [0.0, 5];
+ax.XAxis.Limits = [0, 4];
+ax.YAxis.Limits = [0, 4];
+ax.ZAxis.Limits = [0.0, 35];
 
 %--------------------%
 %     Axis Ticks     %
