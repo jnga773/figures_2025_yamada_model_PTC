@@ -107,7 +107,7 @@ height = 6.0;
 % addpath('../');
 
 % Set figure size
-set_figure_dimensions(width, height);
+set_figure_dimensions(width, height, scale=4);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -139,8 +139,10 @@ shading(ax, 'interp');
 %-----------------------%
 % Surface: Hole (theta_old < 1)
 % "fix up data_hole_lt1" merge point
-data_hole_lt1.theta_new{1} = data_hole_lt1.theta_new{1} - 0.1;
+% data_hole_lt1.theta_new{1} = data_hole_lt1.theta_new{1} - 0.1;
 [X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
+surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+[X, Y, Z] = pad_data(data_hole_lt1, 1, 'lt1');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: Hole (theta_old > 1)
@@ -148,11 +150,13 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: Before hole
-[X, Y, Z] = pad_data(data_before_hole, -1, 'none');
+[X, Y, Z] = pad_data(data_before_hole, 0, 'none');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: After hole
 [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
+surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+[X, Y, Z] = pad_data(data_after_hole, 1, 'none');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 %--------------------------%
@@ -228,7 +232,8 @@ grid(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-view(315, 15);
+% view(315, 15);
+view(305, 17);
 
 % filename_out = '../pdf/fig10a_I_PTC_surface_1.png';
 % exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);

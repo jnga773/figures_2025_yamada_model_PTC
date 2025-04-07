@@ -31,7 +31,7 @@ plot_colours = {'#92b700';    % Green-Yellow
 %-----------------------------------%
 %     Sort Out Single Plot Data     %
 %-----------------------------------%
-plot_A_perturb = [0.05, 0.1, 0.15, 0.5432, 1.0, 1.5, 2.0];
+plot_A_perturb = [0.05, 0.1, 0.15, 0.5427, 1.0, 1.5, 2.0];
 
 % Find plotting indices
 plot_idx = zeros(length(plot_A_perturb), 1);
@@ -98,7 +98,7 @@ width = 7.8;
 height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=1);
+set_figure_dimensions(width, height, scale=4);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -142,6 +142,25 @@ surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: After hole
 [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
+surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+
+%-----------------------%
+%     Plot: Surface     %
+%-----------------------%
+% Surface: Hole (theta_old < 1)
+[X, Y, Z] = pad_data(data_hole_lt1, 1, 'lt1');
+surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+
+% % Surface: Hole (theta_old > 1)
+% [X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+
+% % Surface: Before hole
+% [X, Y, Z] = pad_data(data_before_hole, 0, 'none');
+% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+
+% Surface: After hole
+[X, Y, Z] = pad_data(data_after_hole, 1, 'none');
 surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 %--------------------------%
