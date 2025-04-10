@@ -29,12 +29,12 @@ plot_colours = {'#92b700';    % Green-Yellow
 colours = colororder();
 
 % Setup figure
-fig = figure(6); clf;
+fig = figure(5); clf;
 fig.Name = 'PTCs';
 ax = gca();
 
 % Axis dimensions
-width = 4.5;
+width = 5.0;
 height = 9.0;
 
 % Set figure size
@@ -75,8 +75,14 @@ for i = 1 : length(plot_idx)
 
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
+  if idx >= 4
+    temp = -1;
+  else
+    temp = 0;
+  end
+
   % Plot
-  plot(ax, theta_old{idx}, theta_new{idx}, ...
+  plot(ax, theta_old{idx}, theta_new{idx}+temp, ...
        LineWidth=lw, LineStyle='-', ...
        Color=plot_colours{idx});
 end
@@ -98,9 +104,9 @@ ax.XAxis.TickValues = -0.5 : 0.5 : 1.0;
 ax.XAxis.MinorTick = 'on';
 ax.XAxis.MinorTickValues = -0.5 : 0.25 : 1.0;
 
-ax.YAxis.TickValues = -0.5 : 0.5 : 2.5;
+ax.YAxis.TickValues = -1.5 : 0.5 : 2.5;
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
+ax.YAxis.MinorTickValues = -1.5 : 0.25 : 2.5;
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -117,13 +123,12 @@ ax.YAxis.TickLabels = {};
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [0, 1.0];
-ax.YAxis.Limits = [-0.25, 2.0];
+ax.YAxis.Limits = [-0.8, 1.5];
 
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
-% grid(ax, 'on');
 
 %----------------------%
 %      Save Figure     %

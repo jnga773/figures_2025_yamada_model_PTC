@@ -91,14 +91,18 @@ end
 %-------------------------%
 fig = figure(1); clf;
 fig.Name = 'PTC Scans: Gain';
-ax = gca();
+ax  = axes;
+% ax2 = axes;
+
+% linkaxes([ax, ax2]);
 
 % Axis dimensions
 width = 7.8;
 height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=4);
+set_figure_dimensions(width, height, scale=4, fig=fig, ax=ax);
+% set_figure_dimensions(width, height, scale=4, fig=fig, ax=ax2);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -120,7 +124,10 @@ plot3(ax, [intersection.theta_old, intersection.theta_old], ...
 %     Surface Settings     %
 %--------------------------%
 % Set colour map
-colormap(scale_colour_map(2.0));
+cmap = colormap(scale_colour_map(2.0));
+cbar_min = 0.25;
+cbar_max = 2.3;
+clim([cbar_min, cbar_max]);
 
 % Shading of surface
 shading(ax, 'interp');
@@ -130,44 +137,61 @@ shading(ax, 'interp');
 %-----------------------%
 % Surface: Hole (theta_old < 1)
 [X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Scale the data to match the colormap indices
+scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
+% Convert the scaled data to a truecolor (RGB) image
+tm1 = ind2rgb(scaledData, cmap);
+% Plot surface
+surf1 = surf(ax, X, Y, Z, tm1, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: Hole (theta_old > 1)
 [X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Scale the data to match the colormap indices
+scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
+% Convert the scaled data to a truecolor (RGB) image
+tm2 = ind2rgb(scaledData, cmap);
+surf2 = surf(ax, X, Y, Z, tm2, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: Before hole
 [X, Y, Z] = pad_data(data_before_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Scale the data to match the colormap indices
+scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
+% Convert the scaled data to a truecolor (RGB) image
+tm3 = ind2rgb(scaledData, cmap);
+surf3 = surf(ax, X, Y, Z, tm3, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % Surface: After hole
 [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
-surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Scale the data to match the colormap indices
+scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
+% Convert the scaled data to a truecolor (RGB) image
+tm4 = ind2rgb(scaledData, cmap);
+surf4 = surf(ax, X, Y, Z, tm4, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
-% % Surface: Hole (theta_old < 1)
-% [X, Y, Z] = pad_data(data_hole_lt1, 1, 'lt1');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Surface: Hole (theta_old < 1)
+[X, Y, Z] = pad_data(data_hole_lt1, +1, 'lt1');
+surf11 = surf(ax, X, Y, Z, tm1, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 % % Surface: Hole (theta_old > 1)
-% [X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% [X, Y, Z] = pad_data(data_hole_gt1, 1, 'gt1');
+% surf(ax, X, Y, Z, tm2, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
-% % Surface: Before hole
-% [X, Y, Z] = pad_data(data_before_hole, 0, 'none');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% % % Surface: Before hole
+% [X, Y, Z] = pad_data(data_before_hole, 1, 'none');
+% surf(ax, X, Y, Z, tm3, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
-% % Surface: After hole
-% [X, Y, Z] = pad_data(data_after_hole, 1, 'none');
-% surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+% Surface: After hole
+[X, Y, Z] = pad_data(data_after_hole, 1, 'none');
+surf(ax, X, Y, Z, tm4, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
 
 %--------------------------%
 %     Plot: PTC Curves     %
 %--------------------------%
 % Linewidth
-lw = 3.0;
+lw = 2.0;
 
 % Plot all PTCs
 for i = 1 : length(plot_idx)
@@ -175,6 +199,11 @@ for i = 1 : length(plot_idx)
   plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
         LineWidth=lw, LineStyle='-', ...
         Color=plot_colours{i});
+  if i > 3
+    plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}+1, ...
+          LineWidth=lw, LineStyle='-', ...
+          Color=plot_colours{i});
+  end
 end
 
 %-------------------%
@@ -187,7 +216,7 @@ hold(ax, 'off');
 %---------------------%
 ax.XAxis.Limits = [0.0, 1.0];
 ax.YAxis.Limits = [0.0, 2.0];
-ax.ZAxis.Limits = [0.0, 2.5];
+ax.ZAxis.Limits = [0.0, 3.0];
 
 %--------------------%
 %     Axis Ticks     %
@@ -233,8 +262,8 @@ grid(ax, 'on');
 %---------------------%
 view(315, 15);
 
-filename_out = '../pdf/fig7a_G_PTC_surface_1.png';
+filename_out = '../pdf/fig7_G_PTC_surface.png';
 % exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
-% filename_out = '../pdf/fig7a_G_PTC_surface_1.pdf';
+% filename_out = '../pdf/fig7_G_PTC_surface.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');
