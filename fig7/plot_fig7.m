@@ -84,7 +84,6 @@ for i = 1 : length(plot_A_perturb)
 end
 
 % Shift data_hole_lt1 start data point
-% data_hole_lt1.theta_new{1} = data_hole_lt1.theta_new{1} - 1.0;
 data_hole_lt1 = fix_gap(data_before_hole, data_hole_lt1);
 
 %-------------------------------------------------------------------------%
@@ -102,7 +101,7 @@ width = 7.8;
 height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=4);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -125,79 +124,50 @@ plot3(ax, [intersection.theta_old, intersection.theta_old], ...
 %--------------------------%
 % Set colour map
 cmap = colormap(scale_colour_map(2.0));
-% cbar_min = 0.25;
-% cbar_max = 2.3;
-% clim([cbar_min, cbar_max]);
 
 % Shading of surface
 shading(ax, 'interp');
+
+% % Lighting
+% light(ax, Style='infinite', Position=[intersection.theta_old, intersection.A_perturb, 20]);
+
+% Facealpha
+facealpha = 0.75;
 
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
 % Surface: Hole (theta_old < 1)
 [X, Y, Z] = pad_data(data_hole_lt1, 0, 'lt1');
-surf1 = surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% % Scale the data to match the colormap indices
-% scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
-% % Convert the scaled data to a truecolor (RGB) image
-% tm1 = ind2rgb(scaledData, cmap);
-% % Plot surface
-% surf1 = surf(ax, X, Y, Z, tm1, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+     FaceAlpha=facealpha, FaceLighting='flat');
+surf(ax, X, Y, Z+1.0, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+     FaceAlpha=facealpha, FaceLighting='flat');
 
 % Surface: Hole (theta_old > 1)
 [X, Y, Z] = pad_data(data_hole_gt1, 0, 'gt1');
-surf1 = surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% % Scale the data to match the colormap indices
-% scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
-% % Convert the scaled data to a truecolor (RGB) image
-% tm2 = ind2rgb(scaledData, cmap);
-% surf2 = surf(ax, X, Y, Z, tm2, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+     FaceAlpha=facealpha, FaceLighting='flat');
 
 % Surface: Before hole
 [X, Y, Z] = pad_data(data_before_hole, 0, 'none');
-surf1 = surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% % Scale the data to match the colormap indices
-% scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
-% % Convert the scaled data to a truecolor (RGB) image
-% tm3 = ind2rgb(scaledData, cmap);
-% surf3 = surf(ax, X, Y, Z, tm3, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+     FaceAlpha=facealpha, FaceLighting='flat');
+surf(ax, X, Y, Z-1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+     FaceAlpha=facealpha, FaceLighting='flat');
 
 % Surface: After hole
 [X, Y, Z] = pad_data(data_after_hole, 0, 'none');
-surf1 = surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% % Scale the data to match the colormap indices
-% scaledData = round((Z - cbar_min) / (cbar_max - cbar_min) * (size(cmap, 1) - 1)) + 1;
-% % Convert the scaled data to a truecolor (RGB) image
-% tm4 = ind2rgb(scaledData, cmap);
-% surf4 = surf(ax, X, Y, Z, tm4, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-%-----------------------%
-%     Plot: Surface     %
-%-----------------------%
-% Surface: Hole (theta_old < 1)
-[X, Y, Z] = pad_data(data_hole_lt1, +1, 'lt1');
-surf1 = surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% surf11 = surf(ax, X, Y, Z, tm1, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% % Surface: Hole (theta_old > 1)
-% [X, Y, Z] = pad_data(data_hole_gt1, 1, 'gt1');
-% surf(ax, X, Y, Z, tm2, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% % % Surface: Before hole
-% [X, Y, Z] = pad_data(data_before_hole, 1, 'none');
-% surf(ax, X, Y, Z, tm3, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-
-% Surface: After hole
-[X, Y, Z] = pad_data(data_after_hole, 1, 'none');
-surf1 = surf(ax, X, Y, Z, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
-% surf(ax, X, Y, Z, tm4, EdgeColor='interp', FaceColor='interp', MeshStyle='row');
+surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+     FaceAlpha=facealpha, FaceLighting='flat');
+surf(ax, X, Y, Z+1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+     FaceAlpha=facealpha, FaceLighting='flat');
 
 %--------------------------%
 %     Plot: PTC Curves     %
 %--------------------------%
 % Linewidth
-lw = 2.0;
+lw = 1.0;
 % 
 % Plot all PTCs
 for i = 1 : length(plot_idx)
@@ -205,19 +175,16 @@ for i = 1 : length(plot_idx)
   plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}, ...
         LineWidth=lw, LineStyle='-', ...
         Color=plot_colours{i});
-  if i > 3
+  if i <= 3
+    plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}-1, ...
+          LineWidth=lw, LineStyle='-', ...
+          Color=plot_colours{i});
+  elseif i > 3
     plot3(ax, theta_old_plot{i}, A_perturb_plot{i}, theta_new_plot{i}+1, ...
           LineWidth=lw, LineStyle='-', ...
           Color=plot_colours{i});
   end
 end
-% 
-% plot3(ax, data_hole_lt1.theta_old{1}, ...
-%       data_hole_lt1.A_perturb(1) * ones(length(data_hole_lt1.theta_old{1})), ...
-%       data_hole_lt1.theta_new{1}, Color=plot_colours{4}, Linewidth=lw, LineStyle='-');
-% plot3(ax, data_hole_lt1.theta_old{1}, ...
-%       data_hole_lt1.A_perturb(1) * ones(length(data_hole_lt1.theta_old{1})), ...
-%       data_hole_lt1.theta_new{1}+1, Color=plot_colours{4}, Linewidth=lw, LineStyle='-');
 
 %-------------------%
 %     Hold Axis     %
