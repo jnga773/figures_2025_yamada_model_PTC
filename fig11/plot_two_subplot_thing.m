@@ -81,10 +81,17 @@ theta_perturb_interpolate = theta_perturb_interpolate';
 theta_old_interpolate = interp1(theta_perturb_small_range, theta_old_small_range, theta_perturb_interpolate);
 A_perturb_interpolate = interp1(theta_perturb_small_range, A_perturb_small_range, theta_perturb_interpolate);
 
+% Halve theta_perturb
+theta_perturb_interpolate = 0.5 * theta_perturb_interpolate;
+
 % Print values at theta_perturb = 0 and "pi"
 idx_G    = find(theta_perturb_interpolate == 0.0);
-idx_I    = find(theta_perturb_interpolate == 0.5);
-idx_half = find(theta_perturb_interpolate == 0.25);
+idx_I    = find(theta_perturb_interpolate == 0.25);
+% idx_half = find(theta_perturb_interpolate == 0.125);
+
+perturb_angle = 45;
+idx_half = find(round(theta_perturb_interpolate, 3) == round(deg2rad(perturb_angle) / (2 * pi), 3));
+idx_half = idx_half(1);
 
 % Intersection for G perturbation
 fprintf('G intersection at theta_old = %.5f at A_perturb = %.5f\n', ...
@@ -136,14 +143,8 @@ set(ax, 'DefaultTextInterpreter', 'latex');
 hold(ax(1), 'on');
 
 % Highlight area over 0.0 <= theta_perturb <= 0.5 pi
-patch(ax(1), [0, 0, 0.5, 0.5], [0, 1, 1, 0], colours(3, :), FaceAlpha=0.2, ...
+patch(ax(1), [0, 0, 0.25, 0.25], [0, 1, 1, 0], colours(3, :), FaceAlpha=0.2, ...
       EdgeColor='none', HandleVisibility='off')
-
-% % Plot: theta_old vs theta_perturb
-% plot(ax(1), theta_perturb, theta_old, ...
-%      Color=colours(1, :), LineStyle='-', LineWidth=2.5);
-% plot(ax(1), theta_perturb+2, theta_old, ...
-%      Color=colours(1, :), LineStyle='-', LineWidth=2.5);
 
 % Plot interpolated data
 plot(ax(1), theta_perturb_interpolate, theta_old_interpolate, ...
@@ -169,10 +170,10 @@ plot_text = sprintf('$\\vartheta_{\\mathrm{o}}^{(0^{\\circ})} = %.6f$', theta_ol
 text(ax(1), theta_perturb_interpolate(idx_G), theta_old_interpolate(idx_G)-0.05, ...
      plot_text);
 plot_text = sprintf('$\\vartheta_{\\mathrm{o}}^{(90^{\\circ})} = %.6f$', theta_old_interpolate(idx_I));
-text(ax(1), theta_perturb_interpolate(idx_I)+0.03, theta_old_interpolate(idx_I), ...
+text(ax(1), theta_perturb_interpolate(idx_I)+0.015, theta_old_interpolate(idx_I), ...
      plot_text);
 plot_text = sprintf('$\\vartheta_{\\mathrm{o}}^{(45^{\\circ})} = %.6f$', theta_old_interpolate(idx_half));
-text(ax(1), theta_perturb_interpolate(idx_half)-0.2, theta_old_interpolate(idx_half)+0.05, ...
+text(ax(1), theta_perturb_interpolate(idx_half)-0.1, theta_old_interpolate(idx_half)+0.05, ...
      plot_text);
 
 hold(ax(1), 'off')
@@ -183,14 +184,8 @@ hold(ax(1), 'off')
 hold(ax(2), 'on');
 
 % Highlight area over 0.0 <= theta_perturb <= 0.5 pi
-patch(ax(2), [0, 0, 0.5, 0.5], [0, 20, 20, 0], colours(3, :), FaceAlpha=0.2, ...
+patch(ax(2), [0, 0, 0.25, 0.25], [0, 20, 20, 0], colours(3, :), FaceAlpha=0.2, ...
       EdgeColor='none', HandleVisibility='off')
-
-% Plot: theta_old vs theta_perturb
-plot(ax(2), theta_perturb, A_perturb, ...
-     Color=colours(1, :), LineStyle='-', LineWidth=2.5);
-plot(ax(2), theta_perturb+2, A_perturb, ...
-     Color=colours(1, :), LineStyle='-', LineWidth=2.5);
 
 % Plot interpolated data
 plot(ax(2), theta_perturb_interpolate, A_perturb_interpolate, ...
@@ -211,13 +206,13 @@ plot(ax(2), theta_perturb_interpolate(idx_half), A_perturb_interpolate(idx_half)
 
 % Add text
 plot_text = sprintf('$A^{(0^{\\circ})} = %.6f$', A_perturb_interpolate(idx_G));
-text(ax(2), theta_perturb_interpolate(idx_G)-0.2, A_perturb_interpolate(idx_G)+0.75, ...
+text(ax(2), theta_perturb_interpolate(idx_G)-0.1, A_perturb_interpolate(idx_G)+0.75, ...
      plot_text);
 plot_text = sprintf('$A^{(90^{\\circ})} = %.6f$', A_perturb_interpolate(idx_I));
-text(ax(2), theta_perturb_interpolate(idx_I)-0.35, A_perturb_interpolate(idx_I), ...
+text(ax(2), theta_perturb_interpolate(idx_I)-0.175, A_perturb_interpolate(idx_I), ...
      plot_text);
 plot_text = sprintf('$A^{(45^{\\circ})} = %.6f$', A_perturb_interpolate(idx_half));
-text(ax(2), theta_perturb_interpolate(idx_half)-0.2, A_perturb_interpolate(idx_half)+1.5, ...
+text(ax(2), theta_perturb_interpolate(idx_half)-0.1, A_perturb_interpolate(idx_half)+1.5, ...
      plot_text);
 
 hold(ax(2), 'off')
@@ -227,8 +222,8 @@ hold(ax(2), 'off')
 %----------------------------%
 % X-Axis: theta_perturb
 ax(1).XAxis.MinorTick = 'on';
-ax(1).XAxis.TickValues = -0.5 : 0.5 : 2.5;
-ax(1).XAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
+ax(1).XAxis.TickValues = -0.25 : 0.25 : 1.5;
+ax(1).XAxis.MinorTickValues = -0.25 : 0.125 : 1.5;
 ax(1).XAxis.TickLabels = {};
 
 % Y-Axis: theta_old
@@ -240,13 +235,13 @@ ax(1).YAxis.MinorTickValues = 0.0 : 0.05 : 1.0;
 %     Axis Ticks: Axis 2     %
 %----------------------------%
 % X-Axis: theta_perturb
-ax(2).XAxis.MinorTick = 'on';
-ax(2).XAxis.TickValues = -0.5 : 0.5 : 2.5;
-ax(2).XAxis.MinorTickValues = -0.5 : 0.25 : 2.5;
+ax(2).XAxis.MinorTick = ax(1).XAxis.MinorTick;
+ax(2).XAxis.TickValues = ax(1).XAxis.TickValues;
+ax(2).XAxis.MinorTickValues = ax(1).XAxis.MinorTickValues;
 % ax(2).XAxis.TickLabels = {'$-\frac{\pi}{2}$', '$0$', '$\frac{\pi}{2}$', ...
 %                           '$\pi$', '$\frac{3 \pi}{2}$', '$2 \pi$', '$\frac{5 \pi}{2}$'};
-ax(2).XAxis.TickLabels = {'$-\pi/2$', '$0$', '$\pi/2$', ...
-                          '$\pi$', '$3\pi/2$', '$2 \pi$', '$5\pi/2$'};
+% ax(2).XAxis.TickLabels = {'$-\pi/2$', '$0$', '$\pi/2$', ...
+%                           '$\pi$', '$3\pi/2$', '$2 \pi$', '$5\pi/2$'};
 
 
 % Y-Axis: A_perturb
@@ -260,7 +255,7 @@ ax(2).YAxis.MinorTickValues = 0.0 : 1.0 : 15.0;
 %---------------------%
 % X-Axis: theta_perturb
 % ax(1).XAxis.Limits = [-0.5, 2.5];
-ax(1).XAxis.Limits = [-0.25, 2.0];
+ax(1).XAxis.Limits = [-0.125, 1.0];
 ax(2).XAxis.Limits = ax(1).XAxis.Limits;
 
 % Y-Axis: theta_old
@@ -273,7 +268,7 @@ ax(2).YAxis.Limits = [0.0, 15.0];
 %     Axis Labels     %
 %---------------------%
 % X-Axis: theta_perturb
-ax(2).XAxis.Label.String = '$\varphi_{\mathrm{d}}$';
+ax(2).XAxis.Label.String = '$\varphi_{\mathrm{d}} / 2 \pi$';
 
 % Y-Axis: theta_old
 ax(1).YAxis.Label.String = '$\vartheta_{\mathrm{o}}$';

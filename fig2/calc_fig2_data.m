@@ -175,7 +175,9 @@ PtMX = 50;
 prob = coco_set(prob, 'cont', 'PtMX', [PtMX, 0]);
 
 % Continue from branching point
-prob = ode_BP2ep(prob, '', run_old, label_old);
+% prob = ode_BP2ep(prob, '', run_old, label_old);
+prob = ode_ep2ep(prob, '', run_old, label_old);
+prob = coco_set(prob, 'cont', 'branch', 'switch');
 
 %------------------%
 %     Run COCO     %

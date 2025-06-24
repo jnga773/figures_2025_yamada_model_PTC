@@ -382,7 +382,9 @@ prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 prob = coco_set(prob, 'cont', 'NPR', 100);
 
 % Continue coll from previous branching point
-prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
+% prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
+prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
+prob = coco_set(prob, 'cont', 'branch', 'switch');
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -582,8 +584,15 @@ parfor (run = 1 : length(label_old), M)
   % Saved solution points for theta_old
   SP_values = [0.5, 1.5];
 
+  % Continuation parameters
+  continuation_parameters = {'theta_old', 'theta_new', 'eta', 'mu_s', 'T'};
+  % Parameter range for continuation
+  parameter_range = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+
   % Run continuation
-  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
+  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
+                       continuation_parameters, parameter_range, ...
+                       SP_parameter='theta_old', SP_values=SP_values);
 
 end
 

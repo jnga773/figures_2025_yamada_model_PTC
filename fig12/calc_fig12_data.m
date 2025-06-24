@@ -303,7 +303,9 @@ data_adjoint = calc_initial_solution_VAR(run_old, label_old);
 prob = coco_prob();
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 1e-2, 'h0', 1e-2, 'h_max', 1e-2);
+prob = coco_set(prob, 'cont', 'h_min', 1e-2);
+prob = coco_set(prob, 'cont', 'h0', 1e-2);
+prob = coco_set(prob, 'cont', 'h_max', 1e-2);
 
 % Set PtMX
 PtMX = 100;
@@ -441,8 +443,9 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 k = 30;
 
 % Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
-theta_perturb = 0.25 * pi;
-phi_perturb = 0.0;
+% theta_perturb = 0.25 * pi;
+% theta_perturb = 1 / 8;
+theta_perturb = 0.25;
 
 % Set initial conditions from previous solutions
 data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
@@ -533,7 +536,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 % Save solution at phase along \Gamma where there WILL BE an intersection
 % with the stable manifold of q.
-prob = coco_add_event(prob, 'SP', 'theta_old', 0.339413);
+prob = coco_add_event(prob, 'SP', 'theta_old', 0.339379);
 
 %------------------%
 %     Run COCO     %
@@ -616,14 +619,14 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % List of perturbation amplitudes to save solutions for
-SP_values = [0.543235, 0.763750, 4.073735];
+SP_values = [0.1, 0.724587, 4.0];
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
 
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
 % Run COCO continuation
-prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+prange = {[0.0, 4.0], [0.0, 2.0], [-1e-4, 1e-2], [0.99, 1.01], []};
 coco(prob, run_new, [], 1, {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
 
 %-------------------------------------------------------------------------%
@@ -633,7 +636,7 @@ coco(prob, run_new, [], 1, {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T', 'A_per
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_transition_curve = 'run09_phase_reset_PTC_scan';
+run_names.phase_transition_curve = 'run07_phase_reset_DTC_scan';
 run_new = run_names.phase_transition_curve;
 % Which run this continuation continues from
 run_old = run_names.phase_reset_perturbation;
@@ -664,8 +667,15 @@ parfor (run = 1 : length(label_old), M)
   % Saved solution points for theta_old
   SP_values = [0.5, 1.5];
 
+  % Continuation parameters
+  continuation_parameters = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'T'};
+  % Parameter range for continuation
+  parameter_range = {[], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+
   % Run continuation
-  % run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, SP_values, bcs_funcs);
+  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
+                       continuation_parameters, parameter_range, ...
+                       SP_parameter='theta_new', SP_values=SP_values);
 
 end
 
@@ -675,17 +685,14 @@ end
 %-------------------%
 %     Save Data     %
 %-------------------%
-% Save data for Figure 8
-% save_fig8_data(run_new, '../data_files/fig8_data.mat');
+% Save data for Figure 12
+save_fig12_data(run_new, '../data_files/fig12_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-% plot_fig8a1;
-% plot_fig8a2;
-% plot_fig8b1;
-% plot_fig8b2;
+% plot_fig12;
 
 %=========================================================================%
 %                               END OF FILE                               %

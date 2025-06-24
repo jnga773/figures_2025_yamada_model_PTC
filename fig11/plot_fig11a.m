@@ -168,4 +168,4 @@ view(45, 6.0);
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig11a_portrait1.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');
