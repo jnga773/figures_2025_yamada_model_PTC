@@ -94,6 +94,11 @@ function prob_out = apply_boundary_conditions_PR(prob_in, data_in, bcs_funcs_in)
   prob = coco_add_pars(prob, 'pars_all', ...
                        uidx1(maps1.p_idx), data_in.pnames);
 
+  % Add parameter to monitor I at \gamma_{\theta_{o}}
+  prob = coco_add_pars(prob, 'pars_I_theta_n', ...
+                       uidx3(maps3.x0_idx(3)), 'I_theta_n', ...
+                       'active');
+
   %----------------%
   %     Output     %
   %----------------%

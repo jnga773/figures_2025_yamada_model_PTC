@@ -384,9 +384,9 @@ prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 prob = coco_set(prob, 'cont', 'NPR', 100);
 
 % Continue coll from previous branching point
-% prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
-prob = coco_set(prob, 'cont', 'branch', 'switch');
-prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
+prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
+% prob = coco_set(prob, 'cont', 'branch', 'switch');
+% prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -445,7 +445,8 @@ k = 30;
 % Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
 % theta_perturb = 0.25 * pi;
 % theta_perturb = 1 / 8;
-theta_perturb = 0.25;
+% theta_perturb = 0.25;
+theta_perturb = -0.5;
 
 % Set initial conditions from previous solutions
 data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
@@ -465,7 +466,7 @@ prob = coco_set(prob, 'cont', 'h_max', 1e0);
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
-prob = coco_set(prob, 'cont', 'PtMX', 200);
+prob = coco_set(prob, 'cont', 'PtMX', 100);
 
 % Set number of stored solutions
 prob = coco_set(prob, 'cont', 'NPR', 10);
@@ -536,15 +537,19 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 % Save solution at phase along \Gamma where there WILL BE an intersection
 % with the stable manifold of q.
-prob = coco_add_event(prob, 'SP', 'theta_old', 0.339379);
+prob = coco_add_event(prob, 'SP', 'theta_old', [0.339279, 1.339279]);
 
 %------------------%
 %     Run COCO     %
 %------------------%
+% Set continuation parameters and parameter range
+pcont = {'theta_old', 'theta_new', ...
+         'eta', 'mu_s', 'T'};
+prange = {[1.0, 2.0], [1.0, 2.0], ...
+          [-1e-4, 1e-2], [0.99, 1.01], []};
+
 % Run COCO continuation
-prange = {[0.0, 1.0], [0.0, 1.0], [], [0.99, 1.01], []};
-bdtest = coco(prob, run_new, [], 1, ...
-              {'theta_old', 'theta_new', 'eta', 'mu_s', 'T'}, prange);
+coco(prob, run_new, [], 1, pcont, prange);
 
 %-------------------------------------------------------------------------%
 %%                   Increasing Pertubation Amplitude                    %%
@@ -578,12 +583,12 @@ prob = coco_prob();
 % prob = coco_set(prob, 'corr', 'TOL', 5e-7);
 
 % Set step sizes
-% prob = coco_set(prob, 'cont', 'h_min', 5e-2);
-% prob = coco_set(prob, 'cont', 'h0', 1e-1);
-% prob = coco_set(prob, 'cont', 'h_max', 1e0);
+prob = coco_set(prob, 'cont', 'h_min', 1e-1);
+prob = coco_set(prob, 'cont', 'h0', 1e0);
+prob = coco_set(prob, 'cont', 'h_max', 1e1);
 
 % Set adaptive meshR
-prob = coco_set(prob, 'cont', 'NAdapt', 10);
+% prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
 prob = coco_set(prob, 'cont', 'PtMX', 1000);
@@ -591,9 +596,9 @@ prob = coco_set(prob, 'cont', 'PtMX', 1000);
 % Set norm to int
 prob = coco_set(prob, 'cont', 'norm', inf);
 
-% Set MaxRes and al_max
-prob = coco_set(prob, 'cont', 'MaxRes', 10);
-prob = coco_set(prob, 'cont', 'al_max', 25);
+% % Set MaxRes and al_max
+% prob = coco_set(prob, 'cont', 'MaxRes', 10);
+% prob = coco_set(prob, 'cont', 'al_max', 25);
 
 %-------------------------------------------%
 %     Continue from Trajectory Segments     %
@@ -618,16 +623,24 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
+% Read intensity for intersection with I=0 plane
+I_intsct = coco_bd_val(coco_bd_read(run_old), label_old, 'I_theta_n');
+
 % List of perturbation amplitudes to save solutions for
-SP_values = [0.1, 0.724587, 4.0];
+SP_values = [0.1, 0.724587, 1.5257, 4.0];
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
 
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
+% Set continuation parameters and parameter range
+pcont = {'A_perturb', 'theta_new', ...
+         'eta', 'mu_s', 'T'};
+prange = {[0.0, 4.0], [], ...
+          [-1e-4, 1e-2], [0.99, 1.01], []};
+
 % Run COCO continuation
-prange = {[0.0, 4.0], [0.0, 2.0], [-1e-4, 1e-2], [0.99, 1.01], []};
-coco(prob, run_new, [], 1, {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
+coco(prob, run_new, [], 1, pcont, prange);
 
 %-------------------------------------------------------------------------%
 %%             Directional Transition Curve (DTC) - Multiple             %%
