@@ -40,7 +40,7 @@ function save_fig8_data(run_in, filename_in)
 
     % Save data
     theta_old(idx)     = theta_old_read(1);
-    theta_new{idx}     = theta_new_read;
+    theta_new{idx}     = theta_new_read - 1.0;
     A_perturb(idx)     = A_perturb_read(1);
     theta_perturb{idx} = theta_perturb_read;
   end

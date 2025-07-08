@@ -446,7 +446,7 @@ k = 30;
 % theta_perturb = 0.25 * pi;
 % theta_perturb = 1 / 8;
 % theta_perturb = 0.25;
-theta_perturb = -0.5;
+theta_perturb = 0.25;
 
 % Set initial conditions from previous solutions
 data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
@@ -683,7 +683,7 @@ parfor (run = 1 : length(label_old), M)
   % Continuation parameters
   continuation_parameters = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'T'};
   % Parameter range for continuation
-  parameter_range = {[], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  parameter_range = {[], [-1.0, 1.0], [-1e-4, 1e-2], [0.99, 1.01], []};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
@@ -705,7 +705,7 @@ save_fig12_data(run_new, '../data_files/fig12_data.mat');
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-% plot_fig12;
+plot_fig12;
 
 %=========================================================================%
 %                               END OF FILE                               %
