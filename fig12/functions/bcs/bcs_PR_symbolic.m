@@ -120,9 +120,12 @@ function bcs_coco_out = bcs_PR_symbolic()
   % d_vec = [cos(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
   %          sin(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
   %          cos(phi_perturb * pi)];
-  d_vec = [cos(theta_perturb * (2.0 * pi));
+%   d_vec = [cos(theta_perturb * (2.0 * pi));
+%            0.0;
+%            sin(theta_perturb) * (2.0 * pi)];
+  d_vec = [cos(theta_perturb);
            0.0;
-           sin(theta_perturb) * (2.0 * pi)];
+           sin(theta_perturb)];
 
   % Boundary Conditions - Segment 4
   bcs_seg4_1 = x0_seg4 - x0_seg3 - (A_perturb * d_vec);

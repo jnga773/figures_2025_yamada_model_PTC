@@ -384,9 +384,9 @@ prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 prob = coco_set(prob, 'cont', 'NPR', 100);
 
 % Continue coll from previous branching point
-prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
-% prob = coco_set(prob, 'cont', 'branch', 'switch');
-% prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
+% prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
+prob = coco_set(prob, 'cont', 'branch', 'switch');
+prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -443,10 +443,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 k = 30;
 
 % Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
-% theta_perturb = 0.25 * pi;
-% theta_perturb = 1 / 8;
-% theta_perturb = 0.25;
-theta_perturb = 0.25;
+theta_perturb = deg2rad(135);
 
 % Set initial conditions from previous solutions
 data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
@@ -588,7 +585,7 @@ prob = coco_set(prob, 'cont', 'h0', 1e0);
 prob = coco_set(prob, 'cont', 'h_max', 1e1);
 
 % Set adaptive meshR
-% prob = coco_set(prob, 'cont', 'NAdapt', 10);
+prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
 prob = coco_set(prob, 'cont', 'PtMX', 1000);
@@ -668,7 +665,8 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %---------------------------------%
 % Set number of threads
 M = 0;
-parfor (run = 1 : length(label_old), M)
+% parfor (run = 1 : length(label_old), M)
+for run = 1
   % Label for this run
   this_run_label = label_old(run);
 
@@ -683,12 +681,14 @@ parfor (run = 1 : length(label_old), M)
   % Continuation parameters
   continuation_parameters = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'T'};
   % Parameter range for continuation
-  parameter_range = {[], [-1.0, 1.0], [-1e-4, 1e-2], [0.99, 1.01], []};
+  parameter_range = {[0.0, 2*pi], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
                        continuation_parameters, parameter_range, ...
-                       SP_parameter='theta_new', SP_values=SP_values);
+                       SP_parameter='theta_new', SP_values=SP_values, ...
+                       h_min=1e-3, h0=5e-1, h_max=1e1, ...
+                       PtMX=2000, NPR=50, NAdapt=20);
 
 end
 
