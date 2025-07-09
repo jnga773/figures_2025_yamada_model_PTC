@@ -415,7 +415,7 @@ coco(prob, run_new, [], 1, {'w_norm', 'mu_s', 'T'}, {[-1e-4, 1.1], [], []});
 % continuing in 'theta_old' and 'theta_new'.
 
 %-------------------------------------------------------------------------%
-%%                   Increasing Pertubation Amplitude                    %%
+%%                    Move Around the Periodic Orbit                     %%
 %-------------------------------------------------------------------------%
 %------------------%
 %     Run Name     %
@@ -443,7 +443,7 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 k = 30;
 
 % Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
-theta_perturb = deg2rad(135);
+theta_perturb = 0;
 
 % Set initial conditions from previous solutions
 data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
@@ -549,13 +549,13 @@ prange = {[1.0, 2.0], [1.0, 2.0], ...
 coco(prob, run_new, [], 1, pcont, prange);
 
 %-------------------------------------------------------------------------%
-%%                   Increasing Pertubation Amplitude                    %%
+%%                      Change Perturbation Angle                        %%
 %-------------------------------------------------------------------------%
 %------------------%
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_reset_perturbation = 'run06_phase_reset_perturbation';
+run_names.phase_reset_perturbation = 'run06_phase_reset_perturbation_angle';
 run_new = run_names.phase_reset_perturbation;
 % Which run this continuation continues from
 run_old = run_names.phase_reset_orbit;
@@ -566,7 +566,7 @@ label_old = label_old(1);
 
 % Print to console
 fprintf("~~~ Phase Transition Curve: Second Run ~~~ \n");
-fprintf('Increase perturbation amplitude \n');
+fprintf('Change perturbation angle and save equally spaced points \n');
 fprintf('Run name: %s \n', run_new);
 fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 
@@ -580,15 +580,16 @@ prob = coco_prob();
 % prob = coco_set(prob, 'corr', 'TOL', 5e-7);
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 1e-1);
-prob = coco_set(prob, 'cont', 'h0', 1e0);
+prob = coco_set(prob, 'cont', 'h_min', 1e-5);
+prob = coco_set(prob, 'cont', 'h0', 1e-3);
 prob = coco_set(prob, 'cont', 'h_max', 1e1);
 
-% Set adaptive meshR
-prob = coco_set(prob, 'cont', 'NAdapt', 10);
+% Set adaptive mesh
+% prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
-prob = coco_set(prob, 'cont', 'PtMX', 1000);
+PtMX = 100;
+prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 
 % Set norm to int
 prob = coco_set(prob, 'cont', 'norm', inf);
@@ -624,16 +625,16 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 I_intsct = coco_bd_val(coco_bd_read(run_old), label_old, 'I_theta_n');
 
 % List of perturbation amplitudes to save solutions for
-SP_values = [0.1, 0.724587, 1.5257, 4.0];
-prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
+SP_values = -1.0 : 0.01 : 1.0;
+prob = coco_add_event(prob, 'SP', 'theta_perturb', SP_values);
 
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
 % Set continuation parameters and parameter range
-pcont = {'A_perturb', 'theta_new', ...
+pcont = {'theta_perturb', 'theta_new', ...
          'eta', 'mu_s', 'T'};
-prange = {[0.0, 4.0], [], ...
+prange = {[0.0, 1.0], [], ...
           [-1e-4, 1e-2], [0.99, 1.01], []};
 
 % Run COCO continuation
@@ -664,9 +665,8 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 0;
-% parfor (run = 1 : length(label_old), M)
-for run = 1
+M = 3;
+parfor (run = 1 : length(label_old), M)
   % Label for this run
   this_run_label = label_old(run);
 
@@ -676,17 +676,17 @@ for run = 1
   this_run_name = {run_new; sprintf('run_%02d', run)};
 
   % Saved solution points for theta_old
-  SP_values = [0.5, 1.5];
+  SP_values = [0.1, 0.724587, 1.5257, 4.0];
 
   % Continuation parameters
-  continuation_parameters = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'T'};
+  continuation_parameters = {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T'};
   % Parameter range for continuation
-  parameter_range = {[0.0, 2*pi], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  parameter_range = {[0.0, max(SP_values)], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
                        continuation_parameters, parameter_range, ...
-                       SP_parameter='theta_new', SP_values=SP_values, ...
+                       SP_parameter='A_perturb', SP_values=SP_values, ...
                        h_min=1e-3, h0=5e-1, h_max=1e1, ...
                        PtMX=2000, NPR=50, NAdapt=20);
 

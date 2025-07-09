@@ -1,10 +1,10 @@
 function save_fig8_data(run_in, filename_in)
   % save_fig8_data(run_in, filename_in)
   %
-  % Reads PTC scan data from run_in and saves data to filename_in
+  % Reads DTC scan data from run_in and saves data to filename_in
 
   %------------------------%
-  %     Read Data: PTCs    %
+  %     Read Data: DTCs    %
   %------------------------%
   % Folder name
   dir_data = sprintf('./data/%s/', run_in);
