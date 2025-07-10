@@ -20,7 +20,7 @@ theta_old     = zeros(length(dir_sub), 1);
 A_perturb     = zeros(length(dir_sub), 1);
 % theta_perturb = cell(length(dir_sub), 1);
 % theta_new     = cell(length(dir_sub), 1);
-% SP_labs       = cell(length(dir_sub), 1);
+SP_labs       = cell(length(dir_sub), 1);
 theta_perturb = zeros(length(dir_sub), 1);
 theta_new     = zeros(length(dir_sub), 1);
 
@@ -34,16 +34,18 @@ for idx = 1 : length(dir_sub)
 
   % Read SP labels
   labs_read = coco_bd_labs(bd_read, 'SP');
-  % labs_read = sort(labs_read);
+  labs_read = sort(labs_read);
 
   % Save labels
-  % SP_labs{idx} = labs_read;
+  SP_labs{idx} = labs_read;
+
+  lab_read = labs_read(1);
 
   % Read data
-  theta_old(idx)     = coco_bd_val(bd_read, labs_read, 'theta_old');
-  A_perturb(idx)     = coco_bd_val(bd_read, labs_read, 'A_perturb');
-  theta_new(idx)     = coco_bd_val(bd_read, labs_read, 'theta_new');
-  theta_perturb(idx) = coco_bd_val(bd_read, labs_read, 'theta_perturb');
+  theta_old(idx)     = coco_bd_val(bd_read, lab_read, 'theta_old');
+  A_perturb(idx)     = coco_bd_val(bd_read, lab_read, 'A_perturb');
+  theta_new(idx)     = coco_bd_val(bd_read, lab_read, 'theta_new');
+  theta_perturb(idx) = coco_bd_val(bd_read, lab_read, 'theta_perturb');
 
 end
 

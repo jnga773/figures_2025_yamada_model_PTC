@@ -63,7 +63,7 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   % Original dimension of state space
   xdim = 0.5 * data.xdim;
   % Original dimension of parameter space
-  pdim = data.pdim - 3;
+  pdim = data.pdim - 2;
 
   % State space solution
   xbp_read = sol.xbp;
@@ -95,17 +95,12 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   end
 
   % Stable eigenvalue
-  mu_s_read = p_read(end-2);
-  mu_s_name = pnames_read{end-2};
-
-  % Period of segment
-  T_read    = p_read(end);
+  mu_s_read = p_read(end-1);
+  mu_s_name = pnames_read{end-1};
 
   %----------------------------%
   %     Initial Parameters     %
   %----------------------------%
-  % Period of segment
-  T             = T_read;
   % Integer for period
   k             = k_in;
   % \theta_old (where perturbation starts)
@@ -134,18 +129,14 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   % function to ensure the correct parameters are being used.
 
   % Save the index mapping of each parameter
-  p_maps.T             = pdim + 1;
-  p_maps.k             = pdim + 2;
-  p_maps.theta_old     = pdim + 3;
-  p_maps.theta_new     = pdim + 4;
-  p_maps.mu_s          = pdim + 5;
-  p_maps.eta           = pdim + 6;
-  p_maps.A_perturb     = pdim + 7;
-  p_maps.theta_perturb = pdim + 8;
-  p_maps.phi_perturb   = pdim + 9;
-  % p_maps.d_x           = pdim + 10;
-  % p_maps.d_y           = pdim + 11;
-  % p_maps.d_z           = pdim + 12;
+  p_maps.k             = pdim + 1;
+  p_maps.theta_old     = pdim + 2;
+  p_maps.theta_new     = pdim + 3;
+  p_maps.mu_s          = pdim + 4;
+  p_maps.eta           = pdim + 5;
+  p_maps.A_perturb     = pdim + 6;
+  p_maps.theta_perturb = pdim + 7;
+  p_maps.phi_perturb   = pdim + 8;
 
   %------------------------%
   %     Set Parameters     %
@@ -154,7 +145,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   p0_out = zeros(pdim+length(p_maps), 1);
   % Put parameters in order
   p0_out(1:pdim)               = p_system;
-  p0_out(p_maps.T)             = T;
   p0_out(p_maps.k)             = k;
   p0_out(p_maps.theta_old)     = theta_old;
   p0_out(p_maps.theta_new)     = theta_new;
@@ -163,9 +153,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   p0_out(p_maps.A_perturb)     = A_perturb;
   p0_out(p_maps.theta_perturb) = theta_perturb;
   p0_out(p_maps.phi_perturb)   = phi_perturb;
-  % p0_out(p_maps.d_x)           = d_x;
-  % p0_out(p_maps.d_y)           = d_y;
-  % p0_out(p_maps.d_z)           = d_z;
 
   %-------------------------%
   %     Parameter Names     %
@@ -173,7 +160,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   % Parameter names
   pnames_PR                       = {pnames_system{1:pdim}};
   % Integer for period
-  pnames_PR{p_maps.T}             = 'T';
   pnames_PR{p_maps.k}             = 'k';
   pnames_PR{p_maps.theta_old}     = 'theta_old';
   pnames_PR{p_maps.theta_new}     = 'theta_new';
@@ -182,9 +168,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   pnames_PR{p_maps.A_perturb}     = 'A_perturb';
   pnames_PR{p_maps.theta_perturb} = 'theta_perturb';
   pnames_PR{p_maps.phi_perturb}   = 'phi_perturb';
-  % pnames_PR{p_maps.d_x}           = 'd_x';
-  % pnames_PR{p_maps.d_y}           = 'd_y';
-  % pnames_PR{p_maps.d_z}           = 'd_z';
 
   %----------------------------------------------%
   %     Segment Initial Conditions: Periodic     %

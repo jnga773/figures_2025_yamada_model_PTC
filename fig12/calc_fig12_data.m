@@ -84,11 +84,6 @@ funcs.seg3 = func_seg3_symbolic();
 % Phase Reset: Segment 4
 % funcs.seg4 = {@func_seg4};
 funcs.seg4 = func_seg4_symbolic();
-
-% Boundary conditions: Period
-% bcs_funcs.bcs_T = {@bcs_T};
-bcs_funcs.bcs_T = bcs_T_symbolic();
-
 % Boundary conditions: Periodic orbit
 % bcs_funcs.bcs_PO = {@bcs_PO};
 bcs_funcs.bcs_PO = bcs_PO_symbolic();
@@ -341,7 +336,7 @@ prob = coco_add_event(prob, 'mu=1', 'mu_s', 1.0);
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-coco(prob, run_new, [], 1, {'mu_s', 'w_norm', 'T'} , [0.0, 1.1]);
+coco(prob, run_new, [], 1, {'mu_s', 'w_norm'} , [0.0, 1.1]);
 
 %-------------------------------------------------------------------------%
 %%          Compute Floquet Bundle at Zero Phase Point (w_norm)          %%
@@ -404,7 +399,7 @@ prob = coco_add_event(prob, 'NORM1', 'w_norm', 1.0);
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-coco(prob, run_new, [], 1, {'w_norm', 'mu_s', 'T'}, {[-1e-4, 1.1], [], []});
+coco(prob, run_new, [], 1, {'w_norm', 'mu_s'}, {[-1e-4, 1.1], []});
 
 %=========================================================================%
 %%                   CALCULATE PHASE RESET SOLUTIONS                     %%
@@ -541,9 +536,9 @@ prob = coco_add_event(prob, 'SP', 'theta_old', [0.339279, 1.339279]);
 %------------------%
 % Set continuation parameters and parameter range
 pcont = {'theta_old', 'theta_new', ...
-         'eta', 'mu_s', 'T'};
+         'eta', 'mu_s'};
 prange = {[1.0, 2.0], [1.0, 2.0], ...
-          [-1e-4, 1e-2], [0.99, 1.01], []};
+          [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO continuation
 coco(prob, run_new, [], 1, pcont, prange);
@@ -625,7 +620,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 I_intsct = coco_bd_val(coco_bd_read(run_old), label_old, 'I_theta_n');
 
 % List of perturbation amplitudes to save solutions for
-SP_values = -1.0 : 0.01 : 1.0;
+SP_values = -1.0 : 0.2 : 1.0;
 prob = coco_add_event(prob, 'SP', 'theta_perturb', SP_values);
 
 %-------------------------%
@@ -633,9 +628,9 @@ prob = coco_add_event(prob, 'SP', 'theta_perturb', SP_values);
 %-------------------------%
 % Set continuation parameters and parameter range
 pcont = {'theta_perturb', 'theta_new', ...
-         'eta', 'mu_s', 'T'};
-prange = {[0.0, 1.0], [], ...
-          [-1e-4, 1e-2], [0.99, 1.01], []};
+         'eta', 'mu_s'};
+prange = {[-1.0, 1.0], [], ...
+          [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO continuation
 coco(prob, run_new, [], 1, pcont, prange);
@@ -673,15 +668,19 @@ parfor (run = 1 : length(label_old), M)
   % Data directory for this run
   fprintf('\n Continuing from point %d in run: %s \n', this_run_label, run_old);
 
-  this_run_name = {run_new; sprintf('run_%02d', run)};
+  this_run_name = {run_new; sprintf('run_%02d', run)}
+
+  % Read intensity for intersection with I=0 plane
+  I_intsct = coco_bd_val(coco_bd_read(run_old), this_run_label, 'I_theta_n');
 
   % Saved solution points for theta_old
-  SP_values = [0.1, 0.724587, 1.5257, 4.0];
+  SP_values = [0.1, 0.724587, 4.0, I_intsct];
+  SP_values = sort(SP_values);
 
   % Continuation parameters
-  continuation_parameters = {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T'};
+  continuation_parameters = {'A_perturb', 'theta_new', 'eta', 'mu_s'};
   % Parameter range for continuation
-  parameter_range = {[0.0, max(SP_values)], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  parameter_range = {[0.0, max(SP_values)], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
