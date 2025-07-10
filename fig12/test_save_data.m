@@ -38,14 +38,16 @@ for idx = 1 : length(dir_sub)
 
   % Save labels
   SP_labs{idx} = labs_read;
+  
+  if length(labs_read) > 2
+    lab_read = labs_read(2);
 
-  lab_read = labs_read(1);
-
-  % Read data
-  theta_old(idx)     = coco_bd_val(bd_read, lab_read, 'theta_old');
-  A_perturb(idx)     = coco_bd_val(bd_read, lab_read, 'A_perturb');
-  theta_new(idx)     = coco_bd_val(bd_read, lab_read, 'theta_new');
-  theta_perturb(idx) = coco_bd_val(bd_read, lab_read, 'theta_perturb');
+    % Read data
+    theta_old(idx)     = coco_bd_val(bd_read, lab_read, 'theta_old');
+    A_perturb(idx)     = coco_bd_val(bd_read, lab_read, 'A_perturb');
+    theta_new(idx)     = coco_bd_val(bd_read, lab_read, 'theta_new');
+    theta_perturb(idx) = coco_bd_val(bd_read, lab_read, 'theta_perturb');
+  end
 
 end
 

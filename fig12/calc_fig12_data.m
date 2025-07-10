@@ -620,7 +620,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 I_intsct = coco_bd_val(coco_bd_read(run_old), label_old, 'I_theta_n');
 
 % List of perturbation amplitudes to save solutions for
-SP_values = -1.0 : 0.2 : 1.0;
+SP_values = -1.0 : 0.01 : 1.0;
 prob = coco_add_event(prob, 'SP', 'theta_perturb', SP_values);
 
 %-------------------------%
@@ -660,7 +660,7 @@ fprintf('Continuing from SP points in run: %s \n', run_old);
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 3;
+M = 6;
 parfor (run = 1 : length(label_old), M)
   % Label for this run
   this_run_label = label_old(run);
