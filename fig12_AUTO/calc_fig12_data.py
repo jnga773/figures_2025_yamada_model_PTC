@@ -31,9 +31,9 @@ p0 = {1: gamma, 2: A, 3: B, 4: a}
 # Initial solution is the 'off' state
 x0 = [A, B, 0]
 
-# Parameters to save the periodic orbit for
-gamma_PO = 3.5e-2
-A_PO     = 7.4
+# Parameters for the periodic orbit
+gamma_PO = 3.5e-2;
+A_PO     = 7.4;
 
 #------------------------------------------------------------------------------#
 #                           Compute Equilibrium Point                          #
@@ -110,7 +110,7 @@ print('\n')
 
 # %%
 #------------------------------------------------------------------------------#
-#                            Continue Hopf To A_PO                             #
+#                           Continue Hopf To A = A_PO                          #
 #------------------------------------------------------------------------------#
 # We continue the Hopf bifurcation, varying the 'A' parameter until A = A_PO
 
@@ -328,7 +328,7 @@ label_old = run_old('BP1')
 label_old = label_old['LAB']
 
 # Print to console
-print('~~~ Floquet Bundle: Second Run (c.initial_VAR) ~~~')
+print('~~~ Floquet Bundle: Second Run (c.floquet_variational) ~~~')
 print('Calculate Floquet bundle (w_norm) ')
 print('Run name: {}'.format(run_new_str))
 print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
@@ -363,17 +363,16 @@ print('\n')
 # periodic orbit, with boundary conditions described in a paper somewhere.
 
 #------------------------------------------------------------------------------#
-##                 First Continuation: Perturbation Amplitude                 ##
+##                First Continuation: Move Along Periodic Orbit               ##
 #------------------------------------------------------------------------------#
-# We first compute the phase response to a perturbation in a fixed direction
-# applied at the zero-phase point, theta_old = 1.0 (or 0.0). We free  A_perturb
-# and theta_old.
+# We first continue along the periodic orbit in the two phase, theta_old and
+# theta_new, until we reach the theta_old point that we're interested in.
 
 #------------------#
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run08_phase_reset_perturbation'
+run_new_str = 'run08_phase_reset_move_phase'
 # Previous run name
 run_old_str = 'run07_floquet_wnorm'
 run_old = data_funcs.bd_read(run_old_str)
@@ -383,7 +382,7 @@ label_old = label_old['LAB']
 
 # Print to console
 print('~~~ Phase Reset: First Run ~~~')
-print('Continue in the perturbation ampltiude A_perturb')
+print('Move along the periodic orbit')
 print('Run name: {}'.format(run_new_str))
 print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 
@@ -392,11 +391,10 @@ print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 #-------------------#
 # Set initial phase resetting parameters
 # Periodicity
-k = 60
+k = 55
 
 # Perturbation direction (in units of 2 \pi)
-theta_perturb = 0.0
-# theta_perturb = 0.25
+theta_perturb = 0.25
 
 # Calculate initial solution
 x_init_PR, p_PR, pnames_PR = \
@@ -405,26 +403,64 @@ x_init_PR, p_PR, pnames_PR = \
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Set saved points
-from numpy import linspace, concatenate, unique
-
 # Saved points for large scan of G perturbation
-SP_points = concatenate((linspace(0.0, 0.15, 20),
-                         linspace(0.15, 1.0, 25),
-                         linspace(1.0, 1.3, 25),
-                         linspace(1.3, 2.0, 20)))
-SP_points = concatenate((SP_points, [0.05, 0.1, 0.15, 0.5432, 1.0, 1.5, 2.0]))
-SP_points = unique(SP_points)
+SP_points = [0.339279, 1.339279]
 
 # Copy continuation script
-auto.copy('./continuation_scripts/', 'initial_PTC')
+auto.copy('./continuation_scripts/', 'initial_DTC')
 
 # Try set up phase reset calculation lol
 run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
-                   c='initial_PTC',
-                   NMX=2000, NTST=k * 60,
-                   UZR={'A_perturb': SP_points},
-                   UZSTOP={'A_perturb': max(SP_points) + 0.1})
+                   c='initial_DTC',
+                   NMX=500, NPR=50, NTST=k * 50, DS='-',
+                   UZR={'theta_old': SP_points},
+                   UZSTOP={'theta_old': [0.0, 2.0]})
+
+#-------------------#
+#     Save Data     #
+#-------------------#
+# Save data
+data_funcs.save_move_data(run_new, run_new_str)
+
+# Print clear line
+print('\n')
+
+# %%
+#------------------------------------------------------------------------------#
+##                 Second Continuation: Perturbation Amplitude                 ##
+#------------------------------------------------------------------------------#
+# We then increase the perturbation amplitude and save solutions along the point
+# we are interested in.
+
+#------------------#
+#     Run Name     #
+#------------------#
+# This run name
+run_new_str = 'run09_PR_amplitude'
+# Previous run name
+run_old_str = 'run08_phase_reset_move_phase'
+run_old = data_funcs.bd_read(run_old_str)
+# Previous solution label
+label_old = run_old('UZ1')
+label_old = label_old['LAB']
+
+# Print to console
+print('~~~ Phase Reset: Second Run ~~~')
+print('Continue in the perturbation ampltiude A_perturb')
+print('Run name: {}'.format(run_new_str))
+print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
+
+#-------------------------------#
+#     Run AUTO Continuation     #
+#-------------------------------#
+# Saved points for perturbation amplitudes
+SP_points = [0.1, 0.724587, 1.5257, 4.0]
+
+run_new = auto.run(run_old(label_old), LAB=1,
+                   ICP=['A_perturb', 'theta_new', 'eta', 'mu_s', 'T'],
+                   UZR={'A_perturb': SP_points}, DS='-',
+                   UZSTOP={'A_perturb': max(SP_points) + 0.1},
+                   NMX=5000, NPR=200)
 
 #-------------------#
 #     Save Data     #
@@ -447,9 +483,9 @@ print('\n')
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run09_PTC_scan'
+run_new_str = 'run10_DTC_scan'
 # Previous run name
-run_old_str = 'run08_phase_reset_perturbation'
+run_old_str = 'run09_PR_amplitude'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
 label_old = run_old('UZ')
@@ -465,12 +501,10 @@ print('Continuing from (Saved Points) in run: {}'.format(run_old_str))
 #     Define Continuation Function     #
 #--------------------------------------#
 # Define function for parallelising
-def calculate_PTC(i):
+def calculate_DTC(i):
     """
     Run PTC continuation run for label 'i' in run_old.
-    """
-    from numpy import arange
-    
+    """    
     # This label
     this_label = label_old[i]
 
@@ -479,21 +513,12 @@ def calculate_PTC(i):
 
     # Print run information
     print('Continuing from point {} in run: {}'.format(this_label, run_old_str))
-    
-    # Set saved solutions for theta_old
-    SP_points = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
-                 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9]
-    theta_old_stop = [0.0, 2.0]
-    theta_new_stop = [-1.0, 3.0]
 
     # Run continuation
     run_scan = auto.run(run_old(this_label), LAB=1,
-                        ICP=['theta_old', 'theta_new', 'eta', 'mu_s', 'T'],
-                        UZSTOP={'theta_old': theta_old_stop, 'theta_new': theta_new_stop},
-                        UZR={'theta_old': SP_points},
-                        DSMIN=1e-3, DS=2e-3, DSMAX=5e-2,
-                        EPSL=1e-7, EPSU=1e-7, EPSS=1e-4,
-                        NMX=8000, NPR=100)
+                        ICP=['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T'],
+                        UZSTOP={'theta_perturb': [-1.0, 1.0]},
+                        NMX=4000, NPR=100)
     run_scan += auto.run(DS='-')
     
     #-------------------#
@@ -515,14 +540,14 @@ def calculate_PTC(i):
 # Regular for loop run
 for i in range(len(label_old)):
     # Run continuation
-    calculate_PTC(i)
+    calculate_DTC(i)
 
 #--------------#
 #     Plot     #
 #--------------#
 # Save data
-import save_fig7_data as data_PTC
-data_PTC.save_PTC_scan(run_new_str, '../data_files/fig7_data.mat')
+# import save_fig12_data as data_PTC
+# data_PTC.save_PTC_scan(run_new_str, '../data_files/fig12_data.mat')
 
 # %%
 #==============================================================================#

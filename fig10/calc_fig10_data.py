@@ -385,6 +385,7 @@ label_old = label_old['LAB']
 print('~~~ Phase Reset: First Run ~~~')
 print('Continue in the perturbation ampltiude A_perturb')
 print('Run name: {}'.format(run_new_str))
+print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
 
 #-------------------#
 #     Read Data     #
