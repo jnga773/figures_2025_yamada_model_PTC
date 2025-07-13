@@ -6,7 +6,7 @@ function prob_out = apply_boundary_conditions_PR(prob_in, data_in, bcs_funcs_in)
   % together, and also adds some user defined points. Also
   % applied some COCO settings to the continuation problem.
   %
-  % Input
+  % Parameters
   % ----------
   % prob_in : COCO problem structure
   %     Continuation problem structure.
@@ -17,8 +17,8 @@ function prob_out = apply_boundary_conditions_PR(prob_in, data_in, bcs_funcs_in)
   %     List of all of the boundary condition functions for each
   %     phase resetting segment.
   %
-  % Output
-  % ----------
+  % Returns
+  % -------
   % prob_out : COCO problem structure
   %     Continuation problem structure.
 
@@ -68,12 +68,7 @@ function prob_out = apply_boundary_conditions_PR(prob_in, data_in, bcs_funcs_in)
   %     Add Boundary Conditions     %
   %---------------------------------%
   % Boundary condition function list
-  bcs_T  = bcs_funcs_in.bcs_T;
   bcs_PR = bcs_funcs_in.bcs_PR;
-
-  % Apply period boundary condition
-  prob = coco_add_func(prob, 'bcs_T', bcs_T{:}, dim_data, 'zero', ...
-                       'uidx', uidx1(maps1.T_idx));
 
   % Add boundary conditions for four segments
   prob = coco_add_func(prob, 'bcs_PR', bcs_PR{:}, dim_data, 'zero', 'uidx', ...
@@ -93,6 +88,11 @@ function prob_out = apply_boundary_conditions_PR(prob_in, data_in, bcs_funcs_in)
   % Parameter names
   prob = coco_add_pars(prob, 'pars_all', ...
                        uidx1(maps1.p_idx), data_in.pnames);
+
+  % Add parameter to monitor I at \gamma_{\theta_{o}}
+  prob = coco_add_pars(prob, 'pars_I_theta_n', ...
+                       uidx3(maps3.x0_idx(3)), 'I_theta_n', ...
+                       'active');
 
   %----------------%
   %     Output     %

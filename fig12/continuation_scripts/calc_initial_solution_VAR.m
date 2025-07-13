@@ -24,6 +24,14 @@ function data_out = calc_initial_solution_VAR(run_in, label_in)
   % --------
   % coll_read_solution
 
+  %-------------------%
+  %     Arguments     %
+  %-------------------%
+  arguments
+    run_in char
+    label_in double
+  end
+
   %-----------------------%
   %     Read Solution     %
   %-----------------------%

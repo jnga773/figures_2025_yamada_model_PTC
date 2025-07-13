@@ -32,7 +32,7 @@ function prob_out = apply_boundary_conditions_PO(prob_in, bcs_PO_in)
   % Read index data for the stable periodic orbit segment
   [data_s, uidx_s] = coco_get_func_data(prob, 'initial_PO.coll', 'data', 'uidx');
   % Index mapping
-  maps_s     = data_s.coll_seg.maps;
+  maps_s = data_s.coll_seg.maps;
 
   % Read index data for equilibrium points
   [data_pos, uidx_pos] = coco_get_func_data(prob, 'xpos.ep', 'data', 'uidx');

@@ -1,4 +1,4 @@
-function run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, continuation_parameters, parameter_range, options)
+function run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pcont, prange, options)
   % run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, options)
   %
   % Scan through SP labels from previous run (different values of A_perturb)
@@ -17,9 +17,9 @@ function run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, c
   %     Data structure containing the initial conditions for the trajectory segments.
   % bcs_funcs : list of functions
   %     Structure containing boundary condition functions.
-  % continuation_parameters : cell
+  % pcont : cell
   %     Cell array containing additional parameters for the continuation.
-  % parameter_range : cell
+  % prange : cell
   %     Cell array containing the ranges for the continuation parameters.
   % SP_parameter : array
   %     Parameter to save SP solutions for
@@ -57,8 +57,8 @@ function run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, c
     label_old double
     data_PR struct
     bcs_funcs struct
-    continuation_parameters cell = {'theta_old', 'theta_new', 'eta', 'mu_s', 'T'};
-    parameter_range cell = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+    pcont cell = {'theta_old', 'theta_new', 'eta', 'mu_s', 'T'};
+    prange cell = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
     % Optional arguments
     options.SP_parameter string = ''
@@ -137,8 +137,6 @@ function run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, c
   %     Add COCO Events     %
   %-------------------------%
   % Run COCO continuation
-  % prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
-  % coco(prob, run_new, [], 1, {'theta_old', 'theta_new', 'eta', 'mu_s', 'T', 'A_perturb'}, prange);
-  coco(prob, run_new, [], 1, continuation_parameters, parameter_range);
+  coco(prob, run_new, [], 1, pcont, prange);
 
 end

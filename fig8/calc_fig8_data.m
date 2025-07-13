@@ -85,10 +85,6 @@ funcs.seg3 = func_seg3_symbolic();
 % funcs.seg4 = {@func_seg4};
 funcs.seg4 = func_seg4_symbolic();
 
-% Boundary conditions: Period
-% bcs_funcs.bcs_T = {@bcs_T};
-bcs_funcs.bcs_T = bcs_T_symbolic();
-
 % Boundary conditions: Periodic orbit
 % bcs_funcs.bcs_PO = {@bcs_PO};
 bcs_funcs.bcs_PO = bcs_PO_symbolic();
@@ -118,8 +114,8 @@ bcs_funcs.bcs_PR = bcs_PR_symbolic();
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.ode45_PO = 'run01_initial_PO_ode45';
-run_new = run_names.ode45_PO;
+run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
+run_new = run_names.initial_PO_ode45;
 
 % Print to console
 fprintf("~~~ Initial Periodic Orbit: First Run ~~~ \n");
@@ -193,10 +189,10 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.initial_PO = 'run02_initial_periodic_orbit';
-run_new = run_names.initial_PO;
+run_names.initial_PO_COLL = 'run02_initial_PO_COLL';
+run_new = run_names.initial_PO_COLL;
 % Which run this continuation continues from
-run_old = run_names.ode45_PO;
+run_old = run_names.initial_PO_ode45;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
@@ -277,10 +273,10 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.compute_floquet_1 = 'run04_compute_floquet_bundle_1_mu';
-run_new = run_names.compute_floquet_1;
+run_names.VAR_mu = 'run03_VAR_mu';
+run_new = run_names.VAR_mu;
 % Which run this continuation continues from
-run_old = run_names.initial_PO;
+run_old = run_names.initial_PO_COLL;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
@@ -307,7 +303,7 @@ prob = coco_set(prob, 'cont', 'h_min', 1e-2, 'h0', 1e-2, 'h_max', 1e-2);
 
 % Set PtMX
 PtMX = 100;
-prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
+prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 
 % Set NTST
 prob = coco_set(prob, 'coll', 'NTST', 50);
@@ -339,7 +335,7 @@ prob = coco_add_event(prob, 'mu=1', 'mu_s', 1.0);
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-coco(prob, run_new, [], 1, {'mu_s', 'w_norm', 'T'} , [0.0, 1.1]);
+coco(prob, run_new, [], 1, {'mu_s', 'w_norm'} , {[0.9, 1.1], []});
 
 %-------------------------------------------------------------------------%
 %%          Compute Floquet Bundle at Zero Phase Point (w_norm)          %%
@@ -353,10 +349,10 @@ coco(prob, run_new, [], 1, {'mu_s', 'w_norm', 'T'} , [0.0, 1.1]);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.compute_floquet_2 = 'run05_compute_floquet_bundle_2_w';
-run_new = run_names.compute_floquet_2;
+run_names.VAR_wnorm = 'run04_VAR_wnorm';
+run_new = run_names.VAR_wnorm;
 % Which run this continuation continues from
-run_old = run_names.compute_floquet_1;
+run_old = run_names.VAR_mu;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'BP');
@@ -375,11 +371,11 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 prob = coco_prob();
 
 % Set number of PtMX steps
-PtMX = 2000;
+PtMX = 200;
 prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 
 % Set number of saved solutions
-prob = coco_set(prob, 'cont', 'NPR', 100);
+prob = coco_set(prob, 'cont', 'NPR', 25);
 
 % Continue coll from previous branching point
 % prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
@@ -402,7 +398,7 @@ prob = coco_add_event(prob, 'NORM1', 'w_norm', 1.0);
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-coco(prob, run_new, [], 1, {'w_norm', 'mu_s', 'T'}, {[-1e-4, 1.1], [], []});
+coco(prob, run_new, [], 1, {'mu_s', 'w_norm'}, {[], [-1e-4, 1.1]});
 
 %=========================================================================%
 %%                   CALCULATE PHASE RESET SOLUTIONS                     %%
@@ -419,10 +415,10 @@ coco(prob, run_new, [], 1, {'w_norm', 'mu_s', 'T'}, {[-1e-4, 1.1], [], []});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_reset_perturbation = 'run06_phase_reset_perturbation';
-run_new = run_names.phase_reset_perturbation;
+run_names.PR_perturbation = 'run05_PR_perturbation';
+run_new = run_names.PR_perturbation;
 % Which run this continuation continues from
-run_old = run_names.compute_floquet_2;
+run_old = run_names.VAR_wnorm;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'NORM1');
@@ -541,10 +537,14 @@ prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
 %------------------%
 %     Run COCO     %
 %------------------%
+% Set continuation parameters and parameter range
+pcont = {'A_perturb', 'theta_new', ...
+         'eta', 'mu_s'};
+prange = {[-1e-4, max(SP_values)+0.01], [], ...
+          [-1e-4, 1e-2], [0.99, 1.01]};
+
 % Run COCO continuation
-prange = {[-1e-4, max(SP_values)+0.01], [], [], [0.99, 1.01], []};
-bdtest = coco(prob, run_new, [], 1, ...
-              {'A_perturb', 'theta_new', 'eta', 'mu_s', 'T'}, prange);
+coco(prob, run_new, [], 1, pcont, prange);
 
 %-------------------------------------------------------------------------%
 %%                Phase Transition Curve (PTC) - Multiple                %%
@@ -553,10 +553,10 @@ bdtest = coco(prob, run_new, [], 1, ...
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.phase_transition_curve = 'run07_phase_reset_PTC_scan';
-run_new = run_names.phase_transition_curve;
+run_names.PR_PTC_multi = 'run06_PR_PTC_multi';
+run_new = run_names.PR_PTC_multi;
 % Which run this continuation continues from
-run_old = run_names.phase_reset_perturbation;
+run_old = run_names.PR_perturbation;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
@@ -585,14 +585,13 @@ parfor (run = 1 : length(label_old), M)
   SP_values = [0.5, 1.5];
 
   % Continuation parameters
-  continuation_parameters = {'theta_old', 'theta_new', 'eta', 'mu_s', 'T'};
+  pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
   % Parameter range for continuation
-  parameter_range = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
-                       continuation_parameters, parameter_range, ...
-                       SP_parameter='theta_old', SP_values=SP_values);
+                       pcont, prange, SP_parameter='theta_old', SP_values=SP_values);
 
 end
 

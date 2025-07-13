@@ -23,12 +23,9 @@ function F_coco_out = floquet_symbolic()
   % Phase resetting parameters
   syms mu_s w_norm
 
-  % Period
-  syms T
-
   % Total vectors
   uvec = [xvec; wvec];
-  pvec = [p_sys; mu_s; w_norm; T];
+  pvec = [p_sys; mu_s; w_norm];
 
   %--------------------------%
   %     Calculate Things     %
@@ -37,13 +34,13 @@ function F_coco_out = floquet_symbolic()
   F_vec = yamada_symbolic_field(xvec, p_sys);
 
   % Vector field equations
-  F_eqn = T * F_vec;
+  F_eqn = F_vec;
 
   % Calculate tranpose of Jacobian at point xvec
   J_T = transpose(jacobian(F_vec, xvec));
 
   % Adjoint equation
-  adj_eqn = -T * J_T * wvec;
+  adj_eqn = -J_T * wvec;
 
   % Total equation
   F_seg = [F_eqn; adj_eqn];

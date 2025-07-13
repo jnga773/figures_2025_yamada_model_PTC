@@ -82,10 +82,10 @@ function bcs_coco_out = bcs_PR_symbolic()
   p_sys = [gam; A; B; a];
 
   % Phase resetting parameters
-  syms T k theta_old theta_new
+  syms k theta_old theta_new
   syms mu_s eta
   syms A_perturb theta_perturb phi_perturb
-  p_PR = [T; k; theta_old; theta_new;
+  p_PR = [k; theta_old; theta_new;
           mu_s; eta;
           A_perturb; theta_perturb; phi_perturb];
 
@@ -123,11 +123,13 @@ function bcs_coco_out = bcs_PR_symbolic()
   d_vec = [cos(theta_perturb * (2.0 * pi));
            0.0;
            sin(theta_perturb) * (2.0 * pi)];
+  % d_vec = [cos(theta_perturb);
+  %          0.0;
+  %          sin(theta_perturb)];
 
   % Boundary Conditions - Segment 4
   bcs_seg4_1 = x0_seg4 - x0_seg3 - (A_perturb * d_vec);
   bcs_seg4_2 = dot(x1_seg4 - x0_seg2, w0_seg2);
-  % bcs_seg4_3 = norm(x1_seg4 - x0_seg2) - eta;
 
   % The last boundary condition has a singularity in the Jacobian for the initial
   % vector, as the norm is zero. We then redfine this boundary condition as the

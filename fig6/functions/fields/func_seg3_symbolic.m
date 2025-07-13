@@ -20,10 +20,10 @@ function F_coco_out = func_seg3_symbolic()
   p_sys = [gam; A; B; a];
 
   % Phase resetting parameters
-  syms T k theta_old theta_new
+  syms k theta_old theta_new
   syms mu_s eta
   syms A_perturb theta_perturb phi_perturb
-  p_PR = [T; k; theta_old; theta_new;
+  p_PR = [k; theta_old; theta_new;
           mu_s; eta;
           A_perturb; theta_perturb; phi_perturb];
 
@@ -38,7 +38,7 @@ function F_coco_out = func_seg3_symbolic()
   F_vec = yamada_symbolic_field(xvec, p_sys);
 
   % Vector equation
-  vec_eqn = T * (1 - theta_old) * F_vec;
+  vec_eqn = (1 - theta_old) * F_vec;
 
   % Total equation
   F_seg = vec_eqn;

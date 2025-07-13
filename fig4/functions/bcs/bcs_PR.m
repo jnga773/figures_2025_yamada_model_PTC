@@ -96,8 +96,6 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   p_system     = parameters(1 : pdim);
 
   % Phase resetting parameters
-  % Period of the segment
-  % T             = parameters(p_maps.T);
   % Integer for period
   % k             = parameters(p_maps.k);
   % Stable Floquet eigenvalue
@@ -151,12 +149,14 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   d_vec = [cos(theta_perturb * (2.0 * pi));
            0.0;
            sin(theta_perturb) * (2.0 * pi)];
+  % d_vec = [cos(theta_perturb);
+  %          0.0;
+  %          sin(theta_perturb)];
 
   % Boundary Conditions - Segment 4
   bcs_seg4_1 = x0_seg4 - x0_seg3 - (A_perturb * d_vec);
   bcs_seg4_2 = dot(x1_seg4 - x0_seg2, w0_seg2);
   bcs_seg4_3 = norm(x1_seg4 - x0_seg2) - eta;
-  % bcs_seg4_3 = (norm(x1_seg4 - x0_seg2) ^ 2) - eta;
 
   %============================================================================%
   %                                   OUTPUT                                   %

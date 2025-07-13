@@ -113,8 +113,8 @@ bcs_funcs.bcs_PR = bcs_PR_symbolic();
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.ode45_PO = 'run01_initial_PO_ode45';
-run_new = run_names.ode45_PO;
+run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
+run_new = run_names.initial_PO_ode45;
 
 % Print to console
 fprintf("~~~ Initial Periodic Orbit: First Run ~~~ \n");
@@ -188,10 +188,10 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.initial_PO = 'run02_initial_periodic_orbit';
-run_new = run_names.initial_PO;
+run_names.initial_PO_COLL = 'run02_initial_PO_COLL';
+run_new = run_names.initial_PO_COLL;
 % Which run this continuation continues from
-run_old = run_names.ode45_PO;
+run_old = run_names.initial_PO_ode45;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
@@ -272,10 +272,10 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.compute_floquet_1 = 'run03_compute_floquet_bundle_1_mu';
-run_new = run_names.compute_floquet_1;
+run_names.VAR_mu = 'run03_VAR_mu';
+run_new = run_names.VAR_mu;
 % Which run this continuation continues from
-run_old = run_names.initial_PO;
+run_old = run_names.initial_PO_COLL;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
@@ -298,13 +298,11 @@ data_adjoint = calc_initial_solution_VAR(run_old, label_old);
 prob = coco_prob();
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 1e-2);
-prob = coco_set(prob, 'cont', 'h0', 1e-2);
-prob = coco_set(prob, 'cont', 'h_max', 1e-2);
+prob = coco_set(prob, 'cont', 'h_min', 1e-2, 'h0', 1e-2, 'h_max', 1e-2);
 
 % Set PtMX
 PtMX = 100;
-prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
+prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 
 % Set NTST
 prob = coco_set(prob, 'coll', 'NTST', 50);
@@ -336,7 +334,7 @@ prob = coco_add_event(prob, 'mu=1', 'mu_s', 1.0);
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-coco(prob, run_new, [], 1, {'mu_s', 'w_norm'} , [0.0, 1.1]);
+coco(prob, run_new, [], 1, {'mu_s', 'w_norm'} , {[0.9, 1.1], []});
 
 %-------------------------------------------------------------------------%
 %%          Compute Floquet Bundle at Zero Phase Point (w_norm)          %%
@@ -350,10 +348,10 @@ coco(prob, run_new, [], 1, {'mu_s', 'w_norm'} , [0.0, 1.1]);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.compute_floquet_2 = 'run04_compute_floquet_bundle_2_w';
-run_new = run_names.compute_floquet_2;
+run_names.VAR_wnorm = 'run04_VAR_wnorm';
+run_new = run_names.VAR_wnorm;
 % Which run this continuation continues from
-run_old = run_names.compute_floquet_1;
+run_old = run_names.VAR_mu;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'BP');
@@ -372,16 +370,16 @@ fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
 prob = coco_prob();
 
 % Set number of PtMX steps
-PtMX = 2000;
+PtMX = 200;
 prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 
 % Set number of saved solutions
-prob = coco_set(prob, 'cont', 'NPR', 100);
+prob = coco_set(prob, 'cont', 'NPR', 25);
 
 % Continue coll from previous branching point
 % prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
-prob = coco_set(prob, 'cont', 'branch', 'switch');
 prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
+prob = coco_set(prob, 'cont', 'branch', 'switch');
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -399,7 +397,7 @@ prob = coco_add_event(prob, 'NORM1', 'w_norm', 1.0);
 %     Run COCO     %
 %------------------%
 % Run COCO continuation
-coco(prob, run_new, [], 1, {'w_norm', 'mu_s'}, {[-1e-4, 1.1], []});
+coco(prob, run_new, [], 1, {'mu_s', 'w_norm'}, {[], [-1e-4, 1.1]});
 
 %=========================================================================%
 %%                   CALCULATE PHASE RESET SOLUTIONS                     %%
