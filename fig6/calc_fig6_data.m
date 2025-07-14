@@ -199,7 +199,7 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
 % Print to console
-fprintf("~~~ Initial Periodic Orbit: Sixth Run ~~~ \n");
+fprintf("~~~ Initial Periodic Orbit: Second Run ~~~ \n");
 fprintf('Find new periodic orbit \n');
 fprintf('Run name: %s \n', run_new);
 fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
