@@ -291,7 +291,7 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
 % Print to console
 fprintf('=====================================================================\n');
-fprintf("Floquet Bundle: Second Run\n");
+fprintf("Floquet Bundle: First Run\n");
 fprintf('Calculate stable Floquet bundle eigenvalue\n');
 fprintf('---------------------------------------------------------------------\n');
 fprintf('This run name           : %s\n', run_new);
