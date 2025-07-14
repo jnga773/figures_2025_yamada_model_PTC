@@ -60,7 +60,6 @@ x0 = [10; 10; 10];
 pdim = length(p0);
 xdim = length(x0);
 
-
 %-------------------------%
 %     Functions Lists     %
 %-------------------------%
@@ -103,9 +102,13 @@ run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
 run_new = run_names.initial_PO_ode45;
 
 % Print to console
-fprintf("~~~ Initial Periodic Orbit: First Run ~~~ \n");
-fprintf('Find new periodic orbit \n');
-fprintf('Run name: %s \n', run_new);
+fprintf('=====================================================================\n');
+fprintf("Initial Periodic Orbit: First Run\n");
+fprintf('Find new periodic orbit\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Continuation parameters : %s\n', 'A, gamma');
+fprintf('=====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -184,10 +187,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
 % Print to console
-fprintf("~~~ Initial Periodic Orbit: Sixth Run ~~~ \n");
-fprintf('Find new periodic orbit \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Initial Periodic Orbit: Second Run\n");
+fprintf('Rotate periodic orbit\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'A, gamma');
+fprintf('=====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -260,7 +268,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.stable_manifold1 = 'run06_stable_manifold_seg1';
+run_names.stable_manifold1 = 'run03_stable_manifold_seg1';
 run_new = run_names.stable_manifold1;
 % Which run this continuation continues from
 run_old = run_names.initial_PO_COLL;
@@ -269,10 +277,15 @@ run_old = run_names.initial_PO_COLL;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
 % Print to console
-fprintf("~~~ Stable Manifold: Second Run ~~~ \n");
+fprintf('=====================================================================\n');
+fprintf("Stable Manifold of q: First Run\n");
 fprintf('Calculate one of the stable-manifold branches \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'W_seg1, T1, W_seg2');
+fprintf('=====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -347,7 +360,7 @@ coco(prob, run_new, [], 1, {'W_seg1', 'T1', 'W_seg2'}, prange);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.stable_manifold2 = 'run07_stable_manifold_seg2';
+run_names.stable_manifold2 = 'run04_stable_manifold_seg2';
 run_new = run_names.stable_manifold2;
 run_old = run_names.stable_manifold1;
 
@@ -355,10 +368,15 @@ run_old = run_names.stable_manifold1;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'Del1');
 
 % Print to console
-fprintf("~~~ Stable Manifold: Second Run ~~~ \n");
-fprintf('Calculate one of the stable-manifold branches \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Stable Manifold of q: Second Run\n");
+fprintf('Calculate the other stable-manifold branch\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'W_seg2, T2, W_seg1');
+fprintf('=====================================================================\n');
 
 %----------------------------%
 %     Setup Continuation     %
@@ -429,7 +447,7 @@ coco(prob, run_new, [], 1, {'W_seg2', 'T2', 'W_seg1'}, prange);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.close_eps = 'run08_stable_manifold_close_eps';
+run_names.close_eps = 'run05_stable_manifold_close_eps';
 run_new = run_names.close_eps;
 run_old = run_names.stable_manifold2;
 
@@ -437,10 +455,15 @@ run_old = run_names.stable_manifold2;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'Del2') ;
 
 % Print to console
-fprintf("~~~ Stable Manifold: Third Run ~~~ \n");
-fprintf('Close the initial distance eps \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Stable Manifold of q: Third Run\n");
+fprintf('Close the initial distance eps\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'eps, T1, T2');
+fprintf('=====================================================================\n');
 
 %----------------------------%
 %     Setup Continuation     %

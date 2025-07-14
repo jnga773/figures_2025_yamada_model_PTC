@@ -117,9 +117,13 @@ run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
 run_new = run_names.initial_PO_ode45;
 
 % Print to console
-fprintf("~~~ Initial Periodic Orbit: First Run ~~~ \n");
-fprintf('Find new periodic orbit \n');
-fprintf('Run name: %s \n', run_new);
+fprintf('=====================================================================\n');
+fprintf("Initial Periodic Orbit: First Run\n");
+fprintf('Find new periodic orbit\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Continuation parameters : %s\n', 'A, gamma');
+fprintf('=====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -198,10 +202,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
 % Print to console
-fprintf("~~~ Initial Periodic Orbit: Second Run ~~~ \n");
-fprintf('Find new periodic orbit \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Initial Periodic Orbit: Second Run\n");
+fprintf('Rotate periodic orbit\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'A, gamma');
+fprintf('=====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -281,10 +290,15 @@ run_old = run_names.initial_PO_COLL;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
 % Print to console
-fprintf("~~~ Floquet Bundle: First Run ~~~ \n");
-fprintf('Calculate Floquet bundle (mu) \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Floquet Bundle: Second Run\n");
+fprintf('Calculate stable Floquet bundle eigenvalue\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'mu_s, w_norm');
+fprintf('=====================================================================\n');
 
 %--------------------------%
 %     Calculate Things     %
@@ -358,10 +372,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'BP');
 label_old = label_old(1);
 
 % Print to console
-fprintf("~~~ Floquet Bundle: Second Run ~~~ \n");
-fprintf('Calculate Floquet bundle (w_norm) \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Floquet Bundle: Second Run\n");
+fprintf('Grow norm of stable Floquet bundle vector\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'mu_s, w_norm');
+fprintf('=====================================================================\n');
 
 %------------------------------------%
 %     Setup Floquet Continuation     %
@@ -424,10 +443,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'NORM1');
 label_old = label_old(1);
 
 % Print to console
-fprintf("~~~ Phase Transition Curve: First Run ~~~ \n");
-fprintf('Move along periodic orbit \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Directional Transition Curve: First Run\n");
+fprintf('Change phase along periodic orbit\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
+fprintf('=====================================================================\n');
 
 %-------------------%
 %     Read Data     %
@@ -536,7 +560,7 @@ prob = coco_add_event(prob, 'SP', 'theta_old', [0.339279, 1.339279]);
 % Set continuation parameters and parameter range
 pcont = {'theta_old', 'theta_new', ...
          'eta', 'mu_s'};
-prange = {[1.0, 2.0], [1.0, 2.0], ...
+prange = {[0.0, 2.0], [1.0, 2.0], ...
           [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO continuation
@@ -559,72 +583,23 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
 label_old = label_old(1);
 
 % Print to console
-fprintf("~~~ Phase Transition Curve: Second Run ~~~ \n");
-fprintf('Change perturbation angle and save equally spaced points \n');
-fprintf('Run name: %s \n', run_new);
-fprintf('Continuing from point %d in run: %s \n', label_old, run_old);
+fprintf('=====================================================================\n');
+fprintf("Directional Transition Curve: Second Run\n");
+fprintf('Increase perturbation amplitude\n');
+fprintf('---------------------------------------------------------------------\n');
+fprintf('This run name           : %s\n', run_new);
+fprintf('Previous run name       : %s\n', run_old);
+fprintf('Previous solution label : %d\n', label_old);
+fprintf('Continuation parameters : %s\n', 'A_perturb, theta_new, eta, mu_s');
+fprintf('=====================================================================\n');
 
-%----------------------------%
-%     Setup Continuation     %
-%----------------------------%
-% Set up the COCO problem
-prob = coco_prob();
-
-% Set tolerance
-% prob = coco_set(prob, 'corr', 'TOL', 5e-7);
-
-% Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 1e-5);
-prob = coco_set(prob, 'cont', 'h0', 1e-3);
-prob = coco_set(prob, 'cont', 'h_max', 1e1);
-
-% Set adaptive mesh
-prob = coco_set(prob, 'cont', 'NAdapt', 10);
-
-% Set number of steps
-PtMX = 1000;
-prob = coco_set(prob, 'cont', 'PtMX', PtMX);
-
-% Set frequency of saved solutions
-prob = coco_set(prob, 'cont', 'NPR', 100);
-
-% Set norm to int
-prob = coco_set(prob, 'cont', 'norm', inf);
-
-% % Set MaxRes and al_max
-% prob = coco_set(prob, 'cont', 'MaxRes', 10);
-% prob = coco_set(prob, 'cont', 'al_max', 25);
-
-%-------------------------------------------%
-%     Continue from Trajectory Segments     %
-%-------------------------------------------%
-% Segment 1
-prob = ode_coll2coll(prob, 'seg1', run_old, label_old);
-% Segment 2
-prob = ode_coll2coll(prob, 'seg2', run_old, label_old);
-% Segment 3
-prob = ode_coll2coll(prob, 'seg3', run_old, label_old);
-% Segment 4
-prob = ode_coll2coll(prob, 'seg4', run_old, label_old);
-
-%------------------------------------------------%
-%     Apply Boundary Conditions and Settings     %
-%------------------------------------------------%
-% Apply all boundary conditions, glue parameters together, and
-% all that other good COCO stuff. Looking the function file
-% if you need to know more ;)
-prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
-
-%-------------------------%
-%     Add COCO Events     %
-%-------------------------%
+%--------------------------%
+%     Run Continuation     %
+%--------------------------%
 % List of perturbation amplitudes to save solutions for
-SP_values = [0.1, 0.724587, 15.0];
-prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
+SP_parameter = 'A_perturb';
+SP_values    = [0.1, 0.724587, 15.0];
 
-%-------------------------%
-%     Add COCO Events     %
-%-------------------------%
 % Set continuation parameters and parameter range
 pcont = {'A_perturb', 'theta_new', ...
          'eta', 'mu_s'};
@@ -632,7 +607,9 @@ prange = {[0.0, max(SP_values)], [], ...
           [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO continuation
-coco(prob, run_new, [], 1, pcont, prange);
+run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, ...
+                      pcont, prange, ...
+                      SP_parameter=SP_parameter, SP_values=SP_values);
 
 %-------------------------------------------------------------------------%
 %%             Directional Transition Curve (DTC) - Multiple             %%
@@ -665,25 +642,27 @@ parfor (run = 1 : length(label_old), M)
   this_run_label = label_old(run);
 
   % Data directory for this run
-  fprintf('\n Continuing from point %d in run: %s \n', this_run_label, run_old);
+  this_run_name = {run_new; sprintf('run_%02d', run)};
 
-  this_run_name = {run_new; sprintf('run_%02d', run)}
-
-  % Read intensity for intersection with I=0 plane
-  I_intsct = coco_bd_val(coco_bd_read(run_old), this_run_label, 'I_theta_n');
-
-  % Saved solution points for theta_old
-  SP_values = [0.1, 0.724587, 4.0, I_intsct];
-  SP_values = sort(SP_values);
+  % Print to console
+  fprintf('=====================================================================\n');
+  fprintf("Directional Transition Curve: Third Run\n");
+  fprintf('Calculate DTC\n');
+  fprintf('---------------------------------------------------------------------\n');
+  fprintf('This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
+  fprintf('Previous run name       : %s\n', run_old);
+  fprintf('Previous solution label : %d\n', this_run_label);
+  fprintf('Continuation parameters : %s\n', 'theta_perturb, theta_new, eta, mu_s');
+  fprintf('=====================================================================\n');
 
   % Continuation parameters
-  continuation_parameters = {'theta_perturb', 'theta_new', 'eta', 'mu_s'};
+  pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s'};
   % Parameter range for continuation
-  parameter_range = {[-1, 1], [], [-1e-4, 1e-2], [0.99, 1.01]};
+  prange = {[-1, 1], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
-                       continuation_parameters, parameter_range, ...
+                       pcont, prange, ...
                        h_min=1e-3, h0=5e-1, h_max=1e1, ...
                        PtMX=2000, NPR=50, NAdapt=20);
 
