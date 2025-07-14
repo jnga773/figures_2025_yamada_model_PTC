@@ -84,7 +84,6 @@ funcs.seg3 = func_seg3_symbolic();
 % Phase Reset: Segment 4
 % funcs.seg4 = {@func_seg4};
 funcs.seg4 = func_seg4_symbolic();
-
 % Boundary conditions: Periodic orbit
 % bcs_funcs.bcs_PO = {@bcs_PO};
 bcs_funcs.bcs_PO = bcs_PO_symbolic();
@@ -428,14 +427,14 @@ coco(prob, run_new, [], 1, {'mu_s', 'w_norm'}, {[], [-1e-4, 1.1]});
 % continuing in 'theta_old' and 'theta_new'.
 
 %-------------------------------------------------------------------------%
-%%                   Increasing Pertubation Amplitude                    %%
+%%                    Move Around the Periodic Orbit                     %%
 %-------------------------------------------------------------------------%
 %------------------%
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.PR_perturbation = 'run05_PR_perturbation';
-run_new = run_names.PR_perturbation;
+run_names.PR_move_orbit = 'run05_PR_move_orbit';
+run_new = run_names.PR_move_orbit;
 % Which run this continuation continues from
 run_old = run_names.VAR_wnorm;
 
@@ -445,13 +444,13 @@ label_old = label_old(1);
 
 % Print to console
 fprintf(' =====================================================================\n');
-fprintf(' Phase Transition Curve: First Run\n');
-fprintf(' Increase perturbation amplitude\n');
+fprintf(' Directional Transition Curve: First Run\n');
+fprintf(' Change phase along periodic orbit\n');
 fprintf(' ---------------------------------------------------------------------\n');
 fprintf(' This run name           : %s\n', run_new);
 fprintf(' Previous run name       : %s\n', run_old);
 fprintf(' Previous solution label : %d\n', label_old);
-fprintf(' Continuation parameters : %s\n', 'A_perturb, theta_new, eta, mu_s');
+fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
 fprintf(' =====================================================================\n');
 
 %-------------------%
@@ -460,12 +459,12 @@ fprintf(' =====================================================================\
 % Set periodicity
 k = 30;
 
-% Set perturbation direction (in units of 2 pi)
-theta_perturb = 0.0;
-phi_perturb = 0.0;
+% Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
+% theta_perturb = 0;
+theta_perturb = 0.25;
 
 % Set initial conditions from previous solutions
-data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_perturb);
+data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -482,8 +481,7 @@ prob = coco_set(prob, 'cont', 'h_max', 1e0);
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
-PtMX = 1000;
-prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
+prob = coco_set(prob, 'cont', 'PtMX', 100);
 
 % Set number of stored solutions
 prob = coco_set(prob, 'cont', 'NPR', 10);
@@ -552,43 +550,93 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 %     Add COCO Events     %
 %-------------------------%
-% Array of values for special event
-SP_values = [0.1, 1.5];
-
-% When the parameter we want (from param) equals a value in A_vec
-prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
+% Save solution at phase along \Gamma where there WILL BE an intersection
+% with the stable manifold of q.
+prob = coco_add_event(prob, 'SP', 'theta_old', [0.339279, 1.339279]);
 
 %------------------%
 %     Run COCO     %
 %------------------%
-pcont = {'A_perturb', 'theta_new', ...
+% Set continuation parameters and parameter range
+pcont = {'theta_old', 'theta_new', ...
          'eta', 'mu_s'};
-prange = {[-1e-4, max(SP_values)+0.01], [], ...
+prange = {[0.0, 2.0], [1.0, 2.0], ...
           [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO continuation
 coco(prob, run_new, [], 1, pcont, prange);
 
 %-------------------------------------------------------------------------%
-%%                Phase Transition Curve (PTC) - Multiple                %%
+%%                      Change Perturbation Angle                        %%
 %-------------------------------------------------------------------------%
 %------------------%
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.PR_PTC_multi = 'run06_PR_PTC_multi';
-run_new = run_names.PR_PTC_multi;
+run_names.PR_perturbation = 'run06_PR_perturbation';
+run_new = run_names.PR_perturbation;
+% Which run this continuation continues from
+run_old = run_names.PR_move_orbit;
+
+% Continuation point
+label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
+label_old = label_old(1);
+
+% Print to console
+fprintf(' =====================================================================\n');
+fprintf(' Directional Transition Curve: Second Run\n');
+fprintf(' Increase perturbation amplitude\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'A_perturb, theta_new, eta, mu_s');
+fprintf(' =====================================================================\n');
+
+%--------------------------%
+%     Run Continuation     %
+%--------------------------%
+% List of perturbation amplitudes to save solutions for
+SP_parameter = 'A_perturb';
+SP_values    = [0.1, 0.724587, 15.0];
+
+% Set continuation parameters and parameter range
+pcont = {'A_perturb', 'theta_new', ...
+         'eta', 'mu_s'};
+prange = {[0.0, max(SP_values)], [], ...
+          [-1e-4, 1e-2], [0.99, 1.01]};
+
+% Run COCO continuation
+run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, ...
+                      pcont, prange, ...
+                      SP_parameter=SP_parameter, SP_values=SP_values);
+
+%-------------------------------------------------------------------------%
+%%             Directional Transition Curve (DTC) - Multiple             %%
+%-------------------------------------------------------------------------%
+%------------------%
+%     Run Name     %
+%------------------%
+% Current run name
+run_names.PR_DTC_scan = 'run07_PR_DTC_scan';
+run_new = run_names.PR_DTC_scan;
 % Which run this continuation continues from
 run_old = run_names.PR_perturbation;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
 
+% Print to console
+fprintf(' ~~~ Phase Reset: Third Run ~~~ \n');
+fprintf(' Calculate DTCs \n');
+fprintf(' Run name: %s \n', run_new);
+fprintf(' Continuing from SP points in run: %s \n', run_old);
+
 %---------------------------------%
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 0;
+M = 3;
 parfor (run = 1 : length(label_old), M)
   % Label for this run
   this_run_label = label_old(run);
@@ -598,50 +646,43 @@ parfor (run = 1 : length(label_old), M)
 
   % Print to console
   fprintf(' =====================================================================\n');
-  fprintf(' Phase Transition Curve: Second Run\n');
-  fprintf(' Calculate PTC\n');
+  fprintf(' Directional Transition Curve: Third Run\n');
+  fprintf(' Calculate DTC\n');
   fprintf(' ---------------------------------------------------------------------\n');
   fprintf(' This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
   fprintf(' Previous run name       : %s\n', run_old);
   fprintf(' Previous solution label : %d\n', this_run_label);
-  fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
+  fprintf(' Continuation parameters : %s\n', 'theta_perturb, theta_new, eta, mu_s');
   fprintf(' =====================================================================\n');
 
-  % Saved solution points for theta_old
-  SP_values = [0.3, 1.3];
-
   % Continuation parameters
-  pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
+  pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s'};
   % Parameter range for continuation
-  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
+  prange = {[-1, 1], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
-                       pcont, prange, SP_parameter='theta_old', SP_values=SP_values);
+                       pcont, prange, ...
+                       h_min=1e-3, h0=5e-1, h_max=1e1, ...
+                       PtMX=2000, NPR=50, NAdapt=20);
 
 end
 
 %=========================================================================%
-%                           SAVE AND PLOT DATA                            %
+%%                          SAVE AND PLOT DATA                           %%
 %=========================================================================%
 %-------------------%
 %     Save Data     %
 %-------------------%
-% Save data for Figure 4
-save_fig4_data(run_new, '../data_files/fig4_data.mat');
+% Save data for Figure 12
+save_fig12_data(run_new, '../data_files/fig12_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig4a1;
-plot_fig4a1_inset
-plot_fig4a2;
-plot_fig4a3;
-plot_fig4b1;
-plot_fig4b2;
-plot_fig4b3;
+plot_fig12;
 
 %=========================================================================%
-%%                              END OF FILE                              %%
+%                               END OF FILE                               %
 %=========================================================================%

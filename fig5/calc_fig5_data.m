@@ -118,13 +118,13 @@ run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
 run_new = run_names.initial_PO_ode45;
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Initial Periodic Orbit: First Run\n");
-fprintf('Find new periodic orbit\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Continuation parameters : %s\n', 'A, gamma');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Initial Periodic Orbit: First Run\n');
+fprintf(' Find new periodic orbit\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Continuation parameters : %s\n', 'A, gamma');
+fprintf(' =====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -203,15 +203,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Initial Periodic Orbit: Second Run\n");
-fprintf('Rotate periodic orbit\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'A, gamma');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Initial Periodic Orbit: Second Run\n');
+fprintf(' Rotate periodic orbit\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'A, gamma');
+fprintf(' =====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -291,15 +291,15 @@ run_old = run_names.initial_PO_COLL;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Floquet Bundle: Second Run\n");
-fprintf('Calculate stable Floquet bundle eigenvalue\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'mu_s, w_norm');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Floquet Bundle: Second Run\n');
+fprintf(' Calculate stable Floquet bundle eigenvalue\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'mu_s, w_norm');
+fprintf(' =====================================================================\n');
 
 %--------------------------%
 %     Calculate Things     %
@@ -373,15 +373,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'BP');
 label_old = label_old(1);
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Floquet Bundle: Second Run\n");
-fprintf('Grow norm of stable Floquet bundle vector\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'mu_s, w_norm');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Floquet Bundle: Second Run\n');
+fprintf(' Grow norm of stable Floquet bundle vector\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'mu_s, w_norm');
+fprintf(' =====================================================================\n');
 
 %------------------------------------%
 %     Setup Floquet Continuation     %
@@ -444,15 +444,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'NORM1');
 label_old = label_old(1);
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Phase Transition Curve: First Run\n");
-fprintf('Increase perturbation amplitude\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'A_perturb, theta_new, eta, mu_s');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Phase Transition Curve: First Run\n');
+fprintf(' Increase perturbation amplitude\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'A_perturb, theta_new, eta, mu_s');
+fprintf(' =====================================================================\n');
 
 %-------------------%
 %     Read Data     %
@@ -598,15 +598,15 @@ parfor (run = 1 : length(label_old), M)
   this_run_name = {run_new; sprintf('run_%02d', run)};
 
   % Print to console
-  fprintf('=====================================================================\n');
-  fprintf("Phase Transition Curve: Second Run\n");
-  fprintf('Calculate PTC\n');
-  fprintf('---------------------------------------------------------------------\n');
-  fprintf('This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
-  fprintf('Previous run name       : %s\n', run_old);
-  fprintf('Previous solution label : %d\n', this_run_label);
-  fprintf('Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
-  fprintf('=====================================================================\n');
+  fprintf(' =====================================================================\n');
+  fprintf(' Phase Transition Curve: Second Run\n');
+  fprintf(' Calculate PTC\n');
+  fprintf(' ---------------------------------------------------------------------\n');
+  fprintf(' This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
+  fprintf(' Previous run name       : %s\n', run_old);
+  fprintf(' Previous solution label : %d\n', this_run_label);
+  fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
+  fprintf(' =====================================================================\n');
 
   % Array of values for special event
   SP_values = -1.0 : 0.1 : 2.0;

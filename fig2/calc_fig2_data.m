@@ -97,13 +97,13 @@ run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
 run_new = run_names.initial_PO_ode45;
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Initial Periodic Orbit: First Run\n");
-fprintf('Find new periodic orbit\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Continuation parameters : %s\n', 'A, gamma');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Initial Periodic Orbit: First Run\n');
+fprintf(' Find new periodic orbit\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Continuation parameters : %s\n', 'A, gamma');
+fprintf(' =====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -182,15 +182,15 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Initial Periodic Orbit: Second Run\n");
-fprintf('Rotate periodic orbit\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'A, gamma');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Initial Periodic Orbit: Second Run\n');
+fprintf(' Rotate periodic orbit\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'A, gamma');
+fprintf(' =====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -272,15 +272,15 @@ run_old = run_names.initial_PO_COLL;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Stable Manifold of q: First Run\n");
-fprintf('Calculate one of the stable-manifold branches \n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'W_seg1, T1, W_seg2');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Stable Manifold of q: First Run\n');
+fprintf(' Calculate one of the stable-manifold branches \n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'W_seg1, T1, W_seg2');
+fprintf(' =====================================================================\n');
 
 %----------------------------%
 %     Calculate Solution     %
@@ -363,15 +363,15 @@ run_old = run_names.stable_manifold1;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'Del1');
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Stable Manifold of q: Second Run\n");
-fprintf('Calculate the other stable-manifold branch\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'W_seg2, T2, W_seg1');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Stable Manifold of q: Second Run\n');
+fprintf(' Calculate the other stable-manifold branch\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'W_seg2, T2, W_seg1');
+fprintf(' =====================================================================\n');
 
 %----------------------------%
 %     Setup Continuation     %
@@ -450,15 +450,15 @@ run_old = run_names.stable_manifold2;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'Del2') ;
 
 % Print to console
-fprintf('=====================================================================\n');
-fprintf("Stable Manifold of q: Third Run\n");
-fprintf('Close the initial distance eps\n');
-fprintf('---------------------------------------------------------------------\n');
-fprintf('This run name           : %s\n', run_new);
-fprintf('Previous run name       : %s\n', run_old);
-fprintf('Previous solution label : %d\n', label_old);
-fprintf('Continuation parameters : %s\n', 'eps, T1, T2');
-fprintf('=====================================================================\n');
+fprintf(' =====================================================================\n');
+fprintf(' Stable Manifold of q: Third Run\n');
+fprintf(' Close the initial distance eps\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'eps, T1, T2');
+fprintf(' =====================================================================\n');
 
 %----------------------------%
 %     Setup Continuation     %
