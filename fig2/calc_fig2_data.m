@@ -96,7 +96,9 @@ bcs_funcs.bcs_final = {@bcs_Wq_final};
 run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
 run_new = run_names.initial_PO_ode45;
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Initial Periodic Orbit: First Run\n');
 fprintf(' Find new periodic orbit\n');
@@ -181,7 +183,9 @@ run_old = run_names.initial_PO_ode45;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Initial Periodic Orbit: Second Run\n');
 fprintf(' Rotate periodic orbit\n');
@@ -271,7 +275,9 @@ run_old = run_names.initial_PO_COLL;
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Stable Manifold of q: First Run\n');
 fprintf(' Calculate one of the stable-manifold branches \n');
@@ -362,7 +368,9 @@ run_old = run_names.stable_manifold1;
 % Previous solution label
 label_old = coco_bd_labs(coco_bd_read(run_old), 'Del1');
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Stable Manifold of q: Second Run\n');
 fprintf(' Calculate the other stable-manifold branch\n');
@@ -449,7 +457,9 @@ run_old = run_names.stable_manifold2;
 % Previous solution label
 label_old = coco_bd_labs(coco_bd_read(run_old), 'Del2') ;
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Stable Manifold of q: Third Run\n');
 fprintf(' Close the initial distance eps\n');

@@ -117,7 +117,9 @@ bcs_funcs.bcs_PR = bcs_PR_symbolic();
 run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
 run_new = run_names.initial_PO_ode45;
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Initial Periodic Orbit: First Run\n');
 fprintf(' Find new periodic orbit\n');
@@ -202,7 +204,9 @@ run_old = run_names.initial_PO_ode45;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Initial Periodic Orbit: Second Run\n');
 fprintf(' Rotate periodic orbit\n');
@@ -290,7 +294,9 @@ run_old = run_names.initial_PO_COLL;
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Floquet Bundle: Second Run\n');
 fprintf(' Calculate stable Floquet bundle eigenvalue\n');
@@ -372,7 +378,9 @@ run_old = run_names.VAR_mu;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'BP');
 label_old = label_old(1);
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Floquet Bundle: Second Run\n');
 fprintf(' Grow norm of stable Floquet bundle vector\n');
@@ -443,7 +451,9 @@ run_old = run_names.VAR_wnorm;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'NORM1');
 label_old = label_old(1);
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Phase Transition Curve: First Run\n');
 fprintf(' Increase perturbation amplitude\n');
@@ -597,7 +607,9 @@ parfor (run = 1 : length(label_old), M)
   % Data directory for this run
   this_run_name = {run_new; sprintf('run_%02d', run)};
 
-  % Print to console
+  %--------------------------%
+%     Print to Console     %
+%--------------------------%
   fprintf(' =====================================================================\n');
   fprintf(' Phase Transition Curve: Second Run\n');
   fprintf(' Calculate PTC\n');
