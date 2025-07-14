@@ -13,7 +13,7 @@ Created on Fri Jan 31 16:42:11 2025
 
 # Load extra functions
 import auto
-import continuation_scripts.data_functions as data_funcs
+import data_functions as data_funcs
 
 # %%
 #==============================================================================#
@@ -55,7 +55,7 @@ print('Run name: {}'.format(run_new_str))
 #     Run AUTO Continuation     #
 #-------------------------------#
 # # Copy continuation script
-auto.copy('./continuation_scripts/', 'initial_EP')
+auto.copy('../AUTO_files/continuation_scripts/', 'initial_EP')
 
 # Run the first continuation from the initial equilibrium point
 run_new = auto.run(x0, PAR=p0, c='initial_EP')
@@ -231,7 +231,7 @@ x_init_PO, p_PO, pnames_PO = data_funcs.calc_initial_solution_PO(run_old(label_o
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./continuation_scripts/', 'initial_PO')
+auto.copy('../AUTO_files/continuation_scripts/', 'initial_PO')
 
 # Run continuation
 run_new = auto.run(x_init_PO, PAR=p_PO, parnames=pnames_PO,
@@ -290,7 +290,7 @@ x_init_VAR, p_VAR, pnames_VAR = data_funcs.calc_initial_solution_VAR(run_old(lab
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Copy continuation script
-auto.copy('./continuation_scripts/', 'initial_VAR')
+auto.copy('../AUTO_files/continuation_scripts/', 'initial_VAR')
 
 # Run continuation
 run_new = auto.run(x_init_VAR, PAR=p_VAR, parnames=pnames_VAR,
@@ -417,7 +417,7 @@ SP_points = concatenate((SP_points, [0.1, 0.5, 4.078572, 10, 20]))
 SP_points = unique(SP_points)
 
 # Copy continuation script
-auto.copy('./continuation_scripts/', 'initial_PTC')
+auto.copy('../AUTO_files/continuation_scripts/', 'initial_PTC')
 
 # Try set up phase reset calculation lol
 run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,

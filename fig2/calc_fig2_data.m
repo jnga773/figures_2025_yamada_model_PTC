@@ -19,18 +19,16 @@ clear;
 clc;
 
 % Add equation/functions to path
-addpath('./functions/');
+addpath('../COCO_files/');
 % Add field functions to path
-% addpath('./functions/fields/hardcoded/');
-addpath('./functions/fields/');
+addpath('../COCO_files/fields/');
 % Add boundary condition functions to path
-% addpath('./functions/bcs/hardcoded/');
-addpath('./functions/bcs/');
+addpath('../COCO_files/bcs/');
 % Add SymCOCO files to path
-addpath('./functions/symcoco/');
+addpath('../COCO_files/symcoco/');
 
 % Add continuations script functions to path
-addpath('./continuation_scripts/');
+addpath('../COCO_files/continuation_scripts/');
 
 %--------------------%
 %     Parameters     %
@@ -67,9 +65,6 @@ xdim = length(x0);
 % funcs.field = {@yamada, @yamada_DFDX, @yamada_DFDP};
 funcs.field = yamada_symbolic();
 
-% Boundary conditions: Period
-% bcs_funcs.bcs_T = {@bcs_T};
-bcs_funcs.bcs_T = bcs_T_symbolic();
 % Boundary conditions: Periodic orbit
 % bcs_funcs.bcs_PO = {@bcs_PO};
 bcs_funcs.bcs_PO = bcs_PO_symbolic();

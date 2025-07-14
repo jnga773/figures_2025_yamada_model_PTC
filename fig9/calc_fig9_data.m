@@ -19,16 +19,16 @@ clear;
 clc;
 
 % Add equation/functions to path
-addpath('./functions/');
+addpath('../COCO_files/');
 % Add field functions to path
-addpath('./functions/fields/');
+addpath('../COCO_files/fields/');
 % Add boundary condition functions to path
-addpath('./functions/bcs/');
+addpath('../COCO_files/bcs/');
 % Add SymCOCO files to path
-addpath('./functions/symcoco/');
+addpath('../COCO_files/symcoco/');
 
-% Add continuation scripts
-addpath('./continuation_scripts/');
+% Add continuations script functions to path
+addpath('../COCO_files/continuation_scripts/');
 
 %-----------------------%
 %     Problem Setup     %
