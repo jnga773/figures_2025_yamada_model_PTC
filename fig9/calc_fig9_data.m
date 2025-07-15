@@ -609,8 +609,8 @@ parfor (run = 1 : length(label_old), M)
   this_run_name = {run_new; sprintf('run_%02d', run)};
 
   %--------------------------%
-%     Print to Console     %
-%--------------------------%
+  %     Print to Console     %
+  %--------------------------%
   fprintf(' =====================================================================\n');
   fprintf(' Phase Transition Curve: Second Run\n');
   fprintf(' Calculate PTC\n');

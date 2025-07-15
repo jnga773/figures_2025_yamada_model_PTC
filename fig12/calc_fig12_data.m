@@ -116,7 +116,9 @@ bcs_funcs.bcs_PR = bcs_PR_symbolic();
 run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
 run_new = run_names.initial_PO_ode45;
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Initial Periodic Orbit: First Run\n');
 fprintf(' Find new periodic orbit\n');
@@ -201,7 +203,9 @@ run_old = run_names.initial_PO_ode45;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 label_old = label_old(1);
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Initial Periodic Orbit: Second Run\n');
 fprintf(' Rotate periodic orbit\n');
@@ -289,7 +293,9 @@ run_old = run_names.initial_PO_COLL;
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Floquet Bundle: First Run\n');
 fprintf(' Calculate stable Floquet bundle eigenvalue\n');
@@ -371,7 +377,9 @@ run_old = run_names.VAR_mu;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'BP');
 label_old = label_old(1);
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Floquet Bundle: Second Run\n');
 fprintf(' Grow norm of stable Floquet bundle vector\n');
@@ -442,7 +450,9 @@ run_old = run_names.VAR_wnorm;
 label_old = coco_bd_labs(coco_bd_read(run_old), 'NORM1');
 label_old = label_old(1);
 
-% Print to console
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
 fprintf(' =====================================================================\n');
 fprintf(' Directional Transition Curve: First Run\n');
 fprintf(' Increase perturbation amplitude\n');
@@ -599,7 +609,9 @@ for run = 1 : length(label_old)
   % Data directory for this run
   this_run_name = {run_new; sprintf('A_perturb_%02d', run)};
 
-  % Print to console
+  %--------------------------%
+  %     Print to Console     %
+  %--------------------------%
   fprintf(' =====================================================================\n');
   fprintf(' Directional Transition Curve: Second Run\n');
   fprintf(' Change perturbation angles for two approaches\n');
@@ -610,14 +622,17 @@ for run = 1 : length(label_old)
   fprintf(' Continuation parameters : %s\n', 'theta_perturb, theta_new, eta, mu_s');
   fprintf(' =====================================================================\n');
 
+  %------------------%
+  %     Run COCO     %
+  %------------------%
   % Saved points
   SP_parameter = 'theta_perturb';
   SP_values = [0.0, 0.25];
 
   % Continuation parameters
-  pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s'};
+  pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
   % Parameter range for continuation
-  prange = {[-1e-3, 2.51], [], [-1e-4, 1e-2], [0.99, 1.01]};
+  prange = {[-1e-3, 2.51], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
@@ -641,20 +656,20 @@ run_new = run_names.PR_move_theta_old;
 run_old = run_names.PR_change_angle;
 
 % Folder name
-dir_data = sprintf('./data/%s/', run_old);
+dirs_A = sprintf('./data/%s/', run_old);
 % List all directories
-dirs = dir(dir_data);
+dirs_A = dir(dirs_A);
 % Remove ./ and ../
-dirs = dirs(~ismember({dirs.name}, {'.', '..', '.DS_Store'}));
+dirs_A = dirs(~ismember({dirs_A.name}, {'.', '..', '.DS_Store'}));
 % Sub folder names
-dir_sub = {dirs.name};
+dirs_A = {dirs_A.name};
 
 %-------------------------------------%
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
-for idx = 1 : length(dir_sub)
+for idx = 1 : length(dirs_A)
   % Set run string for this run
-  sub_run_name = {run_old, dir_sub{idx}};
+  sub_run_name = {run_old, dirs_A{idx}};
 
   % Read bd_data
   bd_read = coco_bd_read(sub_run_name);
@@ -675,27 +690,32 @@ for idx = 1 : length(dir_sub)
     this_run_label = label_old(run);
 
     % Data directory for this run
-    this_run_name = {run_new; dir_sub{idx}; sprintf('angle_%02d', run)};
+    this_run_name = {run_new; dirs_A{idx}; sprintf('angle_%02d', run)};
 
-    % Print to console
+    %--------------------------%
+    %     Print to Console     %
+    %--------------------------%
     fprintf(' =====================================================================\n');
     fprintf(' Directional Transition Curve: Third Run\n');
     fprintf(' Move along periodic orbit\n');
     fprintf(' ---------------------------------------------------------------------\n');
-    fprintf(' This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
+    fprintf(' This run name           : {%s, %s, %s}\n', this_run_name{1}, this_run_name{2}, this_run_name{3});
     fprintf(' Previous run name       : {%s, %s}\n', sub_run_name{1}, sub_run_name{2});
     fprintf(' Previous solution label : %d\n', this_run_label);
     fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
     fprintf(' =====================================================================\n');
 
+    %------------------%
+    %     Run COCO     %
+    %------------------%
     % Saved points
     SP_parameter = 'theta_old';
     SP_values = [0.339279, 1.339279];
 
     % Continuation parameters
-    pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
+    pcont = {'theta_old', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
     % Parameter range for continuation
-    prange = {[min(SP_values), max(SP_values)], [], [-1e-4, 1e-2], [0.99, 1.01]};
+    prange = {[min(SP_values), max(SP_values)], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
     % Run continuation
     run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
@@ -719,68 +739,71 @@ run_new = run_names.PR_DTC_scan;
 run_old = run_names.PR_move_theta_old;
 
 % Folder name
-dir_data = sprintf('./data/%s/', run_old);
+dirs_A = sprintf('./data/%s/', run_old);
 % List all directories
-dirs = dir(dir_data);
+dirs_A = dir(dirs_A);
 % Remove ./ and ../
-dirs = dirs(~ismember({dirs.name}, {'.', '..', '.DS_Store'}));
+dirs_A = dirs_A(~ismember({dirs_A.name}, {'.', '..', '.DS_Store'}));
 % Sub folder names
-dir_sub = {dirs.name};
+dirs_A = {dirs_A.name};
 
 %-------------------------------------%
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
-for idx = 1 : length(dir_sub)
-  % Set run string for this run
-  sub_run_name = {run_old, dir_sub{idx}};
+for idx_A = 1 : length(dirs_A)
+  % Read folders inside dirs_A
+  dirs_theta = dir(sprintf('./data/%s/%s/', run_old, dirs_A{idx_A}));
+  dirs_theta = dirs_theta(~ismember({dirs_theta.name}, {'.', '..', '.DS_Store'}));
+  dirs_theta = {dirs_theta.name};
 
-  % Read bd_data
-  bd_read = coco_bd_read(sub_run_name);
+  % Cycle through angle runs
+  for idx_theta = 1 : length(dirs_theta)
+    % Set run string for this run
+    sub_run_name = {run_old, dirs_A{idx_A}, dirs_theta{idx_theta}};
 
-  % Read previous labels
-  label_old = coco_bd_labs(bd_read, 'SP');
+    % Read bd_data
+    bd_read = coco_bd_read(sub_run_name);
 
-  % Check if there are 2 'SP' solutions or not
-  if isscalar(label_old)
-    % Append the first EP solution
-    EPs = coco_bd_labs(bd_read, 'EP');
-    label_old = [min(EPs), label_old];
-  end
+    % Read previous labels
+    label_old = coco_bd_labs(bd_read, 'SP');
 
-  % Cycle through labels and move theta_old
-  for run = 1 : length(label_old)
-    % Label for this run
-    this_run_label = label_old(run);
+    % Check if label_old is not empty and, if not, run the continuation
+    if ~isempty(label_old)
+      % Label for this run
+      this_run_label = label_old(1);
 
-    % Data directory for this run
-    this_run_name = {run_new; dir_sub{idx}; sprintf('angle_%02d', run)};
+      % Data directory for this run
+      this_run_name = {run_new; dirs_A{idx_A}; dirs_theta{idx_theta}};
 
-    % Print to console
-    fprintf(' =====================================================================\n');
-    fprintf(' Directional Transition Curve: Third Run\n');
-    fprintf(' Move along periodic orbit\n');
-    fprintf(' ---------------------------------------------------------------------\n');
-    fprintf(' This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
-    fprintf(' Previous run name       : {%s, %s}\n', sub_run_name{1}, sub_run_name{2});
-    fprintf(' Previous solution label : %d\n', this_run_label);
-    fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
-    fprintf(' =====================================================================\n');
+      %--------------------------%
+      %     Print to Console     %
+      %--------------------------%
+      fprintf(' =====================================================================\n');
+      fprintf(' Directional Transition Curve: Third Run\n');
+      fprintf(' Move along periodic orbit\n');
+      fprintf(' ---------------------------------------------------------------------\n');
+      fprintf(' This run name           : {%s, %s, %s}\n', this_run_name{1}, this_run_name{2}, sub_run_name{3});
+      fprintf(' Previous run name       : {%s, %s, %s}\n', sub_run_name{1}, sub_run_name{2}, sub_run_name{3});
+      fprintf(' Previous solution label : %d\n', this_run_label);
+      fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
+      fprintf(' =====================================================================\n');
 
-    % Saved points
-    SP_parameter = 'theta_old';
-    SP_values = [0.339279, 1.339279];
+      %------------------%
+      %     Run COCO     %
+      %------------------%
+      % Continuation parameters
+      pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
+      % Parameter range for continuation
+      prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
-    % Continuation parameters
-    pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
-    % Parameter range for continuation
-    prange = {[min(SP_values), max(SP_values)], [], [-1e-4, 1e-2], [0.99, 1.01]};
+      % Run continuation
+      run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
+                          pcont, prange, ...
+                          SP_parameter=SP_parameter, SP_values=SP_values, ...
+                          h_min=1e-3, h0=1e-1, h_max=1e1, ...
+                          PtMX=1000, NPR=100, NAdapt=20);
 
-    % Run continuation
-    run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
-                         pcont, prange, ...
-                         SP_parameter=SP_parameter, SP_values=SP_values, ...
-                         h_min=1e-3, h0=1e-1, h_max=1e1, ...
-                         PtMX=500, NPR=50, NAdapt=20);
+    end
   end
 end
 

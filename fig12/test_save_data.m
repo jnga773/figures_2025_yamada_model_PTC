@@ -1,65 +1,97 @@
 clear all; close all;
 
 %% READ DATA
-run_in = 'run07_phase_reset_DTC_scan';
+run_in = 'run07_PR_DTC_scan';
 
-%------------------------%
-%     Read Data: PTCs    %
-%------------------------%
+%------------------------------%
+%     Read Sub-Directories     %
+%------------------------------%
 % Folder name
-dir_data = sprintf('./data/%s/', run_in);
+dirs_A = sprintf('./data/%s/', run_in);
 % List all directories
-dirs = dir(dir_data);
+dirs_A = dir(dirs_A);
 % Remove ./ and ../
-dirs = dirs(~ismember({dirs.name}, {'.', '..', '.DS_Store'}));
+dirs_A = dirs_A(~ismember({dirs_A.name}, {'.', '..', '.DS_Store'}));
 % Sub folder names
-dir_sub = {dirs.name};
+dirs_A = {dirs_A.name};
 
-% Empty cells
-theta_old     = zeros(length(dir_sub), 1);
-A_perturb     = zeros(length(dir_sub), 1);
-% theta_perturb = cell(length(dir_sub), 1);
-% theta_new     = cell(length(dir_sub), 1);
-SP_labs       = cell(length(dir_sub), 1);
-theta_perturb = zeros(length(dir_sub), 1);
-theta_new     = zeros(length(dir_sub), 1);
+%------------------------------------%
+%     Cycle Through and Read DTC     %
+%------------------------------------%
+% Empty cells for data
+A_perturb_data     = zeros(length(dirs_A), 2);
+theta_old_data     = zeros(length(dirs_A), 2);
+theta_new_data     = cell(length(dirs_A), 2);
+theta_perturb_data = cell(length(dirs_A), 2);
 
-% Cycle through all sub directories and read data
-for idx = 1 : length(dir_sub)
+% Cycle through A_perturb sub-directories
+for idx_A = 1 : length(dirs_A)
   % Run name
-  sub_run_name = {run_in, dir_sub{idx}};
+  A_sub_run = {run_in, dirs_A{idx_A}};
 
-  % Bifurcation data
-  bd_read = coco_bd_read(sub_run_name);
+  % Read folders inside dirs_A
+  dirs_T = dir(sprintf('./data/%s/%s/', run_in, dirs_A{idx_A}));
+  dirs_T = dirs_T(~ismember({dirs_T.name}, {'.', '..', '.DS_Store'}));
+  dirs_T = {dirs_T.name};
 
-  % Read SP labels
-  labs_read = coco_bd_labs(bd_read, 'SP');
-  labs_read = sort(labs_read);
+  % Cycle through theta directories
+  for idx_T = 1 : length(dirs_T)
+    % Run name
+    T_sub_run = {run_in, dirs_A{idx_A}, dirs_T{idx_T}};
 
-  % Save labels
-  SP_labs{idx} = labs_read;
-  
-  if length(labs_read) > 2
-    lab_read = labs_read(2);
+    % Read bifurcation data
+    bd_read = coco_bd_read(T_sub_run);
 
-    % Read data
-    theta_old(idx)     = coco_bd_val(bd_read, lab_read, 'theta_old');
-    A_perturb(idx)     = coco_bd_val(bd_read, lab_read, 'A_perturb');
-    theta_new(idx)     = coco_bd_val(bd_read, lab_read, 'theta_new');
-    theta_perturb(idx) = coco_bd_val(bd_read, lab_read, 'theta_perturb');
+    % Get values
+    A_perturb_read     = coco_bd_val(bd_read, 1, 'A_perturb');
+    theta_old_read     = coco_bd_val(bd_read, 1, 'theta_old');
+    theta_new_read     = coco_bd_col(bd_read, 'theta_new');
+    theta_perturb_read = coco_bd_col(bd_read, 'theta_perturb');
+    
+    % Update arrays
+    A_perturb_data(idx_A, idx_T)     = A_perturb_read;
+    theta_old_data(idx_A, idx_T)     = theta_old_read;
+    theta_new_data{idx_A, idx_T}    = theta_new_read;
+    theta_perturb_data{idx_A, idx_T} = theta_perturb_read;
+
   end
-
 end
 
-% Sort data by theta_perturb
-[~, sort_idx] = sort(theta_perturb);
-theta_perturb = theta_perturb(sort_idx);
-theta_old     = theta_old(sort_idx);
-A_perturb     = A_perturb(sort_idx);
-theta_new     = theta_new(sort_idx);
+%% MERGE DATA SET 1
+% Get data for first A_perturb value
+A1  = A_perturb_data(1, 1);
+TO1 = theta_old_data(1, 1);
+TN1 = [theta_new_data{1, 1}, theta_new_data{1, 2}]';
+TP1 = [theta_perturb_data{1, 1}, theta_perturb_data{1, 2}]';
 
-% Renormalise theta_new
-theta_new = theta_new - 1.0;
+% Sort
+[~, sort_idx] = sort(TP1);
+TN1 = TN1(sort_idx);
+TP1 = TP1(sort_idx);
+
+%% MERGE DATA SET 2
+% Get data for first A_perturb value
+A2  = A_perturb_data(2, 1);
+TO2 = theta_old_data(2, 1);
+TN2 = [theta_new_data{2, 1}]';
+TP2 = [theta_perturb_data{2, 1}]';
+
+% Sort
+[~, sort_idx] = sort(TP2);
+TN2 = TN2(sort_idx);
+TP2 = TP2(sort_idx);
+
+%% MERGE DATA SET 3
+% Get data for first A_perturb value
+A3  = A_perturb_data(3, 1);
+TO3 = theta_old_data(3, 1);
+TN3 = [theta_new_data{3, 1}, theta_new_data{3, 2}]';
+TP3 = [theta_perturb_data{3, 1}, theta_perturb_data{3, 2}]';
+
+% Sort
+[~, sort_idx] = sort(TP3);
+TN3 = TN3(sort_idx);
+TP3 = TP3(sort_idx);
 
 %% PLOT DATA
 colours = colororder();
@@ -81,8 +113,16 @@ patch([-3, 3, 3, -3], [0, 0, 1, 1], colours(3, :), ...
     FaceAlpha=0.2, EdgeColor='none', ...
     HandleVisibility='off');
 
+hold(ax, 'on');
+
 % DTC
-plot(ax, theta_perturb, theta_new, LineStyle='-', Color=colours(1, :));
+% theta_perturb_plot = theta_perturb{1, 2};
+% theta_new_plot     = theta_new{1, 2};
+theta_perturb_plot = TP3;
+theta_new_plot     = TN3;
+plot(ax, theta_perturb_plot, theta_new_plot, LineStyle='-', Color=colours(1, :));
+
+hold(ax, 'off');
 
 % daspect(ax, [1, 1, 1]);
 legend(Interpreter='latex', Location='southwest');
