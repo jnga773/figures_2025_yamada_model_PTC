@@ -219,7 +219,7 @@ fprintf(' =====================================================================\
 %     Calculate Solution     %
 %----------------------------%
 % Calculate dem tings
-data_soln = calc_initial_solution_PO(run_old, label_old);
+data_PO = calc_initial_solution_PO(run_old, label_old);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -245,7 +245,7 @@ prob = coco_set(prob, 'cont', 'NPR', 10);
 
 % Set initial guess to 'coll'
 prob = ode_isol2coll(prob, 'initial_PO', funcs.field{:}, ...
-                     data_soln.t, data_soln.x, pnames, data_soln.p);
+                     data_PO.t, data_PO.x, pnames, data_PO.p);
 
 % Add equilibrium points for non trivial steady states
 prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
@@ -262,7 +262,7 @@ prob = apply_boundary_conditions_PO(prob, bcs_funcs.bcs_PO);
 %     Add COCO Events     %
 %-------------------------%
 % Event for A = 7.5
-prob = coco_add_event(prob, 'PO_PT', 'A', data_soln.p(2));
+prob = coco_add_event(prob, 'PO_PT', 'A', data_PO.p(2));
 
 %------------------%
 %     Run COCO     %
