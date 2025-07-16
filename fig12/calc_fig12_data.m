@@ -665,7 +665,8 @@ dirs_A = {dirs_A.name};
 %-------------------------------------%
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
-for idx = 1 : length(dirs_A)
+% for idx = 1 : length(dirs_A)
+parfor(idx = 1 : length(dirs_A), 3)
   % Set run string for this run
   sub_run_name = {run_old, dirs_A{idx}};
 
@@ -688,7 +689,7 @@ for idx = 1 : length(dirs_A)
     this_run_label = label_old(run);
 
     % Data directory for this run
-    this_run_name = {run_new; dirs_A{idx}; sprintf('angle_%02d', run)};
+    this_run_name = {run_new; dirs_A{idx}; sprintf('theta_perturb_%02d', run)};
 
     %--------------------------%
     %     Print to Console     %
@@ -749,7 +750,7 @@ dirs_A = {dirs_A.name};
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
 % for idx_A = 1 : length(dirs_A)
-parfor (idx_A = 1 : length(label_old), 3)
+parfor (idx_A = 1 : length(dirs_A), 3)
   % Read folders inside dirs_A
   dirs_theta = dir(sprintf('./data/%s/%s/', run_old, dirs_A{idx_A}));
   dirs_theta = dirs_theta(~ismember({dirs_theta.name}, {'.', '..', '.DS_Store'}));
@@ -768,38 +769,40 @@ parfor (idx_A = 1 : length(label_old), 3)
 
     % Check if label_old is not empty and, if not, run the continuation
     if ~isempty(label_old)
-      % Label for this run
-      this_run_label = label_old(1);
+      for run = 1 : length(label_old)
+        % Label for this run
+        this_run_label = label_old(run);
 
-      % Data directory for this run
-      this_run_name = {run_new; dirs_A{idx_A}; dirs_theta{idx_theta}};
+        % Data directory for this run
+        this_run_name = {run_new; dirs_A{idx_A}; dirs_theta{idx_theta}; sprintf('theta_old_%02d', run)};
 
-      %--------------------------%
-      %     Print to Console     %
-      %--------------------------%
-      fprintf(' =====================================================================\n');
-      fprintf(' Directional Transition Curve: Third Run\n');
-      fprintf(' Move along periodic orbit\n');
-      fprintf(' ---------------------------------------------------------------------\n');
-      fprintf(' This run name           : {%s, %s, %s}\n', this_run_name{1}, this_run_name{2}, sub_run_name{3});
-      fprintf(' Previous run name       : {%s, %s, %s}\n', sub_run_name{1}, sub_run_name{2}, sub_run_name{3});
-      fprintf(' Previous solution label : %d\n', this_run_label);
-      fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
-      fprintf(' =====================================================================\n');
+        %--------------------------%
+        %     Print to Console     %
+        %--------------------------%
+        fprintf(' =====================================================================\n');
+        fprintf(' Directional Transition Curve: Third Run\n');
+        fprintf(' Move along periodic orbit\n');
+        fprintf(' ---------------------------------------------------------------------\n');
+        fprintf(' This run name           : {%s, %s, %s, %s}\n', this_run_name{1}, this_run_name{2}, this_run_name{3}, this_run_name{4});
+        fprintf(' Previous run name       : {%s, %s, %s}\n', sub_run_name{1}, sub_run_name{2}, sub_run_name{3});
+        fprintf(' Previous solution label : %d\n', this_run_label);
+        fprintf(' Continuation parameters : %s\n', 'theta_perturb, theta_new, eta, mu_s');
+        fprintf(' =====================================================================\n');
 
-      %------------------%
-      %     Run COCO     %
-      %------------------%
-      % Continuation parameters
-      pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
-      % Parameter range for continuation
-      prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+        %------------------%
+        %     Run COCO     %
+        %------------------%
+        % Continuation parameters
+        pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
+        % Parameter range for continuation
+        prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
-      % Run continuation
-      run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
-                          pcont, prange, ...
-                          h_min=1e-3, h0=1e-1, h_max=1e1, ...
-                          PtMX=1000, NPR=100, NAdapt=10);
+        % Run continuation
+        run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
+                            pcont, prange, ...
+                            h_min=1e-4, h0=5e-2, h_max=1e1, ...
+                            PtMX=1000, NPR=50, NAdapt=10);
+      end
     end
   end
 end

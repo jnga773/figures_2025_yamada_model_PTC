@@ -19,41 +19,52 @@ dirs_A = {dirs_A.name};
 %     Cycle Through and Read DTC     %
 %------------------------------------%
 % Empty cells for data
-A_perturb_data     = zeros(length(dirs_A), 2);
-theta_old_data     = zeros(length(dirs_A), 2);
-theta_new_data     = cell(length(dirs_A), 2);
-theta_perturb_data = cell(length(dirs_A), 2);
+A_perturb_data     = zeros(length(dirs_A), 2, 2);
+theta_old_data     = zeros(length(dirs_A), 2, 2);
+theta_new_data     = cell(length(dirs_A), 2, 2);
+theta_perturb_data = cell(length(dirs_A), 2, 2);
 
 % Cycle through A_perturb sub-directories
 for idx_A = 1 : length(dirs_A)
   % Run name
   A_sub_run = {run_in, dirs_A{idx_A}};
 
-  % Read folders inside dirs_A
-  dirs_T = dir(sprintf('./data/%s/%s/', run_in, dirs_A{idx_A}));
-  dirs_T = dirs_T(~ismember({dirs_T.name}, {'.', '..', '.DS_Store'}));
-  dirs_T = {dirs_T.name};
+  % Read folders inside dirs_P
+  dirs_P = dir(sprintf('./data/%s/%s/', run_in, dirs_A{idx_A}));
+  dirs_P = dirs_P(~ismember({dirs_P.name}, {'.', '..', '.DS_Store'}));
+  dirs_P = {dirs_P.name};
 
-  % Cycle through theta directories
-  for idx_T = 1 : length(dirs_T)
+  % Cycle through theta_perturb directories
+  for idx_P = 1 : length(dirs_P)
     % Run name
-    T_sub_run = {run_in, dirs_A{idx_A}, dirs_T{idx_T}};
+    P_sub_run = {run_in, dirs_A{idx_A}, dirs_P{idx_P}};
 
-    % Read bifurcation data
-    bd_read = coco_bd_read(T_sub_run);
+    % Read folders inside dirs_O
+    dirs_O = dir(sprintf('./data/%s/%s/%s/', run_in, dirs_A{idx_A}, dirs_P{idx_P}));
+    dirs_O = dirs_O(~ismember({dirs_O.name}, {'.', '..', '.DS_Store'}));
+    dirs_O = {dirs_O.name};
 
-    % Get values
-    A_perturb_read     = coco_bd_val(bd_read, 1, 'A_perturb');
-    theta_old_read     = coco_bd_val(bd_read, 1, 'theta_old');
-    theta_new_read     = coco_bd_col(bd_read, 'theta_new');
-    theta_perturb_read = coco_bd_col(bd_read, 'theta_perturb');
-    
-    % Update arrays
-    A_perturb_data(idx_A, idx_T)     = A_perturb_read;
-    theta_old_data(idx_A, idx_T)     = theta_old_read;
-    theta_new_data{idx_A, idx_T}    = theta_new_read;
-    theta_perturb_data{idx_A, idx_T} = theta_perturb_read;
+    % Cycle through theta_old directories
+    for idx_O = 1 : length(dirs_O)
+        % Run name
+        O_sub_run = {run_in, dirs_A{idx_A}, dirs_P{idx_P}, dirs_O{idx_O}};
 
+        % Read bifurcation data
+        bd_read = coco_bd_read(O_sub_run);
+
+        % Get values
+        A_perturb_read     = coco_bd_val(bd_read, 1, 'A_perturb');
+        theta_old_read     = coco_bd_val(bd_read, 1, 'theta_old');
+        theta_new_read     = coco_bd_col(bd_read, 'theta_new');
+        theta_perturb_read = coco_bd_col(bd_read, 'theta_perturb');
+        
+        % Update arrays
+        A_perturb_data(idx_A, idx_P, idx_O)     = A_perturb_read;
+        theta_old_data(idx_A, idx_P, idx_O)     = theta_old_read;
+        theta_new_data{idx_A, idx_P, idx_O}    = theta_new_read;
+        theta_perturb_data{idx_A, idx_P, idx_O} = theta_perturb_read;
+
+    end
   end
 end
 
