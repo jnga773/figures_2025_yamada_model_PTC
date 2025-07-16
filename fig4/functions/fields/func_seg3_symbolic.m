@@ -5,6 +5,11 @@ function F_coco_out = func_seg3_symbolic()
   % segment of the phase-resetting problem.
   %
   % Segment 3 goes from gamma_0 to theta_old.
+  %
+  % Returns
+  % -------
+  % F_coco_out : array, float
+  %     Cell of all of the functions and derivatives.
 
   % State space dimension
   xdim = 3;

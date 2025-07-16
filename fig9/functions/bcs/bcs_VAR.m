@@ -8,7 +8,7 @@ function [data_in, y_out] = bcs_VAR(prob_in, data_in, u_in)
   %                   w(1) = \mu_{f} w(0) ,                         (1)
   %                norm(w) = w_norm       .                         (2)
   %
-  % Input
+  % Parameters
   % ----------
   % prob_in : COCO problem structure
   %     Continuation problem structure.
@@ -17,13 +17,13 @@ function [data_in, y_out] = bcs_VAR(prob_in, data_in, u_in)
   % u_in : array (floats?)
   %     Total u-vector of the continuation problem. This function
   %     only utilises the following (as imposed by coco_add_func):
-  %          * u_in(1:2) - Initial point of the perpendicular vector,
-  %          * u_in(3:4) - Final point of the perpendicular vector,
-  %          * u_in(5)   - Eigenvalue (mu_s),
-  %          * u_in(6)   - Norm of w (w_norm).
+  %          * u_in(1:3) - Initial point of the perpendicular vector,
+  %          * u_in(4:6) - Final point of the perpendicular vector,
+  %          * u_in(7)   - Eigenvalue (mu_s),
+  %          * u_in(8:9) - Norm of w (w_norm).
   %
-  % Output
-  % ----------
+  % Returns
+  % -------
   % y_out : array of vectors
   %     An array containing to the two boundary conditions.
   % data_in : structure

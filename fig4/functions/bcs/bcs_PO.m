@@ -7,7 +7,7 @@ function [data_in, y_out] = bcs_PO(prob_in, data_in, u_in)
   %                         e . F(x(0)) = 0,
   % that is, the first component of the vector field at t=0 is zero.
   %
-  % Input
+  % Parameters
   % ----------
   % prob_in : COCO problem structure
   %     Continuation problem structure.
@@ -16,12 +16,12 @@ function [data_in, y_out] = bcs_PO(prob_in, data_in, u_in)
   % u_in : array (floats?)
   %     Total u-vector of the continuation problem. This function
   %     only utilises the following (as imposed by coco_add_func):
-  %          * u_in(1:2) - Initial point of the periodic orbit,
-  %          * u_in(3:4) - Final point of the periodic orbit,
-  %          * u_in(5)   - Parameters.
+  %          * u_in(1:3)  - Initial point of the periodic orbit,
+  %          * u_in(4:6)  - Final point of the periodic orbit,
+  %          * u_in(7:10) - Parameters.
   %
-  % Output
-  % ----------
+  % Returns
+  % -------
   % y_out : array of vectors
   %     An array containing to the two boundary conditions.
   % data_in : structure

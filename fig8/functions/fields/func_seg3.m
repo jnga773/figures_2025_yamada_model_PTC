@@ -6,16 +6,15 @@ function y_out = func_seg3(x_in, p_in)
   %
   % Segment 3 goes from gamma_0 to theta_old.
   %
-  % Input
+  % Parameters
   % ----------
   % x_in : array, float
   %     State vector for the periodic orbit (x) and perpendicular
   %     vector (w).
   % p_in : array, float
   %     Array of parameter values
-  %
-  % Output
-  % ----------
+  % Returns
+  % -------
   % y_out : array, float
   %     Array of the vector field of the periodic orbit segment
   %     and the corresponding adjoint equation for the perpendicular

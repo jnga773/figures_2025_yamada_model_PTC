@@ -3,6 +3,11 @@ function F_coco_out = floquet_symbolic()
   %
   % Creates a CoCo-compatible function encoding for the adjoint
   % equation that computes the Floquet bundle.
+  %
+  % Returns
+  % -------
+  % F_coco_out : array, float
+  %     Cell of all of the functions and derivatives.
 
   % State space dimension
   xdim = 3;

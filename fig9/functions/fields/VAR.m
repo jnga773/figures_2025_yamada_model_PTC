@@ -1,7 +1,23 @@
-function y_out = floquet(u_in, p_in)
-  % y_out = floquet(u_in, p_in)
+function y_out = VAR(u_in, p_in)
+  % y_out = VAR(u_in, p_in)
   %
-  % Adjoint function to calculate the Floquet bundle I guess?
+  % COCO 'ode' toolbox encoding for the adjoint problem, solving for
+  % the rotated periodi orbit and the stable Floquet bundle.
+  %
+  % Parameters
+  % ----------
+  % x_in : array, float
+  %     State vector for the periodic orbit (x) and perpendicular
+  %     vector (w).
+  % p_in : array, float
+  %     Array of parameter values
+  %
+  % Returns
+  % -------
+  % y_out : array, float
+  %     Array of the vector field of the periodic orbit segment
+  %     and the corresponding adjoint equation for the perpendicular
+  %     vector.
   
   % Original vector field dimensions (CHANGE THESE)
   xdim = 3;

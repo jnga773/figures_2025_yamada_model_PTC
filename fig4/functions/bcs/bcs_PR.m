@@ -13,7 +13,7 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %                (x4(1) - x2(0)) . w2(0) = 0 ,
   %               | x4(1) - x2(0) | - \eta = 0 .
   %
-  % Input
+  % Parameters
   % ----------
   % prob_in : COCO problem structure
   %     Continuation problem structure.
@@ -36,8 +36,8 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %            u_in(34:36) - x(1) of segment 4,
   %            u_in(37:50) - Parameters.
   %
-  % Output
-  % ----------
+  % Returns
+  % -------
   % y_out : array of vectors
   %     An array containing the boundary conditions.
   % data_in : structure
@@ -143,15 +143,9 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %-------------------%
   %     Segment 4     %
   %-------------------%
-  % d_vec = [cos(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
-  %          sin(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
-  %          cos(phi_perturb * pi)];
   d_vec = [cos(theta_perturb * (2.0 * pi));
            0.0;
            sin(theta_perturb) * (2.0 * pi)];
-  % d_vec = [cos(theta_perturb);
-  %          0.0;
-  %          sin(theta_perturb)];
 
   % Boundary Conditions - Segment 4
   bcs_seg4_1 = x0_seg4 - x0_seg3 - (A_perturb * d_vec);

@@ -30,8 +30,8 @@ function bcs_coco_out = bcs_PR_symbolic()
   %            u_in(34:36) - x(1) of segment 4,
   %            u_in(37:50) - Parameters.
   %
-  % Output
-  % ----------
+  % Returns
+  % -------
   % bcs_coco_out : cell of function handles
   %     List of CoCo-ified symbolic functions for the boundary conditions
   %     Jacobian, and Hessian.

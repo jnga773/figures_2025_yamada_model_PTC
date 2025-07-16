@@ -10,8 +10,15 @@ function bcs_coco_out = bcs_PO_symbolic()
   %                         e1 . F(x(0)) = 0,
   % that is, the first component of the vector field at t=0 is zero.
   %
-  % Output
-  % ----------
+  % For the hardcoded version, and the actual functions that
+  % will be coco_add_func call will include the following
+  % u-vector components:
+  %          * u_in(1:3)  - Initial point of the periodic orbit,
+  %          * u_in(4:6)  - Final point of the periodic orbit,
+  %          * u_in(7:10) - Parameters.
+  %
+  % Returns
+  % -------
   % bcs_coco_out : cell of function handles
   %     List of CoCo-ified symbolic functions for the boundary conditions
   %     Jacobian, and Hessian.
