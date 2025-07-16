@@ -23,7 +23,7 @@ function F_coco_out = yamada_symbolic()
   %     SymCOCO     %
   %-----------------%
   % Filename for output functions
-  filename_out = '../COCO_files/symcoco/F_yamada';
+  filename_out = './functions/symcoco/F_yamada';
 
   % COCO Function encoding
   F_coco = sco_sym2funcs(F_vec, {xvec, pvec}, {'x', 'p'}, 'filename', filename_out);

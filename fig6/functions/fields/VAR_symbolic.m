@@ -46,7 +46,7 @@ function F_coco_out = floquet_symbolic()
   F_seg = [F_eqn; adj_eqn];
 
   % CoCo-compatible encoding
-  filename_out = '../COCO_files/symcoco/F_floquet';
+  filename_out = './functions/symcoco/F_floquet';
   F_coco = sco_sym2funcs(F_seg, {uvec, pvec}, {'x', 'p'}, 'filename', filename_out);
 
   %----------------%

@@ -155,7 +155,7 @@ function bcs_coco_out = bcs_PR_symbolic()
           bcs_seg4_1; bcs_seg4_2; bcs_seg4_3];
 
   % Filename for output functions
-  filename_out = '../COCO_files/symcoco/F_bcs_PR';
+  filename_out = './functions/symcoco/F_bcs_PR';
 
   % COCO Function encoding
   bcs_coco = sco_sym2funcs(bcs, {uvec}, {'u'}, 'filename', filename_out);

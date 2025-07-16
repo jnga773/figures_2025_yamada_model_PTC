@@ -47,7 +47,7 @@ function F_coco_out = func_seg4_symbolic()
   %     SymCOCO     %
   %-----------------%
   % Filename for output functions
-  filename_out = '../COCO_files/symcoco/F_seg4';
+  filename_out = './functions/symcoco/F_seg4';
 
   % COCO Function encoding
   F_coco = sco_sym2funcs(F_seg, {uvec, pvec}, {'x', 'p'}, 'filename', filename_out);

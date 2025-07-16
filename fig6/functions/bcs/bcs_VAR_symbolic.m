@@ -53,7 +53,7 @@ function bcs_coco_out = bcs_VAR_symbolic()
   %     SymCOCO     %
   %-----------------%
   % Filename for output functions
-  filename_out = '../COCO_files/symcoco/F_bcs_VAR';
+  filename_out = './functions/symcoco/F_bcs_VAR';
 
   % COCO Function encoding
   bcs_coco = sco_sym2funcs(bcs, {uvec}, {'u'}, 'filename', filename_out);
