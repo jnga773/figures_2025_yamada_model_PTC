@@ -531,7 +531,7 @@ prob = coco_set(prob, 'seg4.coll', 'NTST', NTST(4));
 %             point (gamma_0) to the point where the perturbed trajectory 
 %             comes close to the periodic orbit (at theta_new).
 prob = ode_isol2coll(prob, 'seg1', funcs.seg1{:}, ...
-                     data_PR.t_seg1, data_PR.x_seg1, data_PR.p0);
+                     data_PR.t_seg1, data_PR.x_seg1, data_PR.pnames, data_PR.p0);
 
 % Segment 2 - Trajectory segment of the periodic from the end of Segment 1
 %             (at theta_new) back to the zero-phase point (gamma_0).
