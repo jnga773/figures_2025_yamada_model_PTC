@@ -22,169 +22,69 @@ import data_functions as data_funcs
 # We calculate the initial periodic orbit of the Yamada model.
 
 # Set parameters
-gamma = 0.1
-A     = 6.6
-B     = 5.8
-a     = 1.8
-p0 = {1: gamma, 2: A, 3: B, 4: a}
-
-# Initial solution is the 'off' state
-x0 = [A, B, 0]
-
-# Parameters to save the periodic orbit for
 gamma_PO = 3.5e-2
 A_PO     = 7.4
+B        = 5.8
+a        = 1.8
 
-#------------------------------------------------------------------------------#
-#                           Compute Equilibrium Point                          #
-#------------------------------------------------------------------------------#
-# We compute and continue the equilibrium point of the model.
+# Parameter vector
+p0 = {1: gamma_PO, 2: A_PO, 3: B, 4: a}
 
-#------------------#
-#     Run Name     #
-#------------------#
-# This run name
-run_new_str = 'run01_initial_EP'
+# Initial solution is the 'off' state
+x0 = [10, 10, 10]
 
-# Print to console
-print('~~~ Initial Periodic Orbit: First Run (c.initial_EP) ~~~')
-print('Initial continuation from some point x0')
-print('Run name: {}'.format(run_new_str))
-
-#-------------------------------#
-#     Run AUTO Continuation     #
-#-------------------------------#
-# # Copy continuation script
-auto.copy('../AUTO_files/continuation_scripts/', 'initial_EP')
-
-# Run the first continuation from the initial equilibrium point
-run_new = auto.run(x0, PAR=p0, c='initial_EP')
-
-#-------------------#
-#     Save Data     #
-#-------------------#
-# Save data
-data_funcs.save_move_data(run_new, run_new_str)
-
-# Print clear line
-print('\n')
+# State-space variable names
+unames = {1: 'x1', 2: 'x2', 3: 'x3'}
 
 # %%
 #------------------------------------------------------------------------------#
-#                         Continue from Branching Point                        #
+#                    Confirm ODE45 Periodic Orbit Solution                     #
 #------------------------------------------------------------------------------#
-# Continue from the branching point until we detect a Hopf bifurcation.
+# Calculate the periodic orbit using MATLAB's ode45 function.
 
 #------------------#
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run02_branching_point'
-# Previous run name
-run_old_str = 'run01_initial_EP'
-run_old = data_funcs.bd_read(run_old_str)
-# Previous solution label
-label_old = run_old('BP1')
-label_old = label_old['LAB']
+run_new_str = 'run01_initial_PO_ode45'
 
-# Print to console
-print('~~~ Initial Periodic Orbit: Second Run ~~~')
-print('Continue bifurcations from the branching point')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
+#--------------------------#
+#     Print to Console     #
+#--------------------------#
+print('=====================================================================');
+print('Initial Periodic Orbit: First Run');
+print('Find new periodic orbit');
+print('---------------------------------------------------------------------');
+print('This run name           : {}'.format(run_new_str));
+print('Continuation parameters : {}'.format('gamma, T, A'));
+print('=====================================================================');
 
-#-------------------------------#
-#     Run AUTO Continuation     #
-#-------------------------------#
-# Continue from branching point in run01_initial_EP
-run_new = auto.run(run_old('BP1'), ISW=-1)
+#----------------------------#
+#     Calculate Solution     #
+#----------------------------#
+# Solve using scipy's solve_ivp
+x_init_solve_ivp = data_funcs.calc_initial_solution_solve_ivp(x0, p0)
 
-#-------------------#
-#     Save Data     #
-#-------------------#
-# Save data
-data_funcs.save_move_data(run_new, run_new_str)
-
-# Print clear line
-print('\n')
-
-# %%
-#------------------------------------------------------------------------------#
-#                            Continue Hopf To A_PO                             #
-#------------------------------------------------------------------------------#
-# We continue the Hopf bifurcation, varying the 'A' parameter until A = A_PO
-
-#------------------#
-#     Run Name     #
-#------------------#
-# This run name
-run_new_str = 'run03_hopf'
-# Previous run name
-run_old_str = 'run02_branching_point'
-run_old = data_funcs.bd_read(run_old_str)
-# Previous solution label
-label_old = run_old('HB1')
-label_old = label_old['LAB']
-
-# Print to console
-print('~~~ Initial Periodic Orbit: Third Run ~~~')
-print('Follow Hopf birfucation until z=-0.8')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
+# Parameter names
+pnames_PO = {1: 'gamma', 2: 'A', 3: 'B', 4: 'a', 11: 'T'}
 
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Continue from Hop bifurcation
-run_new = auto.run(run_old(label_old), ISW=2,
-                   ICP=['A', 'gamma'],
-                   UZSTOP={'gamma': [0.0, 0.4], 'A': [5.0, 20.0]},
-                   DSMIN=5e-3, DS=5e-3, DSMAX=5e-3,
-                   NMX=500, NPR=50,
-                   UZR={'A': A_PO})
+# Saved points
+UZR = {'A': A_PO, 'gamma': gamma_PO}
+# Continuation parameters
+pcont = ['gamma', 'T', 'A']
+# Parameter range
+prange = {'A': [5.0, 20.0], 'gamma': [0.0, 0.4]}
 
-#-------------------#
-#     Save Data     #
-#-------------------#
-# Save data
-data_funcs.save_move_data(run_new, run_new_str)
-
-# Print clear line
-print('\n')
-
-# %%
-#------------------------------------------------------------------------------#
-#                            Hopf to Periodic Orbit                            #
-#------------------------------------------------------------------------------#
-# We compute a family of periodic orbits originating off the Hopf bifurcation.
-
-#------------------#
-#     Run Name     #
-#------------------#
-# This run name
-run_new_str = 'run04_hopf_to_PO'
-# Previous run name
-run_old_str = 'run03_hopf'
-run_old = data_funcs.bd_read(run_old_str)
-# Previous solution label
-label_old = run_old('GH1')
-label_old = label_old['LAB']
-
-# Print to console
-print('~~~ Initial Periodic Orbit: Fourth Run ~~~')
-print('Continue periodic orbits from the Hopf bifurcation')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
-
-#-------------------------------#
-#     Run AUTO Continuation     #
-#-------------------------------#
-# Follow periodic orbits
-run_new = auto.run(run_old(label_old), ISW=-1, IPS=2, LAB=1,
-                   ICP=['gamma'],
+# Run continuation
+run_new = auto.run(x_init_solve_ivp, e='./functions/yamada', IPS=2, IRS=0,
+                   NPAR=len(pnames_PO), PAR=p0, parnames=pnames_PO, NDIM=len(unames), unames=unames,
+                   ICP=pcont, UZSTOP=prange, UZR=UZR,
+                   JAC=1, NBC=0, NINT=0,
                    NTST=50, DSMIN=1e-1, DS=1e-1, DSMAX=1e-1,
-                   NMX=500, NPR=50,
-                   UZR={'gamma': gamma_PO})
+                   NMX=500, NPR=50)
 
 #-------------------#
 #     Save Data     #
@@ -207,19 +107,26 @@ print('\n')
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run05_initial_PO'
+run_new_str = 'run02_initial_PO'
 # Previous run name
-run_old_str = 'run04_hopf_to_PO'
+run_old_str = 'run01_initial_PO_ode45'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
 label_old = run_old('UZ1')
 label_old = label_old['LAB']
 
-# Print to console
-print('~~~ Initial Periodic Orbit: Fifth Run (c.initial_PO) ~~~')
-print('Continue periodic orbit with shifted phase condition')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
+#--------------------------#
+#     Print to Console     #
+#--------------------------#
+print('=====================================================================');
+print('Initial Periodic Orbit: Second Run');
+print('Continue periodic orbit with shifted phase condition');
+print('---------------------------------------------------------------------');
+print('This run name           : {}'.format(run_new_str));
+print('Previous run name       : {}'.format(run_old_str));
+print('Previous label_solution : {}'.format(label_old));
+print('Continuation parameters : {}'.format('A, gamma'));
+print('=====================================================================');
 
 #-------------------#
 #     Read Data     #
@@ -230,12 +137,25 @@ x_init_PO, p_PO, pnames_PO = data_funcs.calc_initial_solution_PO(run_old(label_o
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Copy continuation script
-auto.copy('../AUTO_files/continuation_scripts/', 'initial_PO')
+# Saved points
+UZR = {'A': A_PO, 'gamma': gamma_PO}
+# Continuation parameters
+pcont = ['gamma', 'T']
+# Parameter range
+prange = {'gamma': [0.0, 0.4]}
 
+#-------------------------------#
+#     Run AUTO Continuation     #
+#-------------------------------#
 # Run continuation
-run_new = auto.run(x_init_PO, PAR=p_PO, parnames=pnames_PO,
-                   c='initial_PO', LAB=1)
+run_new = auto.run(x_init_PO, e='./functions/yamada_VAR', IPS=4, IRS=0, LAB=1,
+                   NPAR=len(pnames_PO), PAR=p_PO, parnames=pnames_PO,
+                   NDIM=len(unames), unames=unames,
+                   ICP=pcont, UZSTOP=prange, UZR=UZR,
+                   JAC=0, NBC=4, NINT=0,
+                   NMX=10, NPR=1,
+                   DSMIN=1e-3, DS=-1e-3, DSMAX=1e-2,
+                   NCOL=4, IAD=1, NTST=50)
 
 #-------------------#
 #     Save Data     #
@@ -267,35 +187,57 @@ print('\n')
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run06_floquet_mu'
+run_new_str = 'run03_floquet_mu'
 # Previous run name
-run_old_str = 'run05_initial_PO'
+run_old_str = 'run02_initial_PO'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
 label_old = 1
 
-# Print to console
-print('~~~ Floquet Bundle: First Run (c.initial_VAR) ~~~')
-print('Calculate Floquet bundle (mu) ')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
+#--------------------------#
+#     Print to Console     #
+#--------------------------#
+print('=====================================================================');
+print('Floquet Bundle: First Run');
+print('Calculate stable Floquet bundle eigenvalue');
+print('---------------------------------------------------------------------');
+print('This run name           : {}'.format(run_new_str));
+print('Previous run name       : {}'.format(run_old_str));
+print('Previous label_solution : {}'.format(label_old));
+print('Continuation parameters : {}'.format('mu_s, w_norm'));
+print('=====================================================================');
 
 #-------------------#
 #     Read Data     #
 #-------------------#
 # Calculate initial solution from previous run
-x_init_VAR, p_VAR, pnames_VAR = data_funcs.calc_initial_solution_VAR(run_old(label_old))
+x_init_VAR, p_VAR, unames_VAR, pnames_VAR = data_funcs.calc_initial_solution_VAR(run_old(label_old))
+
+# Parameter names
+pnames_PO = {1: 'gamma', 2: 'A', 3: 'B', 4: 'a', 11: 'T'}
 
 #-------------------------------#
 #     Run AUTO Continuation     #
 #-------------------------------#
-# Copy continuation script
-auto.copy('../AUTO_files/continuation_scripts/', 'initial_VAR')
+# Saved points
+UZR = {'mu_s': 1.0}
+# Continuation parameters
+pcont = ['mu_s', 'w_norm', 'gamma']
+# Parameter range
+prange = {'mu_s': [0.0, 1.1]}
 
+#-------------------------------#
+#     Run AUTO Continuation     #
+#-------------------------------#
 # Run continuation
-run_new = auto.run(x_init_VAR, PAR=p_VAR, parnames=pnames_VAR,
-                   c='initial_VAR', NPR=50,
-                   DSMIN=1e-4, DS=1e-4, DSMAX=1e-3)
+run_new = auto.run(x_init_VAR, e='./functions/yamada_VAR', IRS=0, IPS=4, ISW=1,
+                   NPAR=len(p_VAR), PAR=p_VAR, parnames=pnames_VAR,
+                   NDIM=len(unames_VAR), unames=unames_VAR,
+                   ICP=pcont, UZSTOP=prange, UZR=UZR,
+                   JAC=0, NBC=8, NINT=0,
+                   NTST=50, NCOL=4, IAD=1,
+                   DSMIN=5e-4, DS=1e-3, DSMAX=1e-2,
+                   NMX=300, NPR=10)
 
 #-------------------#
 #     Save Data     #
@@ -319,19 +261,26 @@ print('\n')
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run07_floquet_wnorm'
+run_new_str = 'run04_floquet_wnorm'
 # Previous run name
-run_old_str = 'run06_floquet_mu'
+run_old_str = 'run03_floquet_mu'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
 label_old = run_old('BP1')
 label_old = label_old['LAB']
 
-# Print to console
-print('~~~ Floquet Bundle: Second Run (c.initial_VAR) ~~~')
-print('Calculate Floquet bundle (w_norm) ')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
+#--------------------------#
+#     Print to Console     #
+#--------------------------#
+print('=====================================================================');
+print('Floquet Bundle: Second Run');
+print('Grow norm of stable Floquet bundle vector');
+print('---------------------------------------------------------------------');
+print('This run name           : {}'.format(run_new_str));
+print('Previous run name       : {}'.format(run_old_str));
+print('Previous label_solution : {}'.format(label_old));
+print('Continuation parameters : {}'.format('mu_s, w_norm'));
+print('=====================================================================');
 
 #-------------------------------#
 #     Run AUTO Continuation     #
@@ -346,9 +295,6 @@ run_new = auto.run(run_old(label_old), LAB=1,
 #-------------------#
 #     Save Data     #
 #-------------------#
-# Save solution to MATLAB .mat file
-# old_functions.save_floquet_data_matlab(run_new('UZ1'))
-
 # Save data
 data_funcs.save_move_data(run_new, run_new_str)
 
@@ -373,19 +319,26 @@ print('\n')
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run08_phase_reset_perturbation'
+run_new_str = 'run05_phase_reset_perturbation'
 # Previous run name
-run_old_str = 'run07_floquet_wnorm'
+run_old_str = 'run04_floquet_wnorm'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
 label_old = run_old('UZ1')
 label_old = label_old['LAB']
 
-# Print to console
-print('~~~ Phase Reset: First Run ~~~')
-print('Continue in the perturbation ampltiude A_perturb')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from point {} in run: {}'.format(label_old, run_old_str))
+#--------------------------#
+#     Print to Console     #
+#--------------------------#
+print('=====================================================================');
+print('Phase Reset: First Run');
+print('Continue in the perturbation ampltiude A_perturb');
+print('---------------------------------------------------------------------');
+print('This run name           : {}'.format(run_new_str));
+print('Previous run name       : {}'.format(run_old_str));
+print('Previous label_solution : {}'.format(label_old));
+print('Continuation parameters : {}'.format('A_perturb, theta_new, eta, mu_s, T'));
+print('=====================================================================');
 
 #-------------------#
 #     Read Data     #
@@ -399,7 +352,7 @@ theta_perturb = 0.0
 # theta_perturb = 0.25
 
 # Calculate initial solution
-x_init_PR, p_PR, pnames_PR = \
+x_init_PR, p_PR, unames, pnames_PR = \
     data_funcs.calc_initial_solution_PR(run_old(label_old), k, theta_perturb)
 
 #-------------------------------#
@@ -416,15 +369,23 @@ SP_points = concatenate((linspace(0.0, 0.15, 20),
 SP_points = concatenate((SP_points, [0.05, 0.1, 0.15, 0.5432, 1.0, 1.5, 2.0]))
 SP_points = unique(SP_points)
 
-# Copy continuation script
-auto.copy('../AUTO_files/continuation_scripts/', 'initial_PTC')
+# Set saved points
+UZR = {'A_perturb': SP_points}
 
-# Try set up phase reset calculation lol
+# Set continuation parameters
+pcont = ['A_perturb', 'theta_new', 'eta', 'mu_s', 'T']
+# Set continuation stop points
+prange = {'A_perturb': max(SP_points) + 0.1}
+
+# Run continuation
 run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
-                   c='initial_PTC',
-                   NMX=2000, NTST=k * 60,
-                   UZR={'A_perturb': SP_points},
-                   UZSTOP={'A_perturb': max(SP_points) + 0.1})
+                   NPAR=len(p_PR), NDIM=len(unames), unames=unames,
+                   e='./functions/yamada_PR', IRS=0, IPS=4, ISW=1, ILP=0, ISP=0,
+                   JAC=1, NBC=22, NINT=0,
+                   ICP=pcont, UZSTOP=prange, UZR=UZR,
+                   NTST=k*50, NCOL=4, IAD=10,
+                   DSMIN=1e-2, DS=5e-2, DSMAX=1e0,
+                   NMX=2000, NPR=100)
 
 #-------------------#
 #     Save Data     #
@@ -434,7 +395,6 @@ data_funcs.save_move_data(run_new, run_new_str)
 
 # Print clear line
 print('\n')
-
 
 # %%
 #------------------------------------------------------------------------------#
@@ -447,19 +407,13 @@ print('\n')
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run09_PTC_scan'
+run_new_str = 'run06_PTC_scan'
 # Previous run name
-run_old_str = 'run08_phase_reset_perturbation'
+run_old_str = 'run05_phase_reset_perturbation'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
 label_old = run_old('UZ')
 label_old = [sol['LAB'] for sol in label_old[:-1]]
-
-# Print to console
-print('~~~ Phase Reset: Second Run ~~~')
-print('Compute phase transition curve (PTC)')
-print('Run name: {}'.format(run_new_str))
-print('Continuing from (Saved Points) in run: {}'.format(run_old_str))
 
 #--------------------------------------#
 #     Define Continuation Function     #
@@ -477,20 +431,38 @@ def calculate_PTC(i):
     # Run string identifier
     this_run = 'sol_' + str(i+1).zfill(3)
 
-    # Print run information
-    print('Continuing from point {} in run: {}'.format(this_label, run_old_str))
-    
+    #--------------------------#
+    #     Print to Console     #
+    #--------------------------#
+    print('=====================================================================');
+    print('Phase Reset: Second Run');
+    print('Compute phase transition curve (PTC) for single perturbation');
+    print('---------------------------------------------------------------------');
+    print('This run name           : {}'.format(this_run));
+    print('Previous run name       : {}'.format(run_old_str));
+    print('Previous label_solution : {}'.format(this_label));
+    print('Continuation parameters : {}'.format('theta_old, theta_new, eta, mu_s, T'));
+    print('=====================================================================');
+
+    #-------------------------------#
+    #     Run AUTO Continuation     #
+    #-------------------------------#
     # Set saved solutions for theta_old
     SP_points = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
                  1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9]
     theta_old_stop = [0.0, 2.0]
     theta_new_stop = [-1.0, 3.0]
+    
+    # Saved points
+    UZR = {'theta_old': SP_points}
+    # Continuation parameters
+    pcont = ['theta_old', 'theta_new', 'eta', 'mu_s', 'T']
+    # Set continuation stop points
+    prange = {'theta_old': theta_old_stop, 'theta_new': theta_new_stop}
 
     # Run continuation
     run_scan = auto.run(run_old(this_label), LAB=1,
-                        ICP=['theta_old', 'theta_new', 'eta', 'mu_s', 'T'],
-                        UZSTOP={'theta_old': theta_old_stop, 'theta_new': theta_new_stop},
-                        UZR={'theta_old': SP_points},
+                        ICP=pcont, UZSTOP=prange, UZR=UZR,
                         DSMIN=1e-3, DS=2e-3, DSMAX=5e-2,
                         EPSL=1e-7, EPSU=1e-7, EPSS=1e-4,
                         NMX=8000, NPR=100)

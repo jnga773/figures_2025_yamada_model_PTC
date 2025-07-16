@@ -15,6 +15,11 @@
 # - bd_read                           : Loads the bifucation and solution data
 #                                       in ./data_run_name_in/XXX.run_name_in.
 #
+# - yamada                            : Set of ODEs for the Yamada model.
+#
+# - calc_initial_solution_solve_ivp   : Calculates the periodic orbit using
+#                                       ode45.
+#
 # - calc_initial_solution_PO          : Reads the periodic orbit data from
 #                                       the AUTO solution, rotates it, and sets
 #                                       it as the initial solution.
@@ -56,7 +61,7 @@ def clean_directories():
     function_files = listdir('./functions/')
     for file in function_files:
         if file.endswith('.o') or file.endswith('.exe'):
-            remove('../AUTO_files/functions/{}'.format(file))
+            remove('./functions/{}'.format(file))
 
     print("Removed fort.*, *.o, *.exe, c.*, and *.mod files")
     
@@ -109,6 +114,59 @@ def bd_read(run_name_in):
     return bd_out
 
 #------------------------------------------------------------------------------#
+def yamada(t_in, x_in, p_in):
+  """
+  Set of ODEs for the Yamada model.
+  """
+  # State space variables
+  G = x_in[0]
+  Q = x_in[1]
+  I = x_in[2]
+
+  # Parameters
+  gamma, A, B, a = p_in
+
+  # ODEs
+  dG = gamma * (A - G - (G * I))
+  dQ = gamma * (B - Q - (a * Q * I))
+  dI = (G - Q - 1) * I
+
+  return [dG, dQ, dI]
+
+#------------------------------------------------------------------------------#
+def calc_initial_solution_solve_ivp(x0_in, p0_in):
+  """
+  Calculate the periodic orbit using ode45.
+  """
+  from scipy.integrate import solve_ivp
+  from numpy import linspace, array
+  
+  # Time span for the integration
+  t_span = (0, 10000)  # Adjust as needed for the period
+
+  # Solve the ODEs
+  sol = solve_ivp(yamada, t_span, x0_in, args=(list(p0_in.values()),),
+                  method='RK45', t_eval=None, dense_output=True)
+  
+  # Get final state
+  x_long = sol.y[:, -1]
+  
+  # Guess period
+  T_PO = 41
+  
+  # Solve again for close to a full period
+  sol = solve_ivp(yamada, (0, T_PO), x_long, args=(list(p0_in.values()),),
+                  method='RK45', dense_output=True)
+
+  # Return the solution
+  t_out = linspace(0, T_PO, 1000)
+  x_out = sol.sol(t_out)
+  
+  sol_out = [t_out, x_out[0, :], x_out[1, :], x_out[2, :]]
+  
+  return sol_out
+
+#------------------------------------------------------------------------------#
 def calc_initial_solution_PO(sol_in):
     """
     Reads the periodic orbit data from [sol_in], rotates the periodic orbit,
@@ -136,7 +194,7 @@ def calc_initial_solution_PO(sol_in):
     A     = sol_in['A']
     B     = sol_in['B']
     a     = sol_in['a']
-    T     = sol_in['PAR(11)']
+    T     = sol_in['T']
 
     #--------------------#
     #     Shift Data     #
@@ -224,16 +282,21 @@ def calc_initial_solution_VAR(sol_in):
     x_init_out = [t, x1_read, x2_read, x3_read, w1, w2, w3]
     x_init_out = array(x_init_out, dtype='float')
 
+    # State-space variable names
+    unames_out = {1: 'x1', 2: 'x2', 3: 'x3',
+                  4: 'wn_1', 5: 'wn_2', 6: 'wn_3'}
+
     # Parameter values
     p_out = {1: gamma, 2: A, 3: B, 4: a,
              5: T,
              6: mu_s, 7: wnorm}
+    
     # Parameter names
     pnames_out = {1: 'gamma', 2: 'A', 3: 'B', 4: 'a',
                   5: 'T',
                   6: 'mu_s', 7: 'w_norm'}
 
-    return x_init_out, p_out, pnames_out
+    return x_init_out, p_out, unames_out, pnames_out
 
 #------------------------------------------------------------------------------#
 # Calculate the initial solutions to the phase resetting problem.
@@ -422,6 +485,14 @@ def calc_initial_solution_PR(sol_in, k_in, theta_in):
                   x1_period, x2_period, x3_period]
     x_init_out = array(x_init_out, dtype='float')
 
+    # State space variable names
+    unames_out = { 1: 'seg1_x1',  2: 'seg1_x2',  3: 'seg1_x3',
+                   4: 'seg1_w1',  5: 'seg1_w2',  6: 'seg1_w3',
+                   7: 'seg2_x1',  8: 'seg2_x2',  9: 'seg2_x3',
+                  10: 'seg2_w1', 11: 'seg2_w2', 12: 'seg2_w3',
+                  13: 'seg3_x1', 14: 'seg3_x2', 15: 'seg3_x3',
+                  16: 'seg4_x1', 17: 'seg4_x2', 18: 'seg4_x3'}
+
     # Parameter vector
     p_out = { 1: gamma, 2: A, 3: B, 4: a,
               5: T, 6: k, 7: theta_old, 8: theta_new,
@@ -434,4 +505,4 @@ def calc_initial_solution_PR(sol_in, k_in, theta_in):
                    9: 'mu_s', 10: 'eta',
                   11: 'A_perturb', 12: 'theta_perturb', 13: 'phi_perturb'}
     
-    return x_init_out, p_out, pnames_out
+    return x_init_out, p_out, unames_out, pnames_out
