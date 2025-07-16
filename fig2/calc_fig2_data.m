@@ -18,17 +18,15 @@ close('all');
 clear;
 clc;
 
-% Add equation/functions to path
-addpath('../COCO_files/');
 % Add field functions to path
-addpath('../COCO_files/fields/');
+addpath('./functions/fields/');
 % Add boundary condition functions to path
-addpath('../COCO_files/bcs/');
+addpath('./functions/bcs/');
 % Add SymCOCO files to path
-addpath('../COCO_files/symcoco/');
+addpath('./functions/symcoco/');
 
 % Add continuations script functions to path
-addpath('../COCO_files/continuation_scripts/');
+addpath('./continuation_scripts/');
 
 %--------------------%
 %     Parameters     %
@@ -65,12 +63,8 @@ xdim = length(x0);
 % funcs.field = {@yamada, @yamada_DFDX, @yamada_DFDP};
 funcs.field = yamada_symbolic();
 
-% Boundary conditions: Periodic orbit
-% bcs_funcs.bcs_PO = {@bcs_PO};
-bcs_funcs.bcs_PO = bcs_PO_symbolic();
-
 % Boundary conditions: Eigenvalues and eigenvectors
-bcs_funcs.bcs_eig = {@bcs_eig};
+bcs_funcs.bcs_eig = {@bcs_eig_q};
 % Boundary conditions: Initial condition
 bcs_funcs.bcs_initial = {@bcs_Wq_initial};
 % Boundary conditions: Final condition
