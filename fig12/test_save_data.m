@@ -118,8 +118,8 @@ hold(ax, 'on');
 % DTC
 % theta_perturb_plot = theta_perturb{1, 2};
 % theta_new_plot     = theta_new{1, 2};
-theta_perturb_plot = TP3;
-theta_new_plot     = TN3;
+theta_perturb_plot = TP1;
+theta_new_plot     = TN1;
 plot(ax, theta_perturb_plot, theta_new_plot, LineStyle='-', Color=colours(1, :));
 
 hold(ax, 'off');

@@ -18,17 +18,15 @@ close('all');
 clear;
 clc;
 
-% Add equation/functions to path
-addpath('../COCO_files/');
 % Add field functions to path
-addpath('../COCO_files/fields/');
+addpath('./functions/fields/');
 % Add boundary condition functions to path
-addpath('../COCO_files/bcs/');
+addpath('./functions/bcs/');
 % Add SymCOCO files to path
-addpath('../COCO_files/symcoco/');
+addpath('./functions/symcoco/');
 
 % Add continuations script functions to path
-addpath('../COCO_files/continuation_scripts/');
+addpath('./continuation_scripts/');
 
 %--------------------%
 %     Parameters     %
@@ -660,7 +658,7 @@ dirs_A = sprintf('./data/%s/', run_old);
 % List all directories
 dirs_A = dir(dirs_A);
 % Remove ./ and ../
-dirs_A = dirs(~ismember({dirs_A.name}, {'.', '..', '.DS_Store'}));
+dirs_A = dirs_A(~ismember({dirs_A.name}, {'.', '..', '.DS_Store'}));
 % Sub folder names
 dirs_A = {dirs_A.name};
 
@@ -750,7 +748,8 @@ dirs_A = {dirs_A.name};
 %-------------------------------------%
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
-for idx_A = 1 : length(dirs_A)
+% for idx_A = 1 : length(dirs_A)
+parfor (idx_A = 1 : length(label_old), 3)
   % Read folders inside dirs_A
   dirs_theta = dir(sprintf('./data/%s/%s/', run_old, dirs_A{idx_A}));
   dirs_theta = dirs_theta(~ismember({dirs_theta.name}, {'.', '..', '.DS_Store'}));
@@ -799,10 +798,8 @@ for idx_A = 1 : length(dirs_A)
       % Run continuation
       run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
                           pcont, prange, ...
-                          SP_parameter=SP_parameter, SP_values=SP_values, ...
                           h_min=1e-3, h0=1e-1, h_max=1e1, ...
-                          PtMX=1000, NPR=100, NAdapt=20);
-
+                          PtMX=1000, NPR=100, NAdapt=10);
     end
   end
 end
