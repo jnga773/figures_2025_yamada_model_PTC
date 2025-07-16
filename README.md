@@ -36,8 +36,10 @@ Just change `/path/to/` to the directory where you have AUTO installed.
 ## Files
 
 Each of the `calc_figX_data.m` COCO scripts makes use of functions in two folders:
-- `functions`: Contains the Matlab encoding of the vector fields (`functions/fields/`) and of the boundary conditions (`functions/bcs/`).
+- `functions`: Contains the Matlab encoding of the vector fields (`functions/fields/`) and of the boundary conditions (`functions/bcs/`). The `functions/symcoco/` folder contains the generated function files from the symbolic toolbox encoding of the fields using the SymCOCO toolbox.
 - `continuation_scripts`: Contains functions which either calculate an initial solution, setup the COCO continuation problem scturcture, or save the relevant data to a Matlab `.mat` file.
+
+For the `calc_figX_data.py` AUTO scripts, the function files are contained in the `functions` folder inside the respective figure directory.
 
 In the main directory, there is also a Matlab function file `set_figure_dimensions.m`. This function defines the dimensions of the axis 'Position' property to a specific dimension in centimetres. For the paper, I import the figures without any labels into Inkscape, and use the textbox tool in Inkscape to generate all of the labels, ticks, and text. `set_figure_dimensions` therefore allows me much finer control over the size of the figures.
 
@@ -96,8 +98,8 @@ This repository is structured as follows:
 
 - `fig7`
   - `calc_fig7_data.py`: AUTO script for generating a whole lot of PTCs for increasing perturbation amplitudes for a $G$-perturbation.
-  - `plot_fig7a.m`: Plots Fig. 7(a) - Surface of PTCs from one viewpoint.
-  - `plot_fig7b.m`: Plots Fig. 7(b) - The same surface of PTCs from another viewpoint.
+  - `data_functions.py`: Python functions used to generate, save, and organise the AUTO-generated data.
+  - `plot_fig7.m`: Plots Fig. 7 - Surface of PTCs from one viewpoint.
   - `save_fig7_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig8`
@@ -109,15 +111,24 @@ This repository is structured as follows:
   - `save_fig5_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig9`
-  - `calc_fig9_data.m`: COCO script for generating the PTCs for a few different perturbation amplitudes in the positive-$I$ direction: $A = 0.05, 0.1, 0.2, 0.55, 1.0, 1.5$, and $2.0$.
+  - `calc_fig9_data.m`: COCO script for generating the PTCs for a few different perturbation amplitudes in the positive-$I$ direction: $A = 0.1, 0.5, 4.0786, 10.0$, and $20.0$.
   - `plot_fig9a.m`: Plots Fig. 9(a) - the phase portrait of the perturbation sets for the saved perturbation amplitudes.
   - `plot_fig9b.m`: Plots Fig. 9(b) - PTCs of the peturbation sets in Fig. 9(a).
   - `save_fig9_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `fig10`
   - `calc_fig10_data.py`: AUTO script for generating a whole lot of PTCs for increasing perturbation amplitudes for an $I$-perturbation.
-  - `plot_fig10a.m`: Plots Fig. 10(a) - Surface of PTCs from one viewpoint.
-  - `plot_fig10b.m`: Plots Fig. 10(b) - The same surface of PTCs from another viewpoint.
+  - `data_functions.py`: Python functions used to generate, save, and organise the AUTO-generated data.
+  - `plot_fig10.m`: Plots Fig. 10 - Surface of PTCs from one viewpoint.
   - `save_fig10_data.m`: Saves the figure data to a Matlab `.mat` file.
+
+- `fig11`
+  - `plot_fig11a.m`: Plots Fig. 11(a) - blah blah blah
+  - `plot_fig11b.m`: Plots Fig. 11(b) - blah blah blah
+
+- `fig12`
+  - `calc_fig12_data.m`: COCO script for generating the DTCs for a few fixed perturbations: $A = 0.1, 0.744$, and $15$.
+  - `plot_fig12.m`: Plots Fig. 12 - DTCs for fixed perturbations.
+  - `save_fig12_data.m`: Saves the figure data to a Matlab `.mat` file.
 
 - `set_figure_dimensions.m`: Matlab function file to define the dimensions of the 'Position' property of the figure axis in a way that works for me :). You should probably add this to your path as it doesn't live in each folder.
