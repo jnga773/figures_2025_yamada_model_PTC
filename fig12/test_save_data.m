@@ -70,10 +70,13 @@ end
 
 %% MERGE DATA SET 1
 % Get data for first A_perturb value
+idx_O = 1;
+% idx_O = 2;
+
 A1  = A_perturb_data(1, 1);
 TO1 = theta_old_data(1, 1);
-TN1 = [theta_new_data{1, 1}, theta_new_data{1, 2}]';
-TP1 = [theta_perturb_data{1, 1}, theta_perturb_data{1, 2}]';
+TN1 = [theta_new_data{1, 1, idx_O}, theta_new_data{1, 2, idx_O}]';
+TP1 = [theta_perturb_data{1, 1, idx_O}, theta_perturb_data{1, 2, idx_O}]';
 
 % Sort
 [~, sort_idx] = sort(TP1);
@@ -82,10 +85,10 @@ TP1 = TP1(sort_idx);
 
 %% MERGE DATA SET 2
 % Get data for first A_perturb value
-A2  = A_perturb_data(2, 1);
-TO2 = theta_old_data(2, 1);
-TN2 = [theta_new_data{2, 1}]';
-TP2 = [theta_perturb_data{2, 1}]';
+A2  = A_perturb_data(2, 1, 1);
+TO2 = theta_old_data(2, 1, 1);
+TN2 = [theta_new_data{2, 1, 1}]';
+TP2 = [theta_perturb_data{2, 1, 1}]';
 
 % Sort
 [~, sort_idx] = sort(TP2);
@@ -94,10 +97,10 @@ TP2 = TP2(sort_idx);
 
 %% MERGE DATA SET 3
 % Get data for first A_perturb value
-A3  = A_perturb_data(3, 1);
-TO3 = theta_old_data(3, 1);
-TN3 = [theta_new_data{3, 1}, theta_new_data{3, 2}]';
-TP3 = [theta_perturb_data{3, 1}, theta_perturb_data{3, 2}]';
+A3  = A_perturb_data(3, 1, idx_O);
+TO3 = theta_old_data(3, 1, idx_O);
+TN3 = [theta_new_data{3, 1, idx_O}, theta_new_data{3, 2, idx_O}]';
+TP3 = [theta_perturb_data{3, 1, idx_O}, theta_perturb_data{3, 2, idx_O}]';
 
 % Sort
 [~, sort_idx] = sort(TP3);
@@ -129,8 +132,8 @@ hold(ax, 'on');
 % DTC
 % theta_perturb_plot = theta_perturb{1, 2};
 % theta_new_plot     = theta_new{1, 2};
-theta_perturb_plot = TP1;
-theta_new_plot     = TN1;
+theta_perturb_plot = TP3;
+theta_new_plot     = TN3;
 plot(ax, theta_perturb_plot, theta_new_plot, LineStyle='-', Color=colours(1, :));
 
 hold(ax, 'off');
