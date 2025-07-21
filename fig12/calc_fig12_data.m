@@ -648,7 +648,7 @@ end
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.PR_move_theta_old = 'run06_PR_move_theta_old';
+run_names.PR_move_theta_old = 'run07_PR_move_theta_old';
 run_new = run_names.PR_move_theta_old;
 % Which run this continuation continues from
 run_old = run_names.PR_change_angle;
@@ -732,7 +732,7 @@ end
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.PR_DTC_scan = 'run07_PR_DTC_scan';
+run_names.PR_DTC_scan = 'run08_PR_DTC_scan';
 run_new = run_names.PR_DTC_scan;
 % Which run this continuation continues from
 run_old = run_names.PR_move_theta_old;

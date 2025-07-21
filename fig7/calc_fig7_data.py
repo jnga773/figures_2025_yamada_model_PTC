@@ -51,13 +51,13 @@ run_new_str = 'run01_initial_PO_ode45'
 #--------------------------#
 #     Print to Console     #
 #--------------------------#
-print('=====================================================================');
-print('Initial Periodic Orbit: First Run');
-print('Find new periodic orbit');
-print('---------------------------------------------------------------------');
-print('This run name           : {}'.format(run_new_str));
-print('Continuation parameters : {}'.format('gamma, T, A'));
-print('=====================================================================');
+print('=====================================================================')
+print('Initial Periodic Orbit: First Run')
+print('Find new periodic orbit')
+print('---------------------------------------------------------------------')
+print('This run name           : {}'.format(run_new_str))
+print('Continuation parameters : {}'.format('gamma, T, A'))
+print('=====================================================================')
 
 #----------------------------#
 #     Calculate Solution     #
@@ -118,15 +118,15 @@ label_old = label_old['LAB']
 #--------------------------#
 #     Print to Console     #
 #--------------------------#
-print('=====================================================================');
-print('Initial Periodic Orbit: Second Run');
-print('Continue periodic orbit with shifted phase condition');
-print('---------------------------------------------------------------------');
-print('This run name           : {}'.format(run_new_str));
-print('Previous run name       : {}'.format(run_old_str));
-print('Previous label_solution : {}'.format(label_old));
-print('Continuation parameters : {}'.format('A, gamma'));
-print('=====================================================================');
+print('=====================================================================')
+print('Initial Periodic Orbit: Second Run')
+print('Continue periodic orbit with shifted phase condition')
+print('---------------------------------------------------------------------')
+print('This run name           : {}'.format(run_new_str))
+print('Previous run name       : {}'.format(run_old_str))
+print('Previous label_solution : {}'.format(label_old))
+print('Continuation parameters : {}'.format('A, gamma'))
+print('=====================================================================')
 
 #-------------------#
 #     Read Data     #
@@ -197,15 +197,15 @@ label_old = 1
 #--------------------------#
 #     Print to Console     #
 #--------------------------#
-print('=====================================================================');
-print('Floquet Bundle: First Run');
-print('Calculate stable Floquet bundle eigenvalue');
-print('---------------------------------------------------------------------');
-print('This run name           : {}'.format(run_new_str));
-print('Previous run name       : {}'.format(run_old_str));
-print('Previous label_solution : {}'.format(label_old));
-print('Continuation parameters : {}'.format('mu_s, w_norm'));
-print('=====================================================================');
+print('=====================================================================')
+print('Floquet Bundle: First Run')
+print('Calculate stable Floquet bundle eigenvalue')
+print('---------------------------------------------------------------------')
+print('This run name           : {}'.format(run_new_str))
+print('Previous run name       : {}'.format(run_old_str))
+print('Previous label_solution : {}'.format(label_old))
+print('Continuation parameters : {}'.format('mu_s, w_norm'))
+print('=====================================================================')
 
 #-------------------#
 #     Read Data     #
@@ -272,15 +272,15 @@ label_old = label_old['LAB']
 #--------------------------#
 #     Print to Console     #
 #--------------------------#
-print('=====================================================================');
-print('Floquet Bundle: Second Run');
-print('Grow norm of stable Floquet bundle vector');
-print('---------------------------------------------------------------------');
-print('This run name           : {}'.format(run_new_str));
-print('Previous run name       : {}'.format(run_old_str));
-print('Previous label_solution : {}'.format(label_old));
-print('Continuation parameters : {}'.format('mu_s, w_norm'));
-print('=====================================================================');
+print('=====================================================================')
+print('Floquet Bundle: Second Run')
+print('Grow norm of stable Floquet bundle vector')
+print('---------------------------------------------------------------------')
+print('This run name           : {}'.format(run_new_str))
+print('Previous run name       : {}'.format(run_old_str))
+print('Previous label_solution : {}'.format(label_old))
+print('Continuation parameters : {}'.format('mu_s, w_norm'))
+print('=====================================================================')
 
 #-------------------------------#
 #     Run AUTO Continuation     #
@@ -330,15 +330,15 @@ label_old = label_old['LAB']
 #--------------------------#
 #     Print to Console     #
 #--------------------------#
-print('=====================================================================');
-print('Phase Reset: First Run');
-print('Continue in the perturbation ampltiude A_perturb');
-print('---------------------------------------------------------------------');
-print('This run name           : {}'.format(run_new_str));
-print('Previous run name       : {}'.format(run_old_str));
-print('Previous label_solution : {}'.format(label_old));
-print('Continuation parameters : {}'.format('A_perturb, theta_new, eta, mu_s, T'));
-print('=====================================================================');
+print('=====================================================================')
+print('Phase Reset: First Run')
+print('Continue in the perturbation ampltiude A_perturb')
+print('---------------------------------------------------------------------')
+print('This run name           : {}'.format(run_new_str))
+print('Previous run name       : {}'.format(run_old_str))
+print('Previous label_solution : {}'.format(label_old))
+print('Continuation parameters : {}'.format('A_perturb, theta_new, eta, mu_s, T'))
+print('=====================================================================')
 
 #-------------------#
 #     Read Data     #
@@ -434,15 +434,15 @@ def calculate_PTC(i):
     #--------------------------#
     #     Print to Console     #
     #--------------------------#
-    print('=====================================================================');
-    print('Phase Reset: Second Run');
-    print('Compute phase transition curve (PTC) for single perturbation');
-    print('---------------------------------------------------------------------');
-    print('This run name           : {}'.format(this_run));
-    print('Previous run name       : {}'.format(run_old_str));
-    print('Previous label_solution : {}'.format(this_label));
-    print('Continuation parameters : {}'.format('theta_old, theta_new, eta, mu_s, T'));
-    print('=====================================================================');
+    print('=====================================================================')
+    print('Phase Reset: Second Run')
+    print('Compute phase transition curve (PTC) for single perturbation')
+    print('---------------------------------------------------------------------')
+    print('This run name           : {}'.format(this_run))
+    print('Previous run name       : {}'.format(run_old_str))
+    print('Previous label_solution : {}'.format(this_label))
+    print('Continuation parameters : {}'.format('theta_old, theta_new, eta, mu_s, T'))
+    print('=====================================================================')
 
     #-------------------------------#
     #     Run AUTO Continuation     #
