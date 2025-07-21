@@ -1,7 +1,7 @@
 clear all; close all;
 
 %% READ DATA
-run_in = 'run07_PR_DTC_scan';
+run_in = 'run08_PR_DTC_scan';
 
 %------------------------------%
 %     Read Sub-Directories     %

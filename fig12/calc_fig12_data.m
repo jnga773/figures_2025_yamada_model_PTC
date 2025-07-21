@@ -482,14 +482,14 @@ prob = coco_prob();
 
 % Set step sizes
 prob = coco_set(prob, 'cont', 'h_min', 5e-5);
-prob = coco_set(prob, 'cont', 'h0', 1e-3);
+prob = coco_set(prob, 'cont', 'h0', 1e-2);
 prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive mesh
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
-prob = coco_set(prob, 'cont', 'PtMX', 1000);
+prob = coco_set(prob, 'cont', 'PtMX', 5000);
 
 % Set number of stored solutions
 prob = coco_set(prob, 'cont', 'NPR', 100);
@@ -560,7 +560,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 % List of perturbation amplitudes to save solutions for
 SP_parameter = 'A_perturb';
-SP_values    = [0.1, 0.724587, 15.0];
+SP_values    = [0.1, 0.724236, 25.0];
 
 % Save solution at phase along \Gamma where there WILL BE an intersection
 % with the stable manifold of q.
@@ -573,7 +573,7 @@ prob = coco_add_event(prob, 'SP', SP_parameter, SP_values);
 % Set continuation parameters and parameter range
 pcont = {'A_perturb', 'theta_new', ...
          'eta', 'mu_s'};
-prange = {[0.0, max(SP_values)+0.1], [], ...
+prange = {[0.0, max(SP_values)+.1], [], ...
           [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO
@@ -625,19 +625,23 @@ for run = 1 : length(label_old)
   %------------------%
   % Saved points
   SP_parameter = 'theta_perturb';
-  SP_values = [0.0, 0.25];
+  SP_values = [0.0, 0.4];
+
+  if run == 3
+    SP_values(2) = 0.28;
+  end
 
   % Continuation parameters
   pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
   % Parameter range for continuation
-  prange = {[-1e-3, 2.51], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  prange = {[-1e-3, max(SP_values)+0.01], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
   % Run continuation
   run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
                        pcont, prange, ...
                        SP_parameter=SP_parameter, SP_values=SP_values, ...
                        h_min=1e-3, h0=1e-2, h_max=1e1, ...
-                       PtMX=[0, 100], NPR=20, NAdapt=20);
+                       PtMX=[0, 500], NPR=20, NAdapt=20);
 
 end
 
@@ -709,7 +713,7 @@ parfor(idx = 1 : length(dirs_A), 3)
     %------------------%
     % Saved points
     SP_parameter = 'theta_old';
-    SP_values = [0.339279, 1.339279];
+    SP_values = [0.339386, 1.339386];
 
     % Continuation parameters
     pcont = {'theta_old', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
