@@ -1,5 +1,5 @@
-function data_out = calc_lins_initial_conditions(run_in, label_in)
-  % data_out = calc_initial_conditions(run_in, label_in)
+function data_out = calc_initial_solution_lins(run_in, label_in)
+  % data_out = calc_initial_solution_lins(run_in, label_in)
   %
   % Reads data from previous run solution and calculates the 
   % initial conditions for the various different trajectory segments.
