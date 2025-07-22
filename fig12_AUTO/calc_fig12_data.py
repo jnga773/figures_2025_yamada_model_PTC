@@ -359,7 +359,7 @@ x_init_PR, p_PR, unames, pnames_PR = \
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Saved points perturbation amplitudes
-SP_points = [0.1, 0.724587, 15.0]
+SP_points = [0.1, 0.724236, 25.0]
 
 # Set saved points
 UZR = {'A_perturb': SP_points}
@@ -407,7 +407,8 @@ label_old = [sol['LAB'] for sol in label_old[:-1]]
 #-------------------------------------#
 #     Cycle Through Previous Runs     #
 #-------------------------------------#
-for run in range(len(label_old)):
+# for run in range(len(label_old)):
+for run in [2]:
     # This label
     this_run_label = label_old[run]
 
@@ -431,31 +432,27 @@ for run in range(len(label_old)):
     #     Run AUTO Continuation     #
     #-------------------------------#
     # Saved points perturbation amplitudes
-    SP_points = [0.0, 0.25]
+    SP_points = [0.0, 0.4]
+    
+    if run == 2:
+        SP_points[1] = 0.2
 
     # Set saved points
-    UZR = {'theta_perturb': SP_points}
+    # UZR = {'theta_perturb': SP_points}
+    UZR = {}
 
     # Set continuation parameters
     pcont = ['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T']
     # Set continuation stop points
-    prange = {}
+    # prange = {'theta_perturb': [-0.1, 0.5]}
+    prange = {'theta_perturb': SP_points}
     
     # Run continution
     data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
                                    pcont, prange,
-                                   UZR=UZR, NMX=500, NPR=20,
+                                   UZR=UZR, NMX=4000, NPR=100,
                                    DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
                                    reverse=True)
-
-#-------------------#
-#     Save Data     #
-#-------------------#
-# # Save data
-# data_funcs.save_move_data(run_new, run_new_str)
-
-# # Print clear line
-# print('\n')
 
 # %%
 #------------------------------------------------------------------------------#
@@ -476,7 +473,8 @@ from os import listdir
 #     Cycle Through Previous Runs     #
 #-------------------------------------#
 # for idx in range(len(label_old)):
-for idx_A in range(len(listdir('./data/{}/'.format(run_old_str)))):
+# for idx_A in range(len(listdir('./data/{}/'.format(run_old_str)))):
+for idx_A in [1, 2]:
     # Set run string for this run to read
     sub_run_name = '{}/A_perturb_{}'.format(run_old_str, str(idx_A+1).zfill(2))
 
@@ -512,16 +510,22 @@ for idx_A in range(len(listdir('./data/{}/'.format(run_old_str)))):
       
         #-------------------------------#
         #     Run AUTO Continuation     #
-        #-------------------------------#    
+        #-------------------------------#
+        # Set saved points for perturbation
+        SP_points = [0.339386, 1.339386]
+        # UZR = {'theta_old': SP_points}
+        UZR = {}
+        
         # Set continuation parameters
         pcont = ['theta_old', 'theta_new', 'eta', 'mu_s', 'T']
         # Set continuation stop points
-        prange = {'theta_old': [0.0, 1.0]}
+        # prange = {'theta_old': [0.0, 2.0]}
+        prange = {'theta_old': SP_points}
         
         # Run continution
         data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
-                                       pcont, prange,
-                                       NMX=1000, NPR=100,
+                                       pcont, prange, UZR=UZR,
+                                       NMX=8000, NPR=100,
                                        DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
                                        reverse=True)
     
@@ -603,7 +607,7 @@ for idx_A in range(len(listdir('./data/{}/'.format(run_old_str)))):
                 # Set continuation parameters
                 pcont = ['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T']
                 # Set continuation stop points
-                prange = {'theta_perturb': [0.0, 1.0]}
+                prange = {'theta_perturb': [-1.0, 2.0]}
                 
                 # Run continution
                 data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
