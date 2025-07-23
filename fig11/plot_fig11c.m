@@ -5,14 +5,6 @@
 load('../data_files/fig2_data.mat', 'xbp_PO', 'Wq_s', 'xpos');
 load('../data_files/fig11_data.mat', 'theta_old', 'A_perturb', 'theta_perturb');
 
-%-------------------%
-%     Sort Data     %
-%-------------------%
-% Sort indices
-[~, sort_idx] = sort(theta_old);
-theta_old     = theta_old(sort_idx);
-theta_perturb = theta_perturb(sort_idx);
-
 %----------------------%
 %     Plot Colours     %
 %----------------------%
@@ -26,7 +18,7 @@ colours = colororder();
 colours = colororder();
 
 % Setup figure
-fig = figure(4); clf;
+fig = figure(5); clf;
 fig.Name = 'Intersection with Ws(q) and Perturbed Gamma';
 ax = gca();
 
@@ -49,19 +41,19 @@ hold(ax, 'on');
 %     Plot: Highlight theta_perturb Area     %
 %--------------------------------------------%
 % Highlight area over 0.0 <= theta_perturb <= 0.5 pi
-patch(ax, [0, 0, 0.25, 0.25], [0, 1, 1, 0], colours(3, :), FaceAlpha=0.2, ...
+patch(ax(1), [0, 0, 0.25, 0.25], [0, 20, 20, 0], colours(3, :), FaceAlpha=0.2, ...
       EdgeColor='none', HandleVisibility='off')
 
 %------------------------------------------%
-%     Plot: theta_perturb vs theta_old     %
+%     Plot: theta_perturb vs A_perturb     %
 %------------------------------------------%
 % Linewidth
 lw = 1.0;
 
 % Plot: theta_old vs theta_perturb
-plot(ax, theta_perturb, theta_old, Color=colours(1, :), LineStyle='-', LineWidth=lw);
-plot(ax, theta_perturb, theta_old-1, Color=colours(1, :), LineStyle='-', LineWidth=lw);
-plot(ax, theta_perturb+2, theta_old, Color=colours(1, :), LineStyle='-', LineWidth=lw);
+plot(ax, theta_perturb-1, A_perturb, Color='k', LineStyle='-', LineWidth=lw);
+plot(ax, theta_perturb, A_perturb, Color='k', LineStyle='-', LineWidth=lw);
+plot(ax, theta_perturb+2, A_perturb, Color='k', LineStyle='-', LineWidth=lw);
 
 %-------------------%
 %     Hold Axis     %
@@ -76,10 +68,10 @@ ax.XAxis.MinorTick = 'on';
 ax.XAxis.TickValues = -0.25 : 0.25 : 1.5;
 ax.XAxis.MinorTickValues = -0.25 : 0.125 : 1.5;
 
-% Y-Axis: theta_old
+% Y-Axis: A_perturb
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.TickValues = 0.0 : 0.25 : 1.0;
-ax.YAxis.MinorTickValues = 0.0 : 0.125 : 1.0;
+ax.YAxis.TickValues = 0.0 : 3.0 : 15.0;
+ax.YAxis.MinorTickValues = 0.0 : 1.0 : 15.0;
 
 %---------------------%
 %     Tick Labels     %
@@ -93,8 +85,8 @@ ax.YAxis.TickLabels = {};
 % X-Axis: theta_perturb
 ax.XAxis.Limits = [-0.125, 1.0];
 
-% Y-Axis: theta_old
-ax.YAxis.Limits = [0.0, 1.0];
+% Y-Axis: A_perturb
+ax.YAxis.Limits = [0.0, 15.0];
 
 %---------------------%
 %     Axis Labels     %
@@ -102,8 +94,8 @@ ax.YAxis.Limits = [0.0, 1.0];
 % % X-Axis: theta_perturb
 % ax.XAxis.Label.String = '$\varphi_{\mathrm{p}}$';
 % 
-% % Y-Axis: theta_perturb
-% ax.YAxis.Label.String = '$\vartheta_{\mathrm{o}}$';
+% % Y-Axis: A_perturb
+% ax.YAxis.Label.String = '$A$';
 
 %----------------------%
 %     Figure Stuff     %

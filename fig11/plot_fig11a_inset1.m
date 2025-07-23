@@ -1,21 +1,9 @@
-close all; clear; clc;
-
 %%
 %-------------------------------------------------------------------------%
-%                              Calculate Data                             %
+%                                Read Data                                %
 %-------------------------------------------------------------------------%
 load('../data_files/fig2_data.mat', 'xbp_PO', 'Wq_s', 'xpos');
-
-% Calculate data
-[theta_old, theta_perturb, A_perturb] = calc_intersection_points();
-
-% Get perturbation vector
-d_vec = A_perturb .* [cos(theta_perturb), sin(theta_perturb)];
-
-% Plotting vector
-G_plot = [xbp_PO(:, 1), xbp_PO(:, 1) + d_vec(:, 1)];
-Q_plot = [xbp_PO(:, 2), xbp_PO(:, 2)];
-I_plot = [xbp_PO(:, 3), xbp_PO(:, 3) + d_vec(:, 2)];
+load('../data_files/fig11_data.mat', 'xbp_gamma', 'xbp_Wsq');
 
 %----------------------%
 %     Plot Colours     %
@@ -28,7 +16,7 @@ colours = colororder();
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
 % Setup figure
-fig = figure(1); clf;
+fig = figure(2); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
@@ -67,35 +55,11 @@ plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
 lw = 3.5;
 colour = colours(7, :);
 
-% Get indices for theta_perturb <= 0.5 pi
-theta_idx = theta_perturb <= 0.5 * pi;
-
-% Get surface data
-G_surf = G_plot(theta_idx, :);
-Q_surf = Q_plot(theta_idx, :);
-I_surf = I_plot(theta_idx, :);
-
-% Plot surface
-surf(ax, G_surf, Q_surf, I_surf, ...
-     EdgeColor='none', FaceColor=colour, FaceAlpha=0.25);
-
-% Plot specific ones
-[~, min_idx] = min(theta_perturb(theta_idx));
-[~, max_idx] = max(theta_perturb(theta_idx));
-[~, mid_idx] = min(abs(theta_perturb(theta_idx) - 0.25 * pi));
-% theta_idx_2 = [min_idx, mid_idx, max_idx];
-theta_idx_2 = [min_idx, max_idx];
-
-for i = 1 : length(theta_idx_2)
-  idx = theta_idx_2(i);
-  plot3(ax, G_surf(idx, :), Q_surf(idx, :), I_surf(idx, :), ...
-        LineStyle='-', Color=colour, LineWidth=lw);
-end
-
-plot3(ax, G_surf(:, 1), Q_surf(:, 1), I_surf(:, 1), ...
-      LineStyle='-', Color=colour, LineWidth=lw);
-plot3(ax, G_surf(:, 2), Q_surf(:, 2), I_surf(:, 2), ...
-      LineStyle='-', Color=colour, LineWidth=lw);
+% Plot highlighted sections along \Gamma and W^{s}(q)
+plot3(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), xbp_gamma(:, 3), ...
+      Color=colour, LineWidth=lw, LineStyle='-');
+plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
+      Color=colour, LineWidth=lw, LineStyle='-');
 
 %---------------------------------%
 %     Plot: Equilibrium Point     %
