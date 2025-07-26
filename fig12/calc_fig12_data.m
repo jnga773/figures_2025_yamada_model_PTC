@@ -669,8 +669,10 @@ dirs_A = {dirs_A.name};
 %-------------------------------------%
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
-% for idx = 1 : length(dirs_A)
-parfor(idx = 1 : length(dirs_A), 3)
+% Set number of threads
+N_threads = 3;
+% N_threads = length(dirs_A);
+parfor(idx = 1 : length(dirs_A), N_threads)
   % Set run string for this run
   sub_run_name = {run_old, dirs_A{idx}};
 
@@ -721,11 +723,11 @@ parfor(idx = 1 : length(dirs_A), 3)
     prange = {[min(SP_values), max(SP_values)], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
     % Run continuation
-    run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
-                         pcont, prange, ...
-                         SP_parameter=SP_parameter, SP_values=SP_values, ...
-                         h_min=1e-3, h0=1e-1, h_max=1e1, ...
-                         PtMX=500, NPR=50, NAdapt=20);
+    run_PR_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
+                        pcont, prange, ...
+                        SP_parameter=SP_parameter, SP_values=SP_values, ...
+                        h_min=1e-3, h0=1e-1, h_max=1e1, ...
+                        PtMX=500, NPR=50, NAdapt=20);
   end
 end
 

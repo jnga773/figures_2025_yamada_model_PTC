@@ -597,8 +597,8 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-M = 2;
-parfor (run = 1 : length(label_old), M)
+N_threads = length(label_old);
+parfor (run = 1 : length(label_old), N_threads)
   % Label for this run
   this_run_label = label_old(run);
 
@@ -619,7 +619,8 @@ parfor (run = 1 : length(label_old), M)
   fprintf(' =====================================================================\n');
 
   % Saved solution points for theta_old
-  SP_values = [0.0, 1.0];
+  SP_parameter = 'theta_old';
+  SP_values    = [0.0, 1.0];
 
   % Continuation parameters
   pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
@@ -627,8 +628,10 @@ parfor (run = 1 : length(label_old), M)
   prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
-  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
-                       pcont, prange, SP_parameter='theta_old', SP_values=SP_values);
+  run_PR_continuation(this_run_name, run_old, this_run_label, ...
+                      data_PR, bcs_funcs, ...
+                      pcont, prange, ...
+                      SP_parameter=SP_parameter, SP_values=SP_values);
 
 end
 
@@ -639,7 +642,8 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 8
-save_fig3_data(run_new, '../data_files/fig3_data.mat');
+save_fig3_data(run_names.initial_PO_COLL, run_names.PR_PTC_multi, ...
+               '../data_files/fig3_data.mat');
 
 %----------------------%
 %     Plot Figures     %

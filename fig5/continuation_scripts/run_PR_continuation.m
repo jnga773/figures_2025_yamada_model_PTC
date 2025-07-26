@@ -1,5 +1,5 @@
-function run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pcont, prange, options)
-  % run_PTC_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, options)
+function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pcont, prange, options)
+  % run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, options)
   %
   % Scan through SP labels from previous run (different values of A_perturb)
   % and continue in \theta_{old} and \theta_{new}. Each run will save
