@@ -1,7 +1,8 @@
-function save_fig6_data(run_in, filename_in)
-  % save_fig6_data(run_in, filename_in)
+function save_fig6_data(run_PO_in, run_PR_PTC_multi_in, filename_in)
+  % save_fig6_data(run_PO_in, run_PTC_multi_in, filename_in)
   %
-  % Reads PTC scan data from run_in and saves data to filename_in
+  % Reads PTC scan data from run_PO_in and run_PR_PTC_multi_in and
+  % saves data to filename_in.
 
   %------------------------------------------%
   %     Read Initial Periodic Orbit Data     %
@@ -15,7 +16,7 @@ function save_fig6_data(run_in, filename_in)
   label_PO = coco_bd_labs(bd_PO, 'PO_PT');
 
   % Read 'initial_PO' COLL data
-  [sol_PO, data_PO] = coll_read_solution('initial_PO', run_PO, label_PO);
+  [sol_PO, data_PO] = coll_read_solution('initial_PO', run_PO_in, label_PO);
 
   % State space solution
   xbp_PO = sol_PO.xbp;
@@ -32,7 +33,7 @@ function save_fig6_data(run_in, filename_in)
   %     Read Data: Stationary Point     %
   %-------------------------------------%
   % Read 'xpos' EP data
-  [sol_pos, ~] = ep_read_solution('xpos', run_PO, label_PO);
+  [sol_pos, ~] = ep_read_solution('xpos', run_PO_in, label_PO);
 
   % Stationary point
   xpos = sol_pos.x;
@@ -41,7 +42,7 @@ function save_fig6_data(run_in, filename_in)
   %     Read Data: PTCs    %
   %------------------------%
   % Folder name
-  dir_data = sprintf('./data/%s/', run_in);
+  dir_data = sprintf('./data/%s/', run_PR_PTC_multi_in);
   % List all directories
   dirs = dir(dir_data);
   % Remove ./ and ../
@@ -60,7 +61,7 @@ function save_fig6_data(run_in, filename_in)
   for i = 1 : length(dir_sub)
   % for i = 1 : 1
     % Run name
-    sub_run_name = {run_in, dir_sub{i}};
+    sub_run_name = {run_PR_PTC_multi_in, dir_sub{i}};
 
     % Bifurcation data
     bd_read = coco_bd_read(sub_run_name);

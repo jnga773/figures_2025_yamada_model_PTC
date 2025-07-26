@@ -1,7 +1,8 @@
 function save_fig3_data(run_PO_in, run_PR_PTC_multi_in, filename_in)
   % save_fig3_data(run_PO_in, run_PTC_multi_in, filename_in)
   %
-  % Reads PTC scan data from run_in and saves data to filename_in
+  % Reads PTC scan data from run_PO_in and run_PR_PTC_multi_in and
+  % saves data to filename_in.
 
   %------------------------------------------%
   %     Read Initial Periodic Orbit Data     %
