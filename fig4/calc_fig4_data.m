@@ -271,14 +271,19 @@ prob = coco_add_event(prob, 'PO_PT', 'A', data_PO.p(2));
 coco(prob, run_new, [], 1, {'A', 'gamma'});
 
 %=========================================================================%
-%%            Compute Floquet Bundle at Zero Phase Point (mu)            %%
+%%               Compute Floquet Bundle at Zero Phase Point              %%
 %=========================================================================%
 % We now add the adjoint function and Floquet boundary conditions to
 % compute the adjoint (left or right idk) eigenvectors and eigenvalues.
 % This will give us the perpendicular vector to the tangent of the periodic
 % orbit. However, this will only be for the eigenvector corresponding to
-% the eigenvalue \mu = 1. Hence, here we continue in \mu (mu_s) until
-% mu_s = 1.
+% the eigenvalue \mu = 1.
+
+%-------------------------------------------------------------------------%
+%%                     Compute Stable Eigenvalue 1.0                     %%
+%-------------------------------------------------------------------------%
+% Starting from an initial zero vector, we continue in mu until the stable
+% eigenvalue is 1.0
 
 %------------------%
 %     Run Name     %
@@ -356,7 +361,7 @@ prob = coco_add_event(prob, 'mu=1', 'mu_s', 1.0);
 coco(prob, run_new, [], 1, {'mu_s', 'w_norm'} , {[0.9, 1.1], []});
 
 %-------------------------------------------------------------------------%
-%%          Compute Floquet Bundle at Zero Phase Point (w_norm)          %%
+%%                  Grow Orthogonal Stable Eigenvector                   %%
 %-------------------------------------------------------------------------%
 % Having found the solution (branching point 'BP') corresponding to
 % \mu = 1, we can continue in the norm of the vector w (w_norm), until the
