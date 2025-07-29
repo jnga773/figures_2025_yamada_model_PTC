@@ -25,7 +25,7 @@ function prob_out = apply_boundary_conditions_Wsq(prob_in, bcs_funcs_in, eps_in)
   prob = prob_in;
 
   % Boundary condition function list
-  % bcs_eig     = bcs_funcs_in.bcs_eig;
+  bcs_PO      = bcs_funcs_in.bcs_PO;
   bcs_initial = bcs_funcs_in.bcs_initial;
   bcs_final   = bcs_funcs_in.bcs_final;
 
@@ -41,7 +41,7 @@ function prob_out = apply_boundary_conditions_Wsq(prob_in, bcs_funcs_in, eps_in)
   maps2 = data2.coll_seg.maps;
 
   % Read index data for the stable periodic orbit segment
-  [data_s, uidx_s] = coco_get_func_data(prob, 'PO_stable.po.orb.coll', 'data', 'uidx');
+  [data_s, uidx_s] = coco_get_func_data(prob, 'PO_stable.coll', 'data', 'uidx');
   % Index mapping
   maps_s     = data_s.coll_seg.maps;
 
@@ -66,6 +66,15 @@ function prob_out = apply_boundary_conditions_Wsq(prob_in, bcs_funcs_in, eps_in)
                        [uidx_0(maps_0.p_idx); ...
                         uidx_pos(maps_pos.p_idx); uidx_neg(maps_neg.p_idx); ...
                         uidx1(maps1.p_idx); uidx2(maps2.p_idx)]);
+
+  %-------------------------------------------%
+  %    Periodic Orbit Boundary Conditions     %
+  %-------------------------------------------%
+  % Apply periodic orbit boundary conditions and special phase condition
+  prob = coco_add_func(prob, 'bcs_PO', bcs_PO{:}, data_s, 'zero', 'uidx', ...
+                       uidx_s([maps_s.x0_idx(1:data_s.xdim); ...
+                               maps_s.x1_idx(1:data_s.xdim); ...
+                               maps_s.p_idx(1:data_s.pdim)]));
 
   %-------------------------------------%
   %     Initial Boundary Conditions     %

@@ -147,17 +147,46 @@ function save_fig11_data(run_names_in, filename_in)
   %---------------------------------------------%
   %     Read Data: Intersection Coordinates     %
   %---------------------------------------------%
+  labs1 = coco_bd_labs(bd_read1, 'SP');
+  labs2 = coco_bd_labs(bd_read2, 'SP');
+
+  % Intersection points
+  theta_old_SP     = [coco_bd_val(bd_read1, labs1, 'theta'), coco_bd_val(bd_read2, labs2, 'theta')]';
+  A_perturb_SP     = [coco_bd_val(bd_read1, labs1, 'A_perturb'), coco_bd_val(bd_read2, labs2, 'A_perturb')]';
+  theta_perturb_SP = [coco_bd_val(bd_read1, labs1, 'theta_perturb'), coco_bd_val(bd_read2, labs2, 'theta_perturb')]';
+  I_theta_SP       = [coco_bd_val(bd_read1, labs1, 'I_theta'), coco_bd_val(bd_read2, labs2, 'I_theta')]';
+
+  % Get \Gamma and W^{s}(q) coordinates
+  G_theta_SP = [coco_bd_val(bd_read1, labs1, 'G_theta'), coco_bd_val(bd_read2, labs2, 'G_theta')]';
+  Q_theta_SP = [coco_bd_val(bd_read1, labs1, 'Q_theta'), coco_bd_val(bd_read2, labs2, 'Q_theta')]';
+  I_theta_SP = [coco_bd_val(bd_read1, labs1, 'I_theta'), coco_bd_val(bd_read2, labs2, 'I_theta')]';
+  G_Wsq_SP   = [coco_bd_val(bd_read1, labs1, 'G_Wsq'), coco_bd_val(bd_read2, labs2, 'G_Wsq')]';
+  Q_Wsq_SP   = [coco_bd_val(bd_read1, labs1, 'Q_Wsq'), coco_bd_val(bd_read2, labs2, 'Q_Wsq')]';
+  I_Wsq_SP   = [coco_bd_val(bd_read1, labs1, 'I_Wsq'), coco_bd_val(bd_read2, labs2, 'I_Wsq')]';
+
+  % Turn into data arrays
+  xbp_gamma_SP = [G_theta_SP, Q_theta_SP, I_theta_SP];
+  xbp_Wsq_SP   = [G_Wsq_SP, Q_Wsq_SP, I_Wsq_SP];
 
   %-------------------%
   %     Save Data     %
   %-------------------%  
   % Manifold intersection data
-  data_out.theta_old     = theta_old;
-  data_out.A_perturb     = A_perturb;
-  data_out.theta_perturb = theta_perturb;
+  data_out.theta_old         = theta_old;
+  data_out.A_perturb         = A_perturb;
+  data_out.theta_perturb     = theta_perturb;
 
-  data_out.xbp_gamma     = [G_gamma, Q_gamma, I_gamma];
-  data_out.xbp_Wsq       = [G_Wsq, Q_Wsq, I_Wsq];
+  data_out.xbp_gamma         = [G_gamma, Q_gamma, I_gamma];
+  data_out.xbp_Wsq           = [G_Wsq, Q_Wsq, I_Wsq];
+
+  % Special intersection points
+  data_out.theta_old_SP      = theta_old_SP;
+  data_out.A_perturb_SP      = A_perturb_SP;
+  data_out.theta_perturb_SP  = theta_perturb_SP;
+  data_out.I_theta_SP        = I_theta_SP;
+
+  data_out.xbp_gamma_SP      = xbp_gamma_SP;
+  data_out.xbp_Wsq_SP        = xbp_Wsq_SP;
 
   % Save to Matlab .mat data structure
   save(filename_in, '-struct', 'data_out');

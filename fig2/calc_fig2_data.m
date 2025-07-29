@@ -63,10 +63,13 @@ xdim = length(x0);
 % funcs.field = {@yamada, @yamada_DFDX, @yamada_DFDP};
 funcs.field = yamada_symbolic();
 
-% Boundary conditions: Eigenvalues and eigenvectors
-bcs_funcs.bcs_eig = {@bcs_eig_q};
+% Boundary conditions: Periodic orbit
+% bcs_funcs.bcs_PO = {@bcs_PO};
+bcs_funcs.bcs_PO = bcs_PO_symbolic();
+
 % Boundary conditions: Initial condition
 bcs_funcs.bcs_initial = {@bcs_Wq_initial};
+
 % Boundary conditions: Final condition
 bcs_funcs.bcs_final = {@bcs_Wq_final};
 
@@ -114,7 +117,7 @@ data_ode45 = calc_initial_solution_ODE45(x0, p0, funcs.field);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 50);
+prob = coco_set(prob, 'coll', 'NTST', 200);
 
 % Set NAdpat
 prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -130,7 +133,7 @@ prob = coco_set(prob, 'cont', 'PtMX', PtMX);
 prob = coco_set(prob, 'cont', 'NPR', 10);
 
 % Set initial guess to 'coll'
-prob = ode_isol2po(prob, 'PO_stable', funcs.field{:}, ...
+prob = ode_isol2po(prob, '', funcs.field{:}, ...
                    data_ode45.t, data_ode45.x, pnames, p0);
 
 % Add equilibrium points for non trivial steady states
@@ -158,6 +161,93 @@ prob = coco_add_event(prob, 'PO_PT', 'A', A_PO);
 % Run COCO continuation
 coco(prob, run_new, [], 1, {'A', 'gamma'});
 
+%-------------------------------------------------------------------------%
+%%                   Re-Solve for Rotated Perioid Orbit                  %%
+%-------------------------------------------------------------------------%
+% Using previous parameters and MATLAB's ode45 function, we solve for an
+% initial solution to be fed in as a periodic orbit solution.
+
+%------------------%
+%     Run Name     %
+%------------------%
+% Current run name
+run_names.initial_PO_COLL = 'run02_initial_PO_COLL';
+run_new = run_names.initial_PO_COLL;
+% Which run this continuation continues from
+run_old = run_names.initial_PO_ode45;
+
+% Continuation point
+label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
+label_old = label_old(1);
+
+%--------------------------%
+%     Print to Console     %
+%--------------------------%
+fprintf(' =====================================================================\n');
+fprintf(' Initial Periodic Orbit: Second Run\n');
+fprintf(' Rotate periodic orbit\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'A, gamma');
+fprintf(' =====================================================================\n');
+
+%----------------------------%
+%     Calculate Solution     %
+%----------------------------%
+% Calculate dem tings
+data_PO = calc_initial_solution_PO(run_old, label_old);
+
+%----------------------------%
+%     Setup Continuation     %
+%----------------------------%
+% Set up the COCO problem
+prob = coco_prob();
+
+% Set NTST mesh 
+prob = coco_set(prob, 'coll', 'NTST', 200);
+
+% Set NAdpat
+prob = coco_set(prob, 'cont', 'NAdapt', 1);
+
+% Turn off MXCL
+prob = coco_set(prob, 'coll', 'MXCL', false);
+
+% Set PtMX steps
+PtMX = 20;
+prob = coco_set(prob, 'cont', 'PtMX', PtMX);
+
+% Set frequency of saved solutions
+prob = coco_set(prob, 'cont', 'NPR', 10);
+
+% Set initial guess to 'coll'
+prob = ode_isol2coll(prob, 'initial_PO', funcs.field{:}, ...
+                     data_PO.t, data_PO.x, pnames, data_PO.p);
+
+% Add equilibrium points for non trivial steady states
+prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
+prob = ode_ep2ep(prob, 'xneg', run_old, label_old);
+prob = ode_ep2ep(prob, 'x0',   run_old, label_old);
+
+%------------------------------------------------%
+%     Apply Boundary Conditions and Settings     %
+%------------------------------------------------%
+% Glue parameters and apply boundary condition
+prob = apply_boundary_conditions_PO(prob, bcs_funcs.bcs_PO);
+
+%-------------------------%
+%     Add COCO Events     %
+%-------------------------%
+% Event for A = 7.5
+prob = coco_add_event(prob, 'PO_PT', 'A', data_PO.p(2));
+
+%------------------%
+%     Run COCO     %
+%------------------%
+% Run COCO continuation
+coco(prob, run_new, [], 1, {'A', 'gamma'});
+
 %=========================================================================%
 %                     CALCULATE STABLE MANIFOLD OF Q                      %
 %=========================================================================%
@@ -174,10 +264,10 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.stable_manifold1 = 'run02_stable_manifold_seg1';
+run_names.stable_manifold1 = 'run03_stable_manifold_seg1';
 run_new = run_names.stable_manifold1;
 % Which run this continuation continues from
-run_old = run_names.initial_PO_ode45;
+run_old = run_names.initial_PO_COLL;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
@@ -208,7 +298,7 @@ data_isol = calc_initial_solution_Wsq(run_old, label_old);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 50);
+prob = coco_set(prob, 'coll', 'NTST', 250);
 
 % Set NAdpat
 % prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -232,7 +322,7 @@ prob = coco_set(prob, 'cont', 'NPR', 10);
 %     Setup Continuation     %
 %----------------------------%
 % Continue periodic orbits
-prob = ode_po2po(prob, 'PO_stable', run_old, label_old);
+prob = ode_coll2coll(prob, 'PO_stable', run_old, 'initial_PO', label_old);
 
 % Add collocation trajectory segment for stable manifold
 prob = ode_isol2coll(prob, 'W1', funcs.field{:}, ...
@@ -273,7 +363,7 @@ coco(prob, run_new, [], 1, {'W_seg1', 'T1', 'W_seg2'}, prange);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.stable_manifold2 = 'run03_stable_manifold_seg2';
+run_names.stable_manifold2 = 'run04_stable_manifold_seg2';
 run_new = run_names.stable_manifold2;
 run_old = run_names.stable_manifold1;
 
@@ -300,7 +390,7 @@ fprintf(' =====================================================================\
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 50);
+prob = coco_set(prob, 'coll', 'NTST', 250);
 
 % Set NAdpat
 % prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -324,7 +414,7 @@ prob = coco_set(prob, 'cont', 'NPR', 10);
 %     Setup Continuation     %
 %----------------------------%
 % Continue periodic orbits
-prob = ode_po2po(prob, 'PO_stable', run_old, label_old);
+prob = ode_coll2coll(prob, 'PO_stable', run_old, label_old);
 
 % Add collocation trajectory segment for stable manifold
 prob = ode_coll2coll(prob, 'W1', run_old, label_old);
@@ -367,7 +457,7 @@ coco(prob, run_new, [], 1, {'W_seg2', 'T2', 'W_seg1'}, prange);
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.close_eps = 'run04_stable_manifold_close_eps';
+run_names.close_eps = 'run05_stable_manifold_close_eps';
 run_new = run_names.close_eps;
 run_old = run_names.stable_manifold2;
 
@@ -394,7 +484,7 @@ fprintf(' =====================================================================\
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 50);
+prob = coco_set(prob, 'coll', 'NTST', 250);
 
 % Set NAdpat
 % prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -418,7 +508,7 @@ prob = coco_set(prob, 'cont', 'NPR', 10);
 %     Setup Continuation     %
 %----------------------------%
 % Continue periodic orbits
-prob = ode_po2po(prob, 'PO_stable', run_old, label_old);
+prob = ode_coll2coll(prob, 'PO_stable', run_old, label_old);
 
 % Add collocation trajectory segment for stable manifold
 prob = ode_coll2coll(prob, 'W1', run_old, label_old);

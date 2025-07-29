@@ -9,7 +9,7 @@ function save_fig2_data(run_in, label_in, filename_in)
   %     Read Data: Periodic Orbit     %
   %-----------------------------------%
   % Read COCO solution
-  [sol_PO, data_PO] = coll_read_solution('PO_stable.po.orb', run_in, label_in);
+  [sol_PO, data_PO] = coll_read_solution('PO_stable', run_in, label_in);
   
   % State space solution
   xbp_PO = sol_PO.xbp;

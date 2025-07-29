@@ -52,7 +52,7 @@ plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
 %     Plot: Surface     %
 %-----------------------%
 % Linewidth
-lw = 3.5;
+lw = 2.5;
 colour = colours(7, :);
 
 % Plot highlighted sections along \Gamma and W^{s}(q)
