@@ -315,9 +315,9 @@ fprintf(' =====================================================================\
 %--------------------------%
 data_adjoint = calc_initial_solution_VAR(run_old, label_old);
 
-%------------------------------------%
-%     Setup Floquet Continuation     %
-%------------------------------------%
+%----------------------------%
+%     Setup Continuation     %
+%----------------------------%
 % Set up the COCO problem
 prob = coco_prob();
 
@@ -394,9 +394,9 @@ fprintf(' Previous solution label : %d\n', label_old);
 fprintf(' Continuation parameters : %s\n', 'mu_s, w_norm');
 fprintf(' =====================================================================\n');
 
-%------------------------------------%
-%     Setup Floquet Continuation     %
-%------------------------------------%
+%----------------------------%
+%     Setup Continuation     %
+%----------------------------%
 % Set up the COCO problem
 prob = coco_prob();
 
