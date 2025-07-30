@@ -18,8 +18,6 @@ close('all');
 clear;
 clc;
 
-% Add field functions to path
-addpath('./functions/fields/');
 % Add boundary condition functions to path
 addpath('./functions/bcs/');
 % Add SymCOCO files to path

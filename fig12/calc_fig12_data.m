@@ -1,4 +1,271 @@
 %=========================================================================%
+%                     YAMADA MODEL (Phase Resetting)                      %
+%=========================================================================%
+% We compute the phase resetting of an attracting periodic orbit of the
+% Yamada model:
+%                     G' = \gamma (A - G - G I) ,
+%                     Q' = \gamma (B - Q - a Q I) ,
+%                     I' = (G - Q - 1) I ,
+% where G is the gain, Q is the absorption, and I is the intensity of the
+% laser. The system is dependent on four parameters: the pump current on
+% the gain, A (or A); the relative absoprtion, B and a; and the decay
+% time of the gain, \gamma.
+ 
+% Clear plots
+close('all');
+
+% Clear workspace
+clear;
+clc;
+
+% Add field functions to path
+addpath('./functions/fields/');
+% Add boundary condition functions to path
+addpath('./functions/bcs/');
+% Add SymCOCO files to path
+addpath('./functions/symcoco/');
+
+% Add continuations script functions to path
+addpath('./continuation_scripts/');
+
+%--------------------%
+%     Parameters     %
+%--------------------%
+% Because we will only be looking at the (A, \gamma) plane, we will be
+% setting values for a and B.
+B = 5.8;
+a = 1.8;
+
+% Parameters for the periodic orbit
+gamma_PO = 3.5e-2;
+A_PO     = 7.4;
+
+%-----------------------%
+%     Problem Setup     %
+%-----------------------%
+% Parameter names
+pnames = {'gamma', 'A', 'B', 'a'};
+
+% Initial parameter values
+p0 = [gamma_PO; A_PO; B; a];
+
+% Initial point
+x0 = [10; 10; 10];
+
+% State dimensions
+pdim = length(p0);
+xdim = length(x0);
+
+%-------------------------%
+%     Functions Lists     %
+%-------------------------%
+% Vector field: Functions
+% funcs.field = {@yamada, @yamada_DFDX, @yamada_DFDP};
+funcs.field = yamada_symbolic();
+
+% Adjoint equations: Functions (for floquet_mu and floquet_wnorm)
+% funcs.VAR = {@VAR};
+funcs.VAR = VAR_symbolic();
+
+% Phase Reset Segment 1: Functions
+% func.seg1 = {@func_seg1};
+funcs.seg1 = func_seg1_symbolic();
+
+% Phase Reset: Segment 2
+% funcs.seg2 = {@func_seg2};
+funcs.seg2 = func_seg2_symbolic();
+
+% Phase Reset: Segment 3
+% funcs.seg3 = {@func_seg3};
+funcs.seg3 = func_seg3_symbolic();
+
+% Phase Reset: Segment 4
+% funcs.seg4 = {@func_seg4};
+funcs.seg4 = func_seg4_symbolic();
+% Boundary conditions: Periodic orbit
+% bcs_funcs.bcs_PO = {@bcs_PO};
+bcs_funcs.bcs_PO = bcs_PO_symbolic();
+
+% Boundary conditions: Floquet multipliers
+% bcs_funcs.bcs_VAR = {@bcs_VAR};
+bcs_funcs.bcs_VAR = bcs_VAR_symbolic();
+
+% Boundary conditions: Phase-resetting segments
+% bcs_funcs.bcs_PR = {@bcs_PR};
+bcs_funcs.bcs_PR = bcs_PR_symbolic();
+
+%=========================================================================%
+%%                   CALCULATE INITIAL PERIODIC ORBIT                    %%
+%=========================================================================%
+% Using ODE45, we compute a guess solution to a stable periodic orbit. We
+% then feed this as an initial solution to the 'PO' toolbox. Finally, we
+% "rotate" the head-point and use this to confirm a solution of a periodic
+% orbit, where the first point corresponds to max(G).
+
+%-------------------------------------------------------------------------%
+%%                 Confirm ODE45 Periodic Orbit Solution                 %%
+%-------------------------------------------------------------------------%
+% Calculate the periodic orbit using MATLAB's ode45 function.
+
+%------------------%
+%     Run Name     %
+%------------------%
+% Current run name
+run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
+run_new = run_names.initial_PO_ode45;
+
+% Print to console
+fprintf(' =====================================================================\n');
+fprintf(' Initial Periodic Orbit: First Run\n');
+fprintf(' Find new periodic orbit\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Continuation parameters : %s\n', 'A, gamma');
+fprintf(' =====================================================================\n');
+
+%----------------------------%
+%     Calculate Solution     %
+%----------------------------%
+% Calculate dem tings
+data_ode45 = calc_initial_solution_ODE45(x0, p0, funcs.field);
+
+%----------------------------%
+%     Setup Continuation     %
+%----------------------------%
+% Set up the COCO problem
+prob = coco_prob();
+
+% Set NTST mesh 
+prob = coco_set(prob, 'coll', 'NTST', 50);
+
+% Set NAdpat
+prob = coco_set(prob, 'cont', 'NAdapt', 1);
+
+% Turn off MXCL
+prob = coco_set(prob, 'coll', 'MXCL', false);
+
+% Set PtMX steps
+PtMX = 20;
+prob = coco_set(prob, 'cont', 'PtMX', PtMX);
+
+% Set frequency of saved solutions
+prob = coco_set(prob, 'cont', 'NPR', 10);
+
+% Set initial guess to 'coll'
+prob = ode_isol2po(prob, '', funcs.field{:}, ...
+                   data_ode45.t, data_ode45.x, pnames, p0);
+
+% Add equilibrium points for non trivial steady states
+prob = ode_isol2ep(prob, 'xpos', funcs.field{:}, ...
+                   data_ode45.xpos, p0);
+prob = ode_isol2ep(prob, 'xneg', funcs.field{:}, ...
+                   data_ode45.xneg, p0);
+prob = ode_isol2ep(prob, 'x0', funcs.field{:}, ...
+                   data_ode45.x0, p0);
+
+%------------------------------------------------%
+%     Apply Boundary Conditions and Settings     %
+%------------------------------------------------%
+% Glue parameters and apply boundary condition
+prob = glue_parameters_PO(prob);
+
+%-------------------------%
+%     Add COCO Events     %
+%-------------------------%
+prob = coco_add_event(prob, 'PO_PT', 'A', A_PO);
+
+%------------------%
+%     Run COCO     %
+%------------------%
+% Run COCO continuation
+coco(prob, run_new, [], 1, {'A', 'gamma'});
+
+%-------------------------------------------------------------------------%
+%%                   Re-Solve for Rotated Perioid Orbit                  %%
+%-------------------------------------------------------------------------%
+% Using previous parameters and MATLAB's ode45 function, we solve for an
+% initial solution to be fed in as a periodic orbit solution.
+
+%------------------%
+%     Run Name     %
+%------------------%
+% Current run name
+run_names.initial_PO_COLL = 'run02_initial_PO_COLL';
+run_new = run_names.initial_PO_COLL;
+% Which run this continuation continues from
+run_old = run_names.initial_PO_ode45;
+
+% Continuation point
+label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
+label_old = label_old(1);
+
+% Print to console
+fprintf(' =====================================================================\n');
+fprintf(' Initial Periodic Orbit: Second Run\n');
+fprintf(' Rotate periodic orbit\n');
+fprintf(' ---------------------------------------------------------------------\n');
+fprintf(' This run name           : %s\n', run_new);
+fprintf(' Previous run name       : %s\n', run_old);
+fprintf(' Previous solution label : %d\n', label_old);
+fprintf(' Continuation parameters : %s\n', 'A, gamma');
+fprintf(' =====================================================================\n');
+
+%----------------------------%
+%     Calculate Solution     %
+%----------------------------%
+% Calculate dem tings
+data_soln = calc_initial_solution_PO(run_old, label_old);
+
+%----------------------------%
+%     Setup Continuation     %
+%----------------------------%
+% Set up the COCO problem
+prob = coco_prob();
+
+% Set NTST mesh 
+prob = coco_set(prob, 'coll', 'NTST', 50);
+
+% Set NAdpat
+prob = coco_set(prob, 'cont', 'NAdapt', 1);
+
+% Turn off MXCL
+prob = coco_set(prob, 'coll', 'MXCL', false);
+
+% Set PtMX steps
+PtMX = 20;
+prob = coco_set(prob, 'cont', 'PtMX', PtMX);
+
+% Set frequency of saved solutions
+prob = coco_set(prob, 'cont', 'NPR', 10);
+
+% Set initial guess to 'coll'
+prob = ode_isol2coll(prob, 'initial_PO', funcs.field{:}, ...
+                     data_soln.t, data_soln.x, pnames, data_soln.p);
+
+% Add equilibrium points for non trivial steady states
+prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
+prob = ode_ep2ep(prob, 'xneg', run_old, label_old);
+prob = ode_ep2ep(prob, 'x0',   run_old, label_old);
+
+%------------------------------------------------%
+%     Apply Boundary Conditions and Settings     %
+%------------------------------------------------%
+% Glue parameters and apply boundary condition
+prob = apply_boundary_conditions_PO(prob, bcs_funcs.bcs_PO);
+
+%-------------------------%
+%     Add COCO Events     %
+%-------------------------%
+% Event for A = 7.5
+prob = coco_add_event(prob, 'PO_PT', 'A', data_soln.p(2));
+
+%------------------%
+%     Run COCO     %
+%------------------%
+% Run COCO continuation
+coco(prob, run_new, [], 1, {'A', 'gamma'});
+
+%=========================================================================%
 %%               Compute Floquet Bundle at Zero Phase Point              %%
 %=========================================================================%
 % We now add the adjoint function and Floquet boundary conditions to

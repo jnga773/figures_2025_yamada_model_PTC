@@ -28,7 +28,7 @@ width = 3.0;
 height = 5.0;
 
 % Set figure size
-set_figure_dimensions(width, height);
+set_figure_dimensions(width, height, scale=2);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -81,13 +81,13 @@ ax.YAxis.MinorTickValues = -1.5 : 0.25 : 2.0;
 % ylabel(ax, '$\vartheta_{\mathrm{n}}$');
 
 % Turn off all tick labels
-ax.XAxis.TickLabels = {};
-ax.YAxis.TickLabels = {};
+% ax.XAxis.TickLabels = {};
+% ax.YAxis.TickLabels = {};
 
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0, 0.5];
+ax.XAxis.Limits = [-1, 1];
 ax.YAxis.Limits = [-1.5, 2.0];
 
 %----------------------%
@@ -100,4 +100,4 @@ box(ax, 'on');
 %----------------------%
 % Filename
 filename_out = '../pdf/fig12_DTCs.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');

@@ -18,8 +18,6 @@ close('all');
 clear;
 clc;
 
-% Add equation/functions to path
-addpath('./functions/');
 % Add field functions to path
 addpath('./functions/fields/');
 % Add boundary condition functions to path
