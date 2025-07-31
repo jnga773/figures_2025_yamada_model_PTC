@@ -93,7 +93,7 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   parameters    = u_in(12*xdim+1 : end);
 
   % System parameters
-  p_system     = parameters(1 : pdim);
+  p_system      = parameters(1 : pdim);
 
   % Phase resetting parameters
   % Integer for period
@@ -143,9 +143,12 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %-------------------%
   %     Segment 4     %
   %-------------------%
+  % d_vec = [cos(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
+  %          cos(phi_perturb * pi)
+  %          sin(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi))];
   d_vec = [cos(theta_perturb * (2.0 * pi));
            0.0;
-           sin(theta_perturb) * (2.0 * pi)];
+           sin(theta_perturb * (2.0 * pi))];
 
   % Boundary Conditions - Segment 4
   bcs_seg4_1 = x0_seg4 - x0_seg3 - (A_perturb * d_vec);

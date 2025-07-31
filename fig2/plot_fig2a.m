@@ -102,4 +102,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig2a_periodic_orbit_temporal_trace.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');
