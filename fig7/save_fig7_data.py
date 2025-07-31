@@ -33,7 +33,7 @@ def read_PTC_scan_bd_files(run_str_in):
     Reads all of the b.dat files from the scan run and outputs a list of
     bd files.
     """
-    from continuation_scripts.data_functions import bd_read
+    from data_functions import bd_read
 
     # Get sorted data folders
     data_dir = sort_data_folders(run_str_in)

@@ -32,6 +32,9 @@
 #                                       solution to solve for the phase
 #                                       resetting problems, and write it
 #                                       to ./data/[XXX].dat file.
+#
+# - run_PR_continuation               : Runs the PTC continuation
+#                                       for the Yamada model.
 
 #------------------------------------------------------------------------------#
 def clean_directories():
@@ -55,6 +58,10 @@ def clean_directories():
         # Remove fort.* data files
         if file.startswith('fort.'):
             remove('./{}'.format(file))
+        
+        # Remove initial solution .dat files
+        if file.endswith('.dat'):
+            remove('./{}'.format(file))
 
 
     # Remove things inside ./functions/ folder
@@ -63,7 +70,7 @@ def clean_directories():
         if file.endswith('.o') or file.endswith('.exe'):
             remove('./functions/{}'.format(file))
 
-    print("Removed fort.*, *.o, *.exe, c.*, and *.mod files")
+    print("Removed fort.*, *.o, *.exe, c.*, *.dat, and *.mod files")
     
 #------------------------------------------------------------------------------#
 def save_move_data(run_in, run_name_in):
@@ -506,3 +513,97 @@ def calc_initial_solution_PR(sol_in, k_in, theta_in):
                   11: 'A_perturb', 12: 'theta_perturb', 13: 'phi_perturb'}
     
     return x_init_out, p_out, unames_out, pnames_out
+
+#------------------------------------------------------------------------------#
+def run_PR_continuation(run_new_str, run_old, label_old, pcont, prange, **kwargs):
+    """
+    Scan through SP labels from previous run (different values of A_perturb)
+    and continue in \theta_{old} and \theta_{new}. Each run will save
+    to the 'data/run10_phase_reset_PTC/' directory.
+
+    Parameters
+    ----------
+    run_new_str : string
+        The new run identifier for the main continuation problem.
+    run_old : string
+        The old run identifier for the sub continuation problem.
+    label_old : integer
+        The label identifier for the previous continuation problem.
+    data_PR : struct
+        Data structure containing the initial conditions for the trajectory segments.
+    bcs_funcs : list of functions
+        Structure containing boundary condition functions.
+    pcont : cell
+        Cell array containing additional parameters for the continuation.
+    prange : cell
+        Cell array containing the ranges for the continuation parameters.
+
+    Optional Arguments
+    ------------------
+    UZ : dict
+        Dictionary containing saved point parameters for the continuation.
+        Default is an empty dictionary.
+    DSMIN : float
+        Minimum step size for the continuation. Default is 1e-4.
+    DS : float
+        Step size for the continuation. Default is 1e-3.
+    DSMAX : float
+        Maximum step size for the continuation. Default is 1e0.
+    NMX : int
+        Maximum number of continuation steps. Default is 2000.
+    NPR : int
+        Number of points to print during the continuation. Default is 100.
+    IAD : int
+        Interval for the continuation. Default is 10.
+    reverse: logical
+        Check if you want to run the continuation in the opposite direction
+        with DS='-'.
+    """
+    from auto import run, merge, relabel
+    # from data_functions import save_move_data
+
+    #-------------------#
+    #     Arguments     #
+    #-------------------#
+    # Default options
+    options = {
+        'UZR'    : {},
+        'DSMIN'  : 1e-4,
+        'DS'     : 1e-2,
+        'DSMAX'  : 1e1,
+        'NMX'    : 2000,
+        'NPR'    : 100,
+        'IAD'    : 10,
+        'reverse': False
+    }
+    # Override defaults with any provided kwargs
+    options.update(kwargs)
+
+    #------------------------#
+    #     Run Contination    #
+    #------------------------#
+
+    # Run continuation
+    run_scan = run(run_old, LAB=1, IRS=label_old,
+                   ICP=pcont, UZSTOP=prange, UZR=options['UZR'],
+                   DSMIN=options['DSMIN'], DS=options['DS'], DSMAX=options['DSMAX'],
+                   NMX=options['NMX'], NPR=options['NPR'],
+                   IAD=options['IAD'])
+    
+    if options['reverse']:
+        run_scan += run(DS='-')
+    
+    #-------------------#
+    #     Save Data     #
+    #-------------------#
+    # Append runs and save data
+    run_scan = merge(run_scan)
+    run_scan = relabel(run_scan)
+    
+    # Save data
+    save_move_data(run_scan, '{}'.format(run_new_str))
+
+    # Print new line
+    print('\n')
+
+#------------------------------------------------------------------------------#

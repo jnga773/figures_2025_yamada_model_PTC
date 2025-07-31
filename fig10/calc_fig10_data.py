@@ -416,21 +416,15 @@ run_old = data_funcs.bd_read(run_old_str)
 label_old = run_old('UZ')
 label_old = [sol['LAB'] for sol in label_old[:-1]]
 
-#--------------------------------------#
-#     Define Continuation Function     #
-#--------------------------------------#
-# Define function for parallelising
-def calculate_PTC(i):
-    """
-    Run PTC continuation run for label 'i' in run_old.
-    """
-    from numpy import arange
-    
+#------------------------------------------#
+#     Cycle Through Previous Solutions     #
+#------------------------------------------#
+for run in range(len(label_old)):    
     # This label
-    this_label = label_old[i]
+    this_run_label = label_old[run]
 
     # Run string identifier
-    this_run = 'sol_' + str(i+1).zfill(3)
+    this_run_name = 'sol_' + str(run+1).zfill(3)
 
     #--------------------------#
     #     Print to Console     #
@@ -439,17 +433,18 @@ def calculate_PTC(i):
     print('Phase Reset: Second Run')
     print('Compute phase transition curve (PTC) for single perturbation')
     print('---------------------------------------------------------------------')
-    print('This run name           : {}'.format(this_run))
+    print('This run name           : {}'.format(this_run_name))
     print('Previous run name       : {}'.format(run_old_str))
-    print('Previous label_solution : {}'.format(this_label))
+    print('Previous label_solution : {}'.format(this_run_label))
     print('Continuation parameters : {}'.format('theta_old, theta_new, eta, mu_s, T'))
     print('=====================================================================')
 
     #-------------------------------#
     #     Run AUTO Continuation     #
-    #-------------------------------#    
+    #-------------------------------#
     # Set saved solutions for theta_old
-    SP_points = arange(0.1, 2.0, 0.1)
+    SP_points = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
+                 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9]
     theta_old_stop = [0.0, 2.0]
     theta_new_stop = [-1.0, 3.0]
     
@@ -461,33 +456,11 @@ def calculate_PTC(i):
     prange = {'theta_old': theta_old_stop, 'theta_new': theta_new_stop}
 
     # Run continuation
-    run_scan = auto.run(run_old(this_label), LAB=1,
-                        ICP=pcont, UZSTOP=prange, UZR=UZR,
-                        DSMIN=1e-3, DS=2e-3, DSMAX=5e-2,
-                        EPSL=1e-7, EPSU=1e-7, EPSS=1e-4,
-                        NMX=8000, NPR=100)
-    run_scan += auto.run(DS='-')
-    
-    #-------------------#
-    #     Save Data     #
-    #-------------------#
-    # Append runs and save data
-    run_scan = auto.relabel(run_scan)
-    # run_scan = auto.merge(run_scan)
-    
-    # Save data
-    data_funcs.save_move_data(run_scan, '{}/{}'.format(run_new_str, this_run))
-
-    # Print new line
-    print('\n')
-
-#--------------------------------------------#
-#     Run Continuation: Regular For Loop     #
-#--------------------------------------------#
-# Regular for loop run
-for i in range(len(label_old)):
-    # Run continuation
-    calculate_PTC(i)
+    data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
+                                   pcont, prange, UZR=UZR,
+                                   NMX=8000, NPR=100,
+                                   DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
+                                   reverse=True)
 
 #--------------#
 #     Plot     #
