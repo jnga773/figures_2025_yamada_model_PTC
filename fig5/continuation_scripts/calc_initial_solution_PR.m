@@ -1,5 +1,5 @@
 function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_perturb_in, phi_perturb_in)
-  % data_out = calc_initial_solution_PR(run_old, label_old, phi_perturb_in)
+  % data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_perturb_in, phi_perturb_in)
   %
   % Reads data from previous run solution and calculates the 
   % initial conditions for the various different trajectory segments.
@@ -46,9 +46,9 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   arguments
     run_in char
     label_in double
-    k_in double
-    theta_perturb_in double
-    phi_perturb_in double = 0.0
+    k_in double             = 30;
+    theta_perturb_in double = 0.0;
+    phi_perturb_in double   = 0.5;
   end
 
   %-----------------------------------------------------------------------%
