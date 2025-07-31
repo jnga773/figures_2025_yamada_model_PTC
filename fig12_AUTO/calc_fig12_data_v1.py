@@ -309,13 +309,17 @@ print('\n')
 # periodic orbit, with boundary conditions described in a paper somewhere.
 
 #------------------------------------------------------------------------------#
-##                    Change theta_old Along Periodic Orbit                   ##
+##                 First Continuation: Perturbation Amplitude                 ##
 #------------------------------------------------------------------------------#
+# We first compute the phase response to a perturbation in a fixed direction
+# applied at the zero-phase point, theta_old = 1.0 (or 0.0). We free  A_perturb
+# and theta_old.
+
 #------------------#
 #     Run Name     #
 #------------------#
 # This run name
-run_new_str = 'run05_PR_move_theta_old'
+run_new_str = 'run05_PR_increase_perturbation'
 # Previous run name
 run_old_str = 'run04_floquet_wnorm'
 run_old = data_funcs.bd_read(run_old_str)
@@ -328,12 +332,12 @@ label_old = label_old['LAB']
 #--------------------------#
 print('=====================================================================')
 print('Directional Transition Curve: First Run')
-print('Move along periodic orbit')
+print('Increase perturbation amplitude')
 print('---------------------------------------------------------------------')
 print('This run name           : {}'.format(run_new_str))
 print('Previous run name       : {}'.format(run_old_str))
 print('Previous label_solution : {}'.format(label_old))
-print('Continuation parameters : {}'.format('theta_old, theta_new, eta, mu_s, T'))
+print('Continuation parameters : {}'.format('A_perturb, theta_new, eta, mu_s, T'))
 print('=====================================================================')
 
 #-------------------#
@@ -344,7 +348,8 @@ print('=====================================================================')
 k = 60
 
 # Perturbation direction (in units of 2 \pi)
-theta_perturb = 0.0
+theta_perturb = 0.125
+# theta_perturb = 0.25
 
 # Calculate initial solution
 x_init_PR, p_PR, unames, pnames_PR = \
@@ -354,15 +359,15 @@ x_init_PR, p_PR, unames, pnames_PR = \
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Saved points perturbation amplitudes
-SP_points = [0.339386, 1.339386]
+SP_points = [0.1, 0.724236, 25.0]
 
 # Set saved points
-UZR = {'theta_old': SP_points}
+UZR = {'A_perturb': SP_points}
 
 # Set continuation parameters
-pcont = ['theta_old', 'theta_new', 'eta', 'mu_s', 'T']
+pcont = ['A_perturb', 'theta_new', 'eta', 'mu_s', 'T']
 # Set continuation stop points
-prange = {'theta_old': [0.0, 1.0]}
+prange = {'A_perturb': max(SP_points) + 0.1}
 
 # Run continuation
 run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR,
@@ -371,8 +376,8 @@ run_new = auto.run(dat='./initial_solution_PR.dat', PAR=p_PR, parnames=pnames_PR
                    JAC=1, NBC=22, NINT=0,
                    ICP=pcont, UZSTOP=prange, UZR=UZR,
                    NTST=k*50, NCOL=4, IAD=10,
-                   DSMIN=1e-2, DS=-5e-1, DSMAX=1e0,
-                   NMX=1000, NPR=25)
+                   DSMIN=1e-2, DS=5e-2, DSMAX=1e0,
+                   NMX=2000, NPR=100)
 
 #-------------------#
 #     Save Data     #
@@ -393,108 +398,136 @@ print('\n')
 # This run name
 run_new_str = 'run06_PR_change_angle'
 # Previous run name
-run_old_str = 'run05_PR_move_theta_old'
+run_old_str = 'run05_PR_increase_perturbation'
 run_old = data_funcs.bd_read(run_old_str)
 # Previous solution label
 label_old = run_old('UZ')
 label_old = [sol['LAB'] for sol in label_old[:-1]]
-label_old = label_old[0]
-
-#--------------------------#
-#     Print to Console     #
-#--------------------------#
-print('=====================================================================')
-print('Directional Transition Curve: Second Run')
-print('Change perturbation angle')
-print('---------------------------------------------------------------------')
-print('This run name           : {}'.format(run_new_str))
-print('Previous run name       : {}'.format(run_old_str))
-print('Previous label_solution : {}'.format(label_old))
-print('Continuation parameters : {}'.format('theta_perturb, theta_new, eta, mu_s, T'))
-print('=====================================================================')
-
-#-------------------------------#
-#     Run AUTO Continuation     #
-#-------------------------------#
-# Saved points perturbation amplitudes
-SP_points = [0.0, 0.25, 0.5, 0.75]
-
-# Set saved points
-UZR = {'theta_perturb': SP_points}
-
-# Set continuation parameters
-pcont = ['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T']
-# Set continuation stop points
-# prange = {'theta_perturb': [-0.1, 0.5]}
-prange = {'theta_perturb': [0.0, 1.0]}
-
-# Run continution
-data_funcs.run_PR_continuation(run_new_str, run_old, label_old,
-                               pcont, prange,
-                               UZR=UZR, NMX=4000, NPR=100,
-                               DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
-                               reverse=False)
-
-# %%
-#------------------------------------------------------------------------------#
-##                      Increase Perturbation Amplitude                       ##
-#------------------------------------------------------------------------------#
-#------------------#
-#     Run Name     #
-#------------------#
-# This run name
-run_new_str = 'run07_PR_increase_perturbation'
-# Previous run name
-run_old_str = 'run06_PR_change_angle'
-run_old = data_funcs.bd_read(run_old_str)
-# Previous solution label
-label_old = run_old('UZ')
-label_old = [sol['LAB'] for sol in label_old]
 
 #-------------------------------------#
 #     Cycle Through Previous Runs     #
 #-------------------------------------#
 # for run in range(len(label_old)):
-for run in [len(label_old)-1]:
+for run in [2]:
     # This label
     this_run_label = label_old[run]
 
     # Data directory for this run
-    this_run_name = '{}/theta_perturb_{}'.format(run_new_str, str(run+1).zfill(2))
+    this_run_name = '{}/A_perturb_{}'.format(run_new_str, str(run+1).zfill(2))
 
     #--------------------------#
     #     Print to Console     #
     #--------------------------#
     print('=====================================================================')
-    print('Directional Transition Curve: Third Run')
-    print('Increase perturbation amplitude')
+    print('Directional Transition Curve: Second Run')
+    print('Change perturbation angle')
     print('---------------------------------------------------------------------')
     print('This run name           : {}'.format(this_run_name))
     print('Previous run name       : {}'.format(run_old_str))
     print('Previous label_solution : {}'.format(this_run_label))
-    print('Continuation parameters : {}'.format('A_perturb, theta_new, eta, mu_s, T'))
+    print('Continuation parameters : {}'.format('theta_perturb, theta_new, eta, mu_s, T'))
     print('=====================================================================')
-    
+  
     #-------------------------------#
     #     Run AUTO Continuation     #
     #-------------------------------#
-    # Set saved points for perturbation
-    SP_points = [0.1, 0.724236, 10.0]
-    # UZR = {'theta_old': SP_points}
-    UZR = {'A_perturb': SP_points}
+    # Saved points perturbation amplitudes
+    SP_points = [0.0, 0.4]
     
+    if run == 2:
+        SP_points[1] = 0.2
+
+    # Set saved points
+    # UZR = {'theta_perturb': SP_points}
+    UZR = {}
+
     # Set continuation parameters
-    pcont = ['A_perturb', 'theta_new', 'eta', 'mu_s', 'T']
+    pcont = ['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T']
     # Set continuation stop points
-    prange = {'A_perturb': [0.0, max(SP_points)+0.1],
-              'eta': [-1e-4, 1e-2]}
-    True
+    # prange = {'theta_perturb': [-0.1, 0.5]}
+    prange = {'theta_perturb': SP_points}
+    
     # Run continution
     data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
-                                    pcont, prange, UZR=UZR,
-                                    NMX=10000, NPR=100,
-                                    DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
-                                    reverse=False)
+                                   pcont, prange,
+                                   UZR=UZR, NMX=4000, NPR=100,
+                                   DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
+                                   reverse=True)
+
+# %%
+#------------------------------------------------------------------------------#
+##                         Move Along Periodic Orbit                          ##
+#------------------------------------------------------------------------------#
+#------------------#
+#     Run Name     #
+#------------------#
+# This run name
+run_new_str = 'run07_PR_move_along_Gamma'
+# Previous run name
+run_old_str = 'run06_PR_change_angle'
+
+# Read directories inside run_old
+from os import listdir
+
+#-------------------------------------#
+#     Cycle Through Previous Runs     #
+#-------------------------------------#
+# for idx in range(len(label_old)):
+# for idx_A in range(len(listdir('./data/{}/'.format(run_old_str)))):
+for idx_A in [1, 2]:
+    # Set run string for this run to read
+    sub_run_name = '{}/A_perturb_{}'.format(run_old_str, str(idx_A+1).zfill(2))
+
+    # Read bifurcation data
+    run_old = data_funcs.bd_read(sub_run_name)
+    
+    # Read previous labels
+    label_old = run_old('UZ')
+    label_old = [sol['LAB'] for sol in label_old]
+    
+    for run in range(len(label_old)):
+        # This label
+        this_run_label = label_old[run]
+
+        # Data directory for this run
+        this_run_name = ('{}/A_perturb_{}/theta_perturb_{}'
+                         ).format(run_new_str,
+                                  str(idx_A+1).zfill(2),
+                                  str(run+1).zfill(2))
+
+        #--------------------------#
+        #     Print to Console     #
+        #--------------------------#
+        print('=====================================================================')
+        print('Directional Transition Curve: Third Run')
+        print('Move along periodic orbit')
+        print('---------------------------------------------------------------------')
+        print('This run name           : {}'.format(this_run_name))
+        print('Previous run name       : {}'.format(sub_run_name))
+        print('Previous label_solution : {}'.format(this_run_label))
+        print('Continuation parameters : {}'.format('theta_old, theta_new, eta, mu_s, T'))
+        print('=====================================================================')
+      
+        #-------------------------------#
+        #     Run AUTO Continuation     #
+        #-------------------------------#
+        # Set saved points for perturbation
+        SP_points = [0.339386, 1.339386]
+        # UZR = {'theta_old': SP_points}
+        UZR = {}
+        
+        # Set continuation parameters
+        pcont = ['theta_old', 'theta_new', 'eta', 'mu_s', 'T']
+        # Set continuation stop points
+        # prange = {'theta_old': [0.0, 2.0]}
+        prange = {'theta_old': SP_points}
+        
+        # Run continution
+        data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
+                                       pcont, prange, UZR=UZR,
+                                       NMX=8000, NPR=100,
+                                       DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
+                                       reverse=True)
     
 # %%
 #------------------------------------------------------------------------------#
@@ -506,7 +539,7 @@ for run in [len(label_old)-1]:
 # This run name
 run_new_str = 'run08_PR_DTC_scan'
 # Previous run name
-run_old_str = 'run07_PR_increase_perturbation'
+run_old_str = 'run07_PR_move_along_Gamma'
 
 # Read directories inside run_old
 from os import listdir
@@ -514,55 +547,74 @@ from os import listdir
 #-------------------------------------#
 #     Cycle Through Previous Runs     #
 #-------------------------------------#
-# Cycle through theta_perturb directories
-for idx_theta in range(len(listdir('./data/{}/'.format(run_old_str)))):
+# for idx in range(len(label_old)):
+for idx_A in range(len(listdir('./data/{}/'.format(run_old_str)))):
     # Set run string for this run to read
-    theta_run_name = '{}/theta_perturb_{}'.format(run_old_str, str(idx_theta+1).zfill(2))
+    A_run_name = '{}/A_perturb_{}'.format(run_old_str, str(idx_A+1).zfill(2))
 
-    # Read bifurcation data
-    run_old = data_funcs.bd_read(theta_run_name)
-    
-    # Read previous labels
-    label_old = run_old('UZ')
-    label_old = [sol['LAB'] for sol in label_old]
-    
-    for run in range(len(label_old)):
-        # This label
-        this_run_label = label_old[run]
+    # Cycle through theta_perturb directories
+    for idx_theta in range(len(listdir('./data/{}/'.format(A_run_name)))):
+        # Set run string for this run to read
+        theta_run_name = '{}/theta_perturb_{}'.format(A_run_name, str(idx_theta+1).zfill(2))
 
-        # Data directory for this run
-        this_run_name = ('{}/theta_perturb_{}/DTC_{}'
-                            ).format(run_new_str,
-                                    str(idx_theta+1).zfill(2),
-                                    str(run+1).zfill(2))
-
-        #--------------------------#
-        #     Print to Console     #
-        #--------------------------#
-        print('=====================================================================')
-        print('Directional Transition Curve: Fourth Run')
-        print('Calculate DTC')
-        print('---------------------------------------------------------------------')
-        print('This run name           : {}'.format(this_run_name))
-        print('Previous run name       : {}'.format(theta_run_name))
-        print('Previous label_solution : {}'.format(this_run_label))
-        print('Continuation parameters : {}'.format('theta_perturb, theta_new, eta, mu_s, T'))
-        print('=====================================================================')
+        # Read bifurcation data
+        run_old = data_funcs.bd_read(theta_run_name)
         
-        #-------------------------------#
-        #     Run AUTO Continuation     #
-        #-------------------------------#    
-        # Set continuation parameters
-        pcont = ['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T']
-        # Set continuation stop points
-        prange = {'theta_perturb': [-1.0, 2.0]}
+        # Read previous labels
+        label_old = run_old('UZ')
+        label_old = [sol['LAB'] for sol in label_old]
         
-        # Run continution
-        data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
-                                        pcont, prange,
-                                        NMX=2000, NPR=100,
-                                        DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
-                                        reverse=True)
+        if label_old:
+            
+            # Go through solutions and check if theta_old is 0.33 or 1.33
+            # (or whatever the range is)
+            label_old_sort = []
+            
+            for run in range(len(label_old)):
+                sol = run_old(label_old[run])
+                theta_old = sol['theta_old']
+                if (theta_old > 0.3) and (theta_old < 1.4):
+                    label_old_sort.append(label_old[run])
+                    print(theta_old)
+            
+            for run in range(len(label_old_sort)):
+                # This label
+                this_run_label = label_old_sort[run]
+    
+                # Data directory for this run
+                this_run_name = ('{}/A_perturb_{}/theta_perturb_{}/theta_old_{}'
+                                 ).format(run_new_str,
+                                          str(idx_A+1).zfill(2),
+                                          str(idx_theta+1).zfill(2),
+                                          str(run+1).zfill(2))
+
+                #--------------------------#
+                #     Print to Console     #
+                #--------------------------#
+                print('=====================================================================')
+                print('Directional Transition Curve: Fourth Run')
+                print('Calculate DTC')
+                print('---------------------------------------------------------------------')
+                print('This run name           : {}'.format(this_run_name))
+                print('Previous run name       : {}'.format(theta_run_name))
+                print('Previous label_solution : {}'.format(this_run_label))
+                print('Continuation parameters : {}'.format('theta_perturb, theta_new, eta, mu_s, T'))
+                print('=====================================================================')
+              
+                #-------------------------------#
+                #     Run AUTO Continuation     #
+                #-------------------------------#    
+                # Set continuation parameters
+                pcont = ['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T']
+                # Set continuation stop points
+                prange = {'theta_perturb': [-1.0, 2.0]}
+                
+                # Run continution
+                data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
+                                               pcont, prange,
+                                               NMX=2000, NPR=100,
+                                               DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
+                                               reverse=True)
             
 
 

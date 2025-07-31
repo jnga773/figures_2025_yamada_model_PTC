@@ -459,7 +459,7 @@ fprintf(' ---------------------------------------------------------------------\
 fprintf(' This run name           : %s\n', run_new);
 fprintf(' Previous run name       : %s\n', run_old);
 fprintf(' Previous solution label : %d\n', label_old);
-fprintf(' Continuation parameters : %s\n', 'thtea_old, theta_new, eta, mu_s');
+fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
 fprintf(' =====================================================================\n');
 
 %-------------------%
