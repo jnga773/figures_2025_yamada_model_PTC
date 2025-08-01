@@ -56,15 +56,36 @@ for idx_P = 1 : length(dirs_P)
 
 end
 
+%% COMBINE DATA
+idx_A = 3;
+
+% Cycle through theta_perturb directories and append data
+theta_perturb_plot = [];
+theta_new_plot     = [];
+theta_old_plot     = theta_old_data(1, idx_A);
+A_perturb_plot     = A_perturb_data(1, idx_A);
+
+for idx_P = 1 : length(dirs_P)
+  % Read data
+  % theta_new_read = theta_new_data(idx_P, idx_A);
+  % theta_perturb_read = theta_perturb_data(idx_P, idx_A);
+
+  theta_perturb_plot = [theta_perturb_plot, NaN, theta_perturb_data{idx_P, idx_A}];
+  theta_new_plot     = [theta_new_plot, NaN, theta_new_data{idx_P, idx_A}];
+end
+
+% idx1 = 1;
+% idx2 = 2;
+% 
+% theta_perturb_plot = theta_perturb_data{idx1, idx2};
+% theta_new_plot     = theta_new_data{idx1, idx2};
+% theta_old_plot     = theta_old_data(idx1, idx2);
+% A_perturb_plot     = A_perturb_data(idx1, idx2);
+
 %% TEST PLOT
-idx1 = 2;
-idx2 = 3;
 
-theta_perturb_plot = theta_perturb_data{idx1, idx2};
-theta_new_plot     = theta_new_data{idx1, idx2};
-theta_old_plot     = theta_old_data(idx1, idx2);
-A_perturb_plot     = A_perturb_data(idx1, idx2);
-
+% x_plot = theta_perturb_plot;
+% y_plot = theta_new_plot;
 
 y_mod = mod(theta_new_plot, 1);
 
@@ -82,13 +103,14 @@ for i = length(breaks):-1:1
 end
 
 
+
 fprintf('A_perturb = %.4f\n', A_perturb_plot);
 fprintf('theta_old = %.4f\n', theta_old_plot);
 
 colours = colororder();
 
 fig = figure(1);
-% clf;
+clf;
 ax = gca();
 
 width = 6.0;
@@ -110,15 +132,24 @@ hold(ax, 'on');
 % DTC
 % plot(ax, theta_perturb_plot, theta_new_plot, LineStyle='-', Color=colours(1, :));
 plot(ax, x_plot, y_plot, LineStyle='-', Color=colours(1, :));
+plot(ax, x_plot, y_plot+1, LineStyle='-', Color=colours(1, :));
+plot(ax, x_plot, y_plot-1, LineStyle='-', Color=colours(1, :));
+
+plot(ax, x_plot+1, y_plot, LineStyle='-', Color=colours(1, :));
+plot(ax, x_plot+1, y_plot+1, LineStyle='-', Color=colours(1, :));
+plot(ax, x_plot+1, y_plot-1, LineStyle='-', Color=colours(1, :));
 
 hold(ax, 'off');
 
 % daspect(ax, [1, 1, 1]);
-legend(Interpreter='latex', Location='southwest');
+% legend(Interpreter='latex', Location='southwest');
+
+% Make a square
+daspect([1, 1, 1]);
 
 % Limits
-xlim(ax, [-1, 2.0]);
-ylim(ax, [-1.5, 2.0]);
+xlim(ax, [-0.0, 1.0]);
+ylim(ax, [-0.5, 1.5]);
 
 % Labels
 xlabel(ax, '$\varphi_{\mathrm{d}} / 2 \pi$');

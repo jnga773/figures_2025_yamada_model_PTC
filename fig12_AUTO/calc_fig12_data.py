@@ -417,7 +417,10 @@ print('=====================================================================')
 #     Run AUTO Continuation     #
 #-------------------------------#
 # Saved points perturbation amplitudes
-SP_points = [0.0, 0.25, 0.5, 0.75]
+# SP_points = [0.0, 0.25, 0.5, 0.75]
+
+from numpy import linspace
+SP_points = linspace(0.0, 1.0, 9)[0:-1]
 
 # Set saved points
 UZR = {'theta_perturb': SP_points}
@@ -454,8 +457,7 @@ label_old = [sol['LAB'] for sol in label_old]
 #-------------------------------------#
 #     Cycle Through Previous Runs     #
 #-------------------------------------#
-# for run in range(len(label_old)):
-for run in [len(label_old)-1]:
+for run in range(len(label_old)):
     # This label
     this_run_label = label_old[run]
 
@@ -555,17 +557,14 @@ for idx_theta in range(len(listdir('./data/{}/'.format(run_old_str)))):
         # Set continuation parameters
         pcont = ['theta_perturb', 'theta_new', 'eta', 'mu_s', 'T']
         # Set continuation stop points
-        prange = {'theta_perturb': [-1.0, 2.0]}
+        prange = {'theta_perturb': [0.0, 1.0]}
         
         # Run continution
         data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
                                         pcont, prange,
                                         NMX=2000, NPR=100,
-                                        DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
+                                        DSMIN=1e-3, DS=1e-2, DSMAX=1e0,
                                         reverse=True)
-            
-
-
 
 # %%
 #==============================================================================#
