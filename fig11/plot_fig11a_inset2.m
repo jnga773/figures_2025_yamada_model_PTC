@@ -2,14 +2,59 @@
 %-------------------------------------------------------------------------%
 %                              Calculate Data                             %
 %-------------------------------------------------------------------------%
-load('../data_files/fig2_data.mat', 'xbp_PO', 'Wq_s', 'xpos');
-load('../data_files/fig11_data.mat', 'xbp_gamma', 'xbp_Wsq');
+load('../data_files/fig2_data.mat', 'xbp_PO', 'Wq_s', 'xpos', 'tbp_PO', 'T_PO');
+load('../data_files/fig11_data.mat');
 
 %----------------------%
 %     Plot Colours     %
 %----------------------%
 % Default colour order
 colours = colororder();
+
+%-------------------%
+%     Sort Data     %
+%-------------------%
+% Normalise tbp_PO
+tbp = tbp_PO / T_PO;
+
+% Indiices for theta_perturb between 0 and 0.25
+idx_P = (theta_perturb >= 0.0) & (theta_perturb <= 0.25);
+% Find new theta_old
+theta_old_sort = theta_old(idx_P);
+
+% Get indices for periodic orbit data that aren't in theta_gamma
+idxs1 = tbp <= min(theta_old_sort);
+idxs2 = tbp >= max(theta_old_sort);
+
+% Get two plotting points
+xbp_PO1 = xbp_PO(idxs1, :);
+xbp_PO2 = xbp_PO(idxs2, :);
+
+% Indices for Wsq outside of xbp_Wsq
+idxs1 = Wq_s(:, 2) <= min(xbp_Wsq(:, 2));
+idxs2 = Wq_s(:, 2) >= max(xbp_Wsq(:, 2));
+
+% Get two plotting points
+Wqs1 = Wq_s(idxs1, :);
+Wqs2 = Wq_s(idxs2, :);
+
+% Plot circles for DTC
+A_DTC = [0.1, 0.724236, 25];
+theta_old_DTC = 0.339386;
+
+% Find tbp index matching theta_old_DTC
+idx_DTC = find(round(tbp, 3) == round(theta_old_DTC, 3));
+
+gamma_DTC = xbp_PO(idx_DTC, :);
+
+% Create circles
+theta_plot = 0 : 0.01 : 2*pi;
+theta_plot = theta_plot';
+
+DTCs = {};
+for idx = 1 : length(A_DTC)
+  DTCs{idx} = gamma_DTC + A_DTC(idx) * [cos(theta_plot), 0 * theta_plot, sin(theta_plot)];
+end
 
 %%
 %-------------------------------------------------------------------------%
@@ -21,7 +66,7 @@ fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
 % Axis dimensions
-width = 3.0;
+width = 3.5;
 height = 1.6;
 
 % Set figure size
@@ -35,31 +80,46 @@ ax.LineWidth = 0.8;
 %-------------------%
 hold(ax, 'on');
 
-%--------------%
-%     Plot     %
-%--------------%
-% Plot original periodic orbit
-plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
-      Color=colours(3, :), ...
-      LineWidth=2.0);
-
-% Plot stable manifold
-plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
-      Color=colours(1, :), ...
-      LineWidth=2.0);
-
-%-----------------------%
-%     Plot: Surface     %
-%-----------------------%
+%------------------------------%
+%     Plot: Periodic Orbit     %
+%------------------------------%
 % Linewidth
-lw = 2.5;
-colour = colours(7, :);
+lw = 2.0;
+% Special colour
+special_colour = colours(7, :);
+
+% Plot original periodic orbit
+% plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
+%       Color=colours(3, :), ...
+%       LineWidth=lw);
+plot3(ax, xbp_PO1(:, 1), xbp_PO1(:, 2), xbp_PO1(:, 3), ...
+      Color=colours(3, :), ...
+      LineWidth=lw);
+plot3(ax, xbp_PO2(:, 1), xbp_PO2(:, 2), xbp_PO2(:, 3), ...
+      Color=colours(3, :), ...
+      LineWidth=lw);
 
 % Plot highlighted sections along \Gamma and W^{s}(q)
 plot3(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), xbp_gamma(:, 3), ...
-      Color=colour, LineWidth=lw, LineStyle='-');
+      Color=special_colour, LineWidth=lw, LineStyle='-');
+
+%-------------------------------%
+%     Plot: Stable Manifold     %
+%-------------------------------%
+% Plot original stable manifold
+% plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
+%       Color=colours(1, :), ...
+%       LineWidth=lw);
+plot3(ax, Wqs1(:, 1), Wqs1(:, 2), Wqs1(:, 3), ...
+      Color=colours(1, :), ...
+      LineWidth=lw);
+plot3(ax, Wqs2(:, 1), Wqs2(:, 2), Wqs2(:, 3), ...
+      Color=colours(1, :), ...
+      LineWidth=lw);
+
+% Plot highlighted sections along \Gamma and W^{s}(q)
 plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
-      Color=colour, LineWidth=lw, LineStyle='-');
+      Color=special_colour, LineWidth=lw, LineStyle='-');
 
 %---------------------------------%
 %     Plot: Equilibrium Point     %
@@ -68,6 +128,37 @@ plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
 plot3(ax, xpos(1), xpos(2), xpos(3), ...
       Marker='o', MarkerSize=4, ...
       MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+
+%-----------------------%
+%     Plot: Surface     %
+%-----------------------%
+% Create surface plots
+G_surf = [xbp_gamma(:, 1), xbp_Wsq(:, 1)];
+Q_surf = [xbp_gamma(:, 2), xbp_Wsq(:, 2)];
+I_surf = [xbp_gamma(:, 3), xbp_Wsq(:, 3)];
+
+% Plot surface
+surf(ax, G_surf, Q_surf, I_surf, ...
+     EdgeColor='none', FaceColor=colour, FaceAlpha=0.25);
+
+% Plot specific lines for theta_perturb = 0, 0.125, 0.25
+for idx = 1 : length(theta_old_SP)
+  % plotting vector
+  % xplot = [xbp_gamma(idx, :); xbp_Wsq(idx, :)];
+  xplot = [xbp_gamma_SP(idx, :); xbp_Wsq_SP(idx, :)];
+
+  plot3(ax, xplot(:, 1), xplot(:, 2), xplot(:, 3), ...
+        Color=colour, LineWidth=lw, LineStyle='-');
+end
+
+%--------------------%
+%     Plot: DTCs     %
+%--------------------%
+% for idx = 1 : length(DTCs)
+%   DTC_plot = DTCs{idx};
+%   plot3(ax, DTC_plot(:, 1), DTC_plot(:, 2), DTC_plot(:, 3), ...
+%         LineStyle='-', Color='k', LineWidth=lw);
+% end
 
 %-------------------%
 %     Hold Axis     %

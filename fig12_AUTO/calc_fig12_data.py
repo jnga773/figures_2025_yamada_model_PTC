@@ -419,8 +419,8 @@ print('=====================================================================')
 # Saved points perturbation amplitudes
 # SP_points = [0.0, 0.25, 0.5, 0.75]
 
-from numpy import linspace
-SP_points = linspace(0.0, 1.0, 9)[0:-1]
+from numpy import arange
+SP_points = arange(0.0, 1.0, 0.125)
 
 # Set saved points
 UZR = {'theta_perturb': SP_points}

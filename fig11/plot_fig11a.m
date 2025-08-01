@@ -67,11 +67,11 @@ fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
 % Axis dimensions
-width = 7.5;
+width = 8.0;
 height = 5.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=3);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -81,17 +81,18 @@ ax.LineWidth = 0.8;
 %-------------------%
 hold(ax, 'on');
 
-%--------------%
-%     Plot     %
-%--------------%
+%------------------------------%
+%     Plot: Periodic Orbit     %
+%------------------------------%
 % Linewidth
 lw = 2.0;
+% Special colour
+special_colour = colours(7, :);
 
 % Plot original periodic orbit
 % plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
 %       Color=colours(3, :), ...
 %       LineWidth=lw);
-
 plot3(ax, xbp_PO1(:, 1), xbp_PO1(:, 2), xbp_PO1(:, 3), ...
       Color=colours(3, :), ...
       LineWidth=lw);
@@ -99,7 +100,14 @@ plot3(ax, xbp_PO2(:, 1), xbp_PO2(:, 2), xbp_PO2(:, 3), ...
       Color=colours(3, :), ...
       LineWidth=lw);
 
-% Plot stable manifold
+% Plot highlighted sections along \Gamma and W^{s}(q)
+plot3(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), xbp_gamma(:, 3), ...
+      Color=special_colour, LineWidth=lw, LineStyle='-');
+
+%-------------------------------%
+%     Plot: Stable Manifold     %
+%-------------------------------%
+% Plot original stable manifold
 % plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
 %       Color=colours(1, :), ...
 %       LineWidth=lw);
@@ -110,19 +118,21 @@ plot3(ax, Wqs2(:, 1), Wqs2(:, 2), Wqs2(:, 3), ...
       Color=colours(1, :), ...
       LineWidth=lw);
 
+% Plot highlighted sections along \Gamma and W^{s}(q)
+plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
+      Color=special_colour, LineWidth=lw, LineStyle='-');
+
+%---------------------------------%
+%     Plot: Equilibrium Point     %
+%---------------------------------%
+% Plot equilibrium point
+plot3(ax, xpos(1), xpos(2), xpos(3), ...
+      Marker='o', MarkerSize=4, ...
+      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
-% Linewidth
-lw = 2.5;
-colour = colours(7, :);
-
-% Plot highlighted sections along \Gamma and W^{s}(q)
-plot3(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), xbp_gamma(:, 3), ...
-      Color=colour, LineWidth=lw, LineStyle='-');
-plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
-      Color=colour, LineWidth=lw, LineStyle='-');
-
 % Create surface plots
 G_surf = [xbp_gamma(:, 1), xbp_Wsq(:, 1)];
 Q_surf = [xbp_gamma(:, 2), xbp_Wsq(:, 2)];
@@ -150,14 +160,6 @@ end
 %   plot3(ax, DTC_plot(:, 1), DTC_plot(:, 2), DTC_plot(:, 3), ...
 %         LineStyle='-', Color='k', LineWidth=lw);
 % end
-
-%---------------------------------%
-%     Plot: Equilibrium Point     %
-%---------------------------------%
-% Plot equilibrium point
-plot3(ax, xpos(1), xpos(2), xpos(3), ...
-      Marker='o', MarkerSize=4, ...
-      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 %-------------------%
 %     Hold Axis     %

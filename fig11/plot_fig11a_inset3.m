@@ -10,6 +10,7 @@ load('../data_files/fig11_data.mat');
 %----------------------%
 % Default colour order
 colours = colororder();
+
 %-------------------%
 %     Sort Data     %
 %-------------------%
@@ -55,21 +56,22 @@ for idx = 1 : length(A_DTC)
   DTCs{idx} = gamma_DTC + A_DTC(idx) * [cos(theta_plot), 0 * theta_plot, sin(theta_plot)];
 end
 
+
 %%
 %-------------------------------------------------------------------------%
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
 % Setup figure
-fig = figure(2); clf;
+fig = figure(1); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
 % Axis dimensions
 width = 3.5;
-height = 1.6;
+height = 2.0;
 
 % Set figure size
-set_figure_dimensions(width, height);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -88,66 +90,50 @@ lw = 2.0;
 special_colour = colours(7, :);
 
 % Plot original periodic orbit
-% plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
-%       Color=colours(3, :), ...
-%       LineWidth=lw);
-plot3(ax, xbp_PO1(:, 1), xbp_PO1(:, 2), xbp_PO1(:, 3), ...
-      Color=colours(3, :), ...
-      LineWidth=lw);
-plot3(ax, xbp_PO2(:, 1), xbp_PO2(:, 2), xbp_PO2(:, 3), ...
-      Color=colours(3, :), ...
-      LineWidth=lw);
+plot(ax, xbp_PO1(:, 1), xbp_PO1(:, 3), ...
+     Color=colours(3, :), ...
+     LineWidth=lw);
+plot(ax, xbp_PO2(:, 1), xbp_PO2(:, 3), ...
+     Color=colours(3, :), ...
+     LineWidth=lw);
 
-% Plot highlighted sections along \Gamma and W^{s}(q)
-plot3(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), xbp_gamma(:, 3), ...
-      Color=special_colour, LineWidth=lw, LineStyle='-');
+% Plot special section
+plot(ax, xbp_gamma(:, 1), xbp_gamma(:, 3), ...
+     Color=special_colour, LineWidth=lw, LineStyle='-');
 
 %-------------------------------%
 %     Plot: Stable Manifold     %
 %-------------------------------%
 % Plot original stable manifold
-% plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
-%       Color=colours(1, :), ...
-%       LineWidth=lw);
-plot3(ax, Wqs1(:, 1), Wqs1(:, 2), Wqs1(:, 3), ...
-      Color=colours(1, :), ...
-      LineWidth=lw);
-plot3(ax, Wqs2(:, 1), Wqs2(:, 2), Wqs2(:, 3), ...
-      Color=colours(1, :), ...
-      LineWidth=lw);
+plot(ax, Wqs1(:, 1), Wqs1(:, 3), ...
+     Color=colours(1, :), ...
+     LineWidth=lw);
+plot(ax, Wqs2(:, 1), Wqs2(:, 3), ...
+     Color=colours(1, :), ...
+     LineWidth=lw);
 
-% Plot highlighted sections along \Gamma and W^{s}(q)
-plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
-      Color=special_colour, LineWidth=lw, LineStyle='-');
+% Plot special section
+plot(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 3), ...
+     Color=special_colour, LineWidth=lw, LineStyle='-');
 
 %---------------------------------%
 %     Plot: Equilibrium Point     %
 %---------------------------------%
 % Plot equilibrium point
-plot3(ax, xpos(1), xpos(2), xpos(3), ...
-      Marker='o', MarkerSize=4, ...
-      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+plot(ax, xpos(1), xpos(3), ...
+     Marker='o', MarkerSize=4, ...
+     MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
-% Create surface plots
-G_surf = [xbp_gamma(:, 1), xbp_Wsq(:, 1)];
-Q_surf = [xbp_gamma(:, 2), xbp_Wsq(:, 2)];
-I_surf = [xbp_gamma(:, 3), xbp_Wsq(:, 3)];
-
-% Plot surface
-surf(ax, G_surf, Q_surf, I_surf, ...
-     EdgeColor='none', FaceColor=colour, FaceAlpha=0.25);
-
 % Plot specific lines for theta_perturb = 0, 0.125, 0.25
-for idx = 1 : length(theta_old_SP)
+for idx = [1, 2]
   % plotting vector
-  % xplot = [xbp_gamma(idx, :); xbp_Wsq(idx, :)];
   xplot = [xbp_gamma_SP(idx, :); xbp_Wsq_SP(idx, :)];
 
-  plot3(ax, xplot(:, 1), xplot(:, 2), xplot(:, 3), ...
-        Color=colour, LineWidth=lw, LineStyle='-');
+  plot(ax, xplot(:, 1), xplot(:, 3), ...
+       Color=special_colour, LineWidth=lw, LineStyle='-');
 end
 
 %--------------------%
@@ -164,55 +150,40 @@ end
 %-------------------%
 hold(ax, 'off');
 
-%---------------------%
-%     Axis Limits     %
-%---------------------%
-ax.XAxis.Limits = [0.0, 3.0];
-ax.YAxis.Limits = [0.0, 3.0];
-ax.ZAxis.Limits = [0.0, 5];
-
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
+ax.XAxis.TickDirection = 'in';
 ax.XAxis.TickValues = [];
 
-% Y-Axis
+% Z-Axis
+ax.YAxis.TickDirection = 'in';
 ax.YAxis.TickValues = [];
 
-% Z-Axis
-ax.ZAxis.TickValues = [];
+%---------------------%
+%     Axis Limits     %
+%---------------------%
+ax.XAxis.Limits = [0.75, 3.0];
+ax.YAxis.Limits = [0.0, 5.0];
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
 % xlabel(ax, '$G$');
-% ylabel(ax, '$Q$');
-% zlabel(ax, '$I$');
+% ylabel(ax, '$I$');
 
 % Turn off all tick labels
 ax.XAxis.TickLabels = {};
 ax.YAxis.TickLabels = {};
-ax.ZAxis.TickLabels = {};
 
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
 box(ax, 'on');
-% grid(ax, 'on');
-
-% Grid lines
-% ax.GridLineWidth = 0.5;
-% ax.GridColor = 'black';
-% ax.GridAlpha = 0.25;
-
-% 3D plot view
-view(45, 6.0);
-% view(-45, 6);
-
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig11a_inset1.pdf';
+filename_out = '../pdf/fig11a_inset3.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');
