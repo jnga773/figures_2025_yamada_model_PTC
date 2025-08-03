@@ -1,6 +1,6 @@
 %%
 %-------------------------------------------------------------------------%
-%                              Calculate Data                             %
+%                                Read Data                                %
 %-------------------------------------------------------------------------%
 load('../data_files/fig2_data.mat', 'xbp_PO', 'Wq_s', 'xpos', 'tbp_PO', 'T_PO');
 load('../data_files/fig11_data.mat');
@@ -61,7 +61,7 @@ end
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
 % Setup figure
-fig = figure(3); clf;
+fig = figure(2); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
@@ -70,7 +70,7 @@ width = 3.5;
 height = 1.6;
 
 % Set figure size
-set_figure_dimensions(width, height);
+set_figure_dimensions(width, height, scale=3);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -89,9 +89,6 @@ lw = 2.0;
 special_colour = colours(7, :);
 
 % Plot original periodic orbit
-% plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
-%       Color=colours(3, :), ...
-%       LineWidth=lw);
 plot3(ax, xbp_PO1(:, 1), xbp_PO1(:, 2), xbp_PO1(:, 3), ...
       Color=colours(3, :), ...
       LineWidth=lw);
@@ -142,7 +139,8 @@ surf(ax, G_surf, Q_surf, I_surf, ...
      EdgeColor='none', FaceColor=special_colour, FaceAlpha=0.25);
 
 % Plot specific lines for theta_perturb = 0, 0.125, 0.25
-for idx = 1 : length(theta_old_SP)
+% for idx = 1 : length(theta_old_SP)
+for idx = [1, 2]
   % plotting vector
   % xplot = [xbp_gamma(idx, :); xbp_Wsq(idx, :)];
   xplot = [xbp_gamma_SP(idx, :); xbp_Wsq_SP(idx, :)];
@@ -168,8 +166,8 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.0, 3.0];
-ax.YAxis.Limits = [0.0, 2.0];
+ax.XAxis.Limits = [0.8, 3.25];
+ax.YAxis.Limits = [0.3, 2.25];
 ax.ZAxis.Limits = [0.0, 5];
 
 %--------------------%
@@ -203,12 +201,12 @@ ax.ZAxis.TickLabels = {};
 box(ax, 'on');
 
 % 3D plot view
-% view(-70, 6);
-% view(170, 50);
-view(175, 40);
+% view(45, 6.0);
+% view(320, 3);
+view(300, 1);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig11a_inset2.pdf';
+filename_out = '../pdf/fig11a_inset1.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');
