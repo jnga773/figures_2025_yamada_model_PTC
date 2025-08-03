@@ -61,61 +61,102 @@ idx_A = 1;
 
 [x_plot, y_plot] = sort_mod_data(theta_perturb_data, theta_new_data, idx_A);
 
-% 
-% fprintf('A_perturb = %.4f\n', A_perturb_plot);
-% fprintf('theta_old = %.4f\n', theta_old_plot);
-
+%-------------------------------------------------------------------------%
+%%                               Plot Data                               %%
+%-------------------------------------------------------------------------%
+% Default colour order (matplotlib)
 colours = colororder();
 
-fig = figure(1);
-clf;
+% Setup figure
+fig = figure(5); clf;
+fig.Name = 'PTCs';
 ax = gca();
 
-width = 6.0;
-height = 8.0;
+% Axis dimensions
+width = 6;
+height = 8.5;
 
-set_figure_dimensions(width, height, scale=2);
-% fig.Position = [5, 5, 8, 8];
+% Set figure size
+set_figure_dimensions(width, height, scale=1);
 
-% Plot
+% Set axis linewidth
+ax.LineWidth = 0.8;
+
+%-------------------%
+%     Hold Axis     %
+%-------------------%
 hold(ax, 'on');
 
+%-----------------------------%
+%     Plot: Patch and DTC     %
+%-----------------------------%
 % Fundamental domain
 patch([-3, 3, 3, -3], [0, 0, 1, 1], colours(3, :), ...
     FaceAlpha=0.2, EdgeColor='none', ...
     HandleVisibility='off');
 
-hold(ax, 'on');
+lw = 1.5;
 
-% DTC
-% plot(ax, theta_perturb_plot, theta_new_plot, LineStyle='-', Color=colours(1, :));
-plot(ax, x_plot, y_plot, LineStyle='-', Color=colours(1, :));
-plot(ax, x_plot, y_plot+1, LineStyle='-', Color=colours(1, :));
-plot(ax, x_plot, y_plot-1, LineStyle='-', Color=colours(1, :));
+DTC_colours = {colours(9, :); colours(4, :); colours(5, :)};
+for idx_A = 1 : 3
+  % Read data
+  [x_plot, y_plot] = sort_mod_data(theta_perturb_data, theta_new_data, idx_A);
 
-plot(ax, x_plot+1, y_plot, LineStyle='-', Color=colours(1, :));
-plot(ax, x_plot+1, y_plot+1, LineStyle='-', Color=colours(1, :));
-plot(ax, x_plot+1, y_plot-1, LineStyle='-', Color=colours(1, :));
+  % Plot DTC
+  for offset = -1 : 1
+    plot(ax, x_plot, y_plot+offset, LineStyle='-', Color=DTC_colours{idx_A}, LineWidth=lw);
+    plot(ax, x_plot+1, y_plot+offset, LineStyle='-', Color=DTC_colours{idx_A}, LineWidth=lw);
+  end
+end
 
 hold(ax, 'off');
 
-% daspect(ax, [1, 1, 1]);
-% legend(Interpreter='latex', Location='southwest');
+daspect(ax, [1, 1, 1]);
 
-% Make a square
-daspect([1, 1, 1]);
+%-------------------%
+%     Hold Axis     %
+%-------------------%
+hold(ax, 'off');
 
-% Limits
-xlim(ax, [-0.0, 1.0]);
-ylim(ax, [-0.5, 1.5]);
+%--------------------%
+%     Axis Ticks     %
+%--------------------%
+ax.XAxis.TickValues = 0.0 : 0.5 : 1.0;
+ax.XAxis.MinorTick = 'on';
+ax.XAxis.MinorTickValues = 0.0 : 0.25 : 0.5;
 
-% Labels
-xlabel(ax, '$\varphi_{\mathrm{d}} / 2 \pi$');
-ylabel(ax, '$\vartheta_{\mathrm{n}}$');
-% title(ax, title_str);
+ax.YAxis.TickValues = -0.5 : 0.5 : 1.5;
+ax.YAxis.MinorTick = 'on';
+ax.YAxis.MinorTickValues = -0.25 : 0.25 : 1.25;
 
-% Figure stuff
+%------------------------------%
+%     Axis and Tick Labels     %
+%------------------------------%
+% Axis labels
+% xlabel(ax, '$\varphi_{\mathrm{d}}$');
+% ylabel(ax, '$\vartheta_{\mathrm{n}}$');
+
+% Turn off all tick labels
+ax.XAxis.TickLabels = {};
+ax.YAxis.TickLabels = {};
+
+%---------------------%
+%     Axis Limits     %
+%---------------------%
+ax.XAxis.Limits = [0, 1];
+ax.YAxis.Limits = [-0.25, 1.25];
+
+%----------------------%
+%     Figure Stuff     %
+%----------------------%
 box(ax, 'on');
+
+%----------------------%
+%      Save Figure     %
+%----------------------%
+% Filename
+filename_out = '../pdf/fig12_DTCs.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');
 
 %%
 function [x_out, y_out] = sort_mod_data(theta_perturb_data_in, theta_new_data_in, idx_A_in)
