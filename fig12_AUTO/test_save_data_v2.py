@@ -24,17 +24,15 @@ dirs_P = sorted(listdir('./data/{}/'.format(run_in)))
 #     Cycle Through and Read DTC     #
 #------------------------------------#
 # Empty cells for data
-A_perturb_data     = np.zeros((4, 4))
-theta_old_data     = np.zeros((4, 4))
+A_perturb_data     = np.zeros((len(dirs_P), 4))
+theta_old_data     = np.zeros((len(dirs_P), 3))
 # Bifurcation data
 theta_perturb_A1   = []
 theta_perturb_A2   = []
 theta_perturb_A3   = []
-theta_perturb_A4   = []
 theta_new_A1       = []
 theta_new_A2       = []
 theta_new_A3       = []
-theta_new_A4       = []
 
 
 # Cycle through theta_perturb directories
@@ -69,9 +67,6 @@ for idx_P, sub_run_P in enumerate(dirs_P):
         elif idx_A == 2:
             theta_perturb_A3.append(theta_perturb_read)
             theta_new_A3.append(theta_new_read)
-        elif idx_A == 4:
-            theta_perturb_A4.append(theta_perturb_read)
-            theta_new_A4.append(theta_new_read)
 
 # %% PLOT DATA
 
@@ -87,10 +82,8 @@ ax = plt.gca()
 
 
 # Plot
-ax.plot(theta_perturb_plot[0], theta_new_plot[0], color='C0', ls='solid')
-# ax.plot(theta_perturb_plot[1], theta_new_plot[1], color='C1', ls='dashed')
-# ax.plot(theta_perturb_plot[2], theta_new_plot[2], color='C2', ls='dotted')
-# ax.plot(theta_perturb_plot[3], theta_new_plot[3], color='C3', ls='dashdot')
+for idx in range(len(theta_perturb_plot)):
+    ax.plot(theta_perturb_plot[idx], theta_new_plot[idx], color='C{}'.format(idx), ls='solid')
 
 ax.set_xlim(-1, 1)
 ax.set_ylim(-2, 2)

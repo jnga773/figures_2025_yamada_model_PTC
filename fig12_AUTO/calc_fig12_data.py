@@ -420,7 +420,7 @@ print('=====================================================================')
 # SP_points = [0.0, 0.25, 0.5, 0.75]
 
 from numpy import arange
-SP_points = arange(0.0, 1.0, 0.125)
+SP_points = arange(0.0, 1.0, 0.1)
 
 # Set saved points
 UZR = {'theta_perturb': SP_points}
@@ -481,7 +481,7 @@ for run in range(len(label_old)):
     #     Run AUTO Continuation     #
     #-------------------------------#
     # Set saved points for perturbation
-    SP_points = [0.1, 0.724236, 10.0]
+    SP_points = [0.1, 0.724236, 1.25, 10.0]
     # UZR = {'theta_old': SP_points}
     UZR = {'A_perturb': SP_points}
     
