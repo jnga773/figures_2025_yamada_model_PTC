@@ -614,7 +614,8 @@ fprintf(' =====================================================================\
 %------------------%
 % Saved points
 SP_parameter = 'theta_perturb';
-SP_values = [0.0, 0.25, 0.5, 0.75];
+% SP_values = [0.0, 0.25, 0.5, 0.75];
+SP_values = 0.0 : 0.1 : 0.9;
 
 % Continuation parameters
 pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
@@ -674,7 +675,7 @@ parfor (run = 1 : length(label_old), N_threads)
   %------------------%
   % Saved points
   SP_parameter = 'A_perturb';
-  SP_values = [0.1, 0.724236, 10.0];
+  SP_values = [0.1, 0.724236, 1.25, 10.0];
 
   % Continuation parameters
   pcont = {'A_perturb', 'theta_new', 'eta', 'mu_s', 'theta_perturb'};
@@ -763,8 +764,8 @@ parfor(idx = 1 : length(dirs_P), N_threads)
     % Run continuation
     run_PR_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
                         pcont, prange, ...
-                        h_min=1e-4, h0=1e-2, h_max=1e0, ...
-                        PtMX=10000, NPR=500, NAdapt=10);
+                        h_min=1e-3, h0=1e-1, h_max=1e0, ...
+                        PtMX=5000, NPR=500, NAdapt=10);
   end
 end
 
@@ -775,13 +776,13 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 12
-save_fig12_data(run_new, '../data_files/fig12_data.mat');
+% save_fig12_data(run_new, '../data_files/fig12_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig12;
+% plot_fig12;
 
 %=========================================================================%
 %                               END OF FILE                               %

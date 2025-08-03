@@ -19,10 +19,10 @@ dirs_P = {dirs_P.name};
 %     Cycle Through and Read DTC     %
 %------------------------------------%
 % Empty cells for data
-A_perturb_data     = zeros(length(dirs_P), 3);
-theta_old_data     = zeros(length(dirs_P), 3);
-theta_new_data     = cell(length(dirs_P), 3);
-theta_perturb_data = cell(length(dirs_P), 3);
+A_perturb_data     = zeros(length(dirs_P), 4);
+theta_old_data     = zeros(length(dirs_P), 4);
+theta_new_data     = cell(length(dirs_P), 4);
+theta_perturb_data = cell(length(dirs_P), 4);
 
 % Cycle through A_perturb sub-directories
 for idx_P = 1 : length(dirs_P)
