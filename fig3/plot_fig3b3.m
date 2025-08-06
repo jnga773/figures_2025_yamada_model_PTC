@@ -55,8 +55,7 @@ hold(ax, 'off');
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-% ax.XAxis.Limits = [29, 30];
-ax.XAxis.Limits = [28.5, 29.5];
+ax.XAxis.Limits = [29, 30];
 ax.YAxis.Limits = [-0.1, 20];
 
 %------------------------------%
