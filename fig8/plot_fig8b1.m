@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -116,4 +116,4 @@ box(ax, 'on');
 %     Save Figure     %
 %---------------------%
 filename_out = '../pdf/fig8b1_portrait2.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+% exportgraphics(fig, filename_out, ContentType='vector');

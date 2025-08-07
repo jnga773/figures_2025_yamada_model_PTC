@@ -18,6 +18,8 @@ close('all');
 clear;
 clc;
 
+% Add field functions to path
+addpath('./functions/fields/');
 % Add boundary condition functions to path
 addpath('./functions/bcs/');
 % Add SymCOCO files to path
@@ -472,11 +474,10 @@ fprintf(' =====================================================================\
 k = 30;
 
 % Set perturbation direction
-theta_perturb = 0.5 * pi;
-phi_perturb = 0.0;
+theta_perturb = 0.25;
 
 % Set initial conditions from previous solutions
-data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_perturb);
+data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -485,8 +486,8 @@ data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_per
 prob = coco_prob();
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 5e-5);
-prob = coco_set(prob, 'cont', 'h0', 1e-3);
+prob = coco_set(prob, 'cont', 'h_min', 1e-3);
+prob = coco_set(prob, 'cont', 'h0', 1e-2);
 prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive mesh
@@ -646,16 +647,19 @@ end
 %-------------------%
 % Save data for Figure 8
 save_fig8_data(run_names.initial_PO_COLL, run_names.PR_PTC_multi, ...
-               '../data_files/fig8_data.mat');;
+               '../data_files/fig8_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
 plot_fig8a1;
+plot_fig8a1_inset;
 plot_fig8a2;
+plot_fig8a3;
 plot_fig8b1;
 plot_fig8b2;
+plot_fig8b3;
 
 %=========================================================================%
 %                               END OF FILE                               %
