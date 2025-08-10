@@ -57,7 +57,7 @@ for idx_P = 1 : length(dirs_P)
 end
 
 %% COMBINE DATA
-idx_A = 1;
+idx_A = 3;
 
 [x_plot, y_plot] = sort_mod_data(theta_perturb_data, theta_new_data, idx_A);
 
@@ -123,7 +123,8 @@ function [x_out, y_out] = sort_mod_data(theta_perturb_data_in, theta_new_data_in
   theta_perturb_plot = [];
   theta_new_plot     = [];
 
-  for idx_P = 1 : 4
+  size_data = size(theta_perturb_data_in);
+  for idx_P = 1 : size_data(1)
     % Read data
     % theta_new_read = theta_new_data(idx_P, idx_A);
     % theta_perturb_read = theta_perturb_data(idx_P, idx_A);

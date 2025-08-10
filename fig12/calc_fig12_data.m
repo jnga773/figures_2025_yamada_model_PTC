@@ -561,7 +561,7 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 % List of perturbation amplitudes to save solutions for
 SP_parameter = 'A_perturb';
-SP_values    = [0.1, 0.724236, 25.0];
+SP_values    = [0.1, 0.724236, 10, 25.0];
 
 % Save solution at phase along \Gamma where there WILL BE an intersection
 % with the stable manifold of q.
@@ -599,9 +599,8 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-% M = 3;
-% parfor (run = 1 : length(label_old), M)
-for run = 1 : length(label_old)
+N_threads = length(label_old);
+parfor (run = 1 : length(label_old), N_threads)
   % Label for this run
   this_run_label = label_old(run);
 
@@ -626,23 +625,19 @@ for run = 1 : length(label_old)
   %------------------%
   % Saved points
   SP_parameter = 'theta_perturb';
-  SP_values = [0.0, 0.4];
-
-  if run == 3
-    SP_values(2) = 0.28;
-  end
+  SP_values = -0.5 : 0.125 : 1-0.125;
 
   % Continuation parameters
   pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
   % Parameter range for continuation
-  prange = {[-1e-3, max(SP_values)+0.01], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+  prange = {[-0.5, 1.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
   % Run continuation
-  run_PTC_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
-                       pcont, prange, ...
-                       SP_parameter=SP_parameter, SP_values=SP_values, ...
-                       h_min=1e-3, h0=1e-2, h_max=1e1, ...
-                       PtMX=[0, 500], NPR=20, NAdapt=20);
+  run_PR_continuation(this_run_name, run_old, this_run_label, data_PR, bcs_funcs, ...
+                      pcont, prange, ...
+                      SP_parameter=SP_parameter, SP_values=SP_values, ...
+                      h_min=1e-3, h0=1e-2, h_max=1e1, ...
+                      PtMX=[0, 500], NPR=20, NAdapt=20);
 
 end
 
@@ -671,8 +666,7 @@ dirs_A = {dirs_A.name};
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
 % Set number of threads
-N_threads = 3;
-% N_threads = length(dirs_A);
+N_threads = length(dirs_A);
 parfor(idx = 1 : length(dirs_A), N_threads)
   % Set run string for this run
   sub_run_name = {run_old, dirs_A{idx}};
@@ -756,8 +750,8 @@ dirs_A = {dirs_A.name};
 %-------------------------------------%
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
-% for idx_A = 1 : length(dirs_A)
-parfor (idx_A = 1 : length(dirs_A), 3)
+N_threads = length(dirs_A);
+parfor (idx_A = 1 : length(dirs_A), N_threads)
   % Read folders inside dirs_A
   dirs_theta = dir(sprintf('./data/%s/%s/', run_old, dirs_A{idx_A}));
   dirs_theta = dirs_theta(~ismember({dirs_theta.name}, {'.', '..', '.DS_Store'}));
@@ -805,7 +799,7 @@ parfor (idx_A = 1 : length(dirs_A), 3)
         prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
         % Run continuation
-        run_PTC_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
+        run_PR_continuation(this_run_name, sub_run_name, this_run_label, data_PR, bcs_funcs, ...
                             pcont, prange, ...
                             h_min=1e-4, h0=5e-2, h_max=1e1, ...
                             PtMX=1000, NPR=50, NAdapt=10);
@@ -821,13 +815,13 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 12
-save_fig12_data(run_new, '../data_files/fig12_data.mat');
+% save_fig12_data(run_new, '../data_files/fig12_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig12;
+% plot_fig12;
 
 %=========================================================================%
 %                               END OF FILE                               %

@@ -75,16 +75,13 @@ for i = 1 : length(plot_idx)
 
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
-  if idx >= 4
-    temp = -1;
-  else
-    temp = 0;
-  end
-
   % Plot
-  plot(ax, theta_old{idx}, theta_new{idx}+temp, ...
+  plot(ax, theta_old{idx}, theta_new{idx}, ...
        LineWidth=lw, LineStyle='-', ...
        Color=plot_colours{idx});
+  % plot(ax, theta_old{idx}, theta_new{idx}-1, ...
+  %      LineWidth=lw, LineStyle='-', ...
+  %      Color=plot_colours{idx});
 end
 
 %-------------------%
@@ -123,7 +120,7 @@ ax.YAxis.TickLabels = {};
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [0, 1.0];
-ax.YAxis.Limits = [-0.8, 1.5];
+ax.YAxis.Limits = [-0.25, 2.0];
 
 %----------------------%
 %     Figure Stuff     %

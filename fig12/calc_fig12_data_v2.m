@@ -615,7 +615,8 @@ fprintf(' =====================================================================\
 % Saved points
 SP_parameter = 'theta_perturb';
 % SP_values = [0.0, 0.25, 0.5, 0.75];
-SP_values = 0.0 : 0.1 : 0.9;
+SP_values = -0.5 : 0.125 : 1.0;
+SP_values = SP_values(1:end-1);
 
 % Continuation parameters
 pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
