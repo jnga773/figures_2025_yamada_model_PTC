@@ -469,7 +469,6 @@ fprintf(' =====================================================================\
 k = 30;
 
 % Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
-% theta_perturb = 0;
 theta_perturb = 0.0;
 
 % Set initial conditions from previous solutions
@@ -574,7 +573,7 @@ prob = coco_add_event(prob, 'SP', SP_parameter, SP_values);
 % Set continuation parameters and parameter range
 pcont = {'theta_old', 'theta_new', ...
          'eta', 'mu_s'};
-prange = {[0.0, 1.0], [], ...
+prange = {[min(SP_values), max(SP_values)], [], ...
           [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO
@@ -676,7 +675,7 @@ parfor (run = 1 : length(label_old), N_threads)
   %------------------%
   % Saved points
   SP_parameter = 'A_perturb';
-  SP_values = [0.1, 0.724236, 1.25, 10.0];
+  SP_values = [0.1, 0.724236, 10.0];
 
   % Continuation parameters
   pcont = {'A_perturb', 'theta_new', 'eta', 'mu_s', 'theta_perturb'};
@@ -714,7 +713,6 @@ dirs_P = dirs_P(~ismember({dirs_P.name}, {'.', '..', '.DS_Store'}));
 % Sub folder names
 dirs_P = {dirs_P.name};
 
-%%
 %-------------------------------------%
 %     Cycle Through Previous Runs     %
 %-------------------------------------%
@@ -758,7 +756,7 @@ parfor(idx = 1 : length(dirs_P), N_threads)
     % Continuation parameters
     pcont = {'theta_perturb', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
     % Parameter range for continuation
-    prange = {[-1.0, 2.0], [], ...
+    prange = {[-1.0, 1.0], [], ...
               [-1e-4, 1e-2], [0.99, 1.01], ...
               []};
 
@@ -777,7 +775,7 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 12
-% save_fig12_data(run_new, '../data_files/fig12_data.mat');
+save_fig12_data(run_names.PR_DTC_scan, '../data_files/fig12_data.mat');
 
 %----------------------%
 %     Plot Figures     %

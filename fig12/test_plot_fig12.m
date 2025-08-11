@@ -1,4 +1,4 @@
-clear all; close all;
+% clear all; close all;
 
 %% READ DATA
 run_in = 'run08_PR_DTC_scan';
@@ -164,7 +164,11 @@ function [x_out, y_out] = sort_mod_data(theta_perturb_data_in, theta_new_data_in
   theta_perturb_plot = [];
   theta_new_plot     = [];
 
-  for idx_P = 1 : 4
+  % Get dimensions of data array
+  dir_P_size = size(theta_perturb_data_in);
+  N_dir_P    = max(dir_P_size);
+
+  for idx_P = 1 : N_dir_P
     % Read data
     % theta_new_read = theta_new_data(idx_P, idx_A);
     % theta_perturb_read = theta_perturb_data(idx_P, idx_A);
@@ -181,23 +185,23 @@ function [x_out, y_out] = sort_mod_data(theta_perturb_data_in, theta_new_data_in
   % theta_old_plot     = theta_old_data(idx1, idx2);
   % A_perturb_plot     = A_perturb_data(idx1, idx2);
 
-  % x_plot = theta_perturb_plot;
-  % y_plot = theta_new_plot;
-
-  y_mod = mod(theta_new_plot, 1);
-
-  dx = abs(diff(y_mod));
-  threshold = 0.5;  % You can adjust this if needed
-  breaks = find(dx > threshold);
-
-  % Insert NaNs to break the line at discontinuities
-  y_plot = y_mod;
   x_plot = theta_perturb_plot;
-  for i = length(breaks):-1:1
-      idx = breaks(i) + 1;
-      y_plot = [y_plot(1:idx-1), NaN, y_plot(idx:end)];
-      x_plot = [x_plot(1:idx-1), NaN, x_plot(idx:end)];
-  end
+  y_plot = theta_new_plot;
+
+  % y_mod = mod(theta_new_plot, 1);
+  % 
+  % dx = abs(diff(y_mod));
+  % threshold = 0.5;  % You can adjust this if needed
+  % breaks = find(dx > threshold);
+  % 
+  % % Insert NaNs to break the line at discontinuities
+  % y_plot = y_mod;
+  % x_plot = theta_perturb_plot;
+  % for i = length(breaks):-1:1
+  %     idx = breaks(i) + 1;
+  %     y_plot = [y_plot(1:idx-1), NaN, y_plot(idx:end)];
+  %     x_plot = [x_plot(1:idx-1), NaN, x_plot(idx:end)];
+  % end
 
   x_out = x_plot;
   y_out = y_plot;
