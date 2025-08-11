@@ -18,6 +18,8 @@ close('all');
 clear;
 clc;
 
+% Add field functions to path
+addpath('./functions/fields/');
 % Add boundary condition functions to path
 addpath('./functions/bcs/');
 % Add SymCOCO files to path
@@ -485,8 +487,8 @@ data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_per
 prob = coco_prob();
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 5e-5);
-prob = coco_set(prob, 'cont', 'h0', 1e-3);
+prob = coco_set(prob, 'cont', 'h_min', 1e-3);
+prob = coco_set(prob, 'cont', 'h0', 5e-2);
 prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive mesh
@@ -565,7 +567,6 @@ prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
 %-------------------------%
 % Array of values for special event\
 SP_values = [0.1, 0.5, 4.08348, 10.0, 20.0];
-% SP_values = [0.5];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -574,10 +575,8 @@ prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
 %     Run COCO     %
 %------------------%
 % Set continuation parameters and parameter range
-pcont = {'A_perturb', 'theta_new', ...
-         'eta', 'mu_s'};
-prange = {[-1e-4, max(SP_values)+0.01], [], ...
-          [-1e-4, 1e-2], [0.99, 1.01]};
+pcont = {'A_perturb', 'theta_new', 'eta', 'mu_s'};
+prange = {[-1e-4, max(SP_values)+0.01], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
 % Run COCO continuation
 coco(prob, run_new, [], 1, pcont, prange);
@@ -601,8 +600,7 @@ label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
 %     Cycle through SP labels     %
 %---------------------------------%
 % Set number of threads
-N = 4;
-% N_threads = length(label_old);
+N_threads = length(label_old);
 parfor (run = 1 : length(label_old), N_threads)
   % Label for this run
   this_run_label = label_old(run);
@@ -620,23 +618,19 @@ parfor (run = 1 : length(label_old), N_threads)
   fprintf(' This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
   fprintf(' Previous run name       : %s\n', run_old);
   fprintf(' Previous solution label : %d\n', this_run_label);
-  fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
+  fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s, A_perturb');
   fprintf(' =====================================================================\n');
 
-  % Array of values for special event
-  SP_parameter = 'theta_old';
-  SP_values    = -1.0 : 0.1 : 2.0;
-
   % Continuation parameters
-  pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
+  pcont = {'theta_old', 'theta_new', 'eta', 'mu_s', 'A_perturb'};
   % Parameter range for continuation
-  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
+  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
 
   % Run continuation
   run_PR_continuation(this_run_name, run_old, this_run_label, ...
                       data_PR, bcs_funcs, ...
                       pcont, prange, ...
-                      SP_parameter=SP_parameter, SP_values=SP_values);
+                      h_min=1e-3, h0=5e-2, h_max=1e0);
 
 end
 
@@ -647,15 +641,13 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 6
-save_fig9_data(run_names.initial_PO_COLL, run_names.PR_PTC_multi, ...
-               '../data_files/fig9_data.mat');
+save_fig9_data(run_names, '../data_files/fig9_data.mat');
 
 %----------------------%
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
 plot_fig9a;
-plot_fig9a_inset;
 plot_fig9b;
 
 %=========================================================================%

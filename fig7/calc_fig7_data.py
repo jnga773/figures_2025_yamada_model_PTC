@@ -432,7 +432,7 @@ for run in range(len(label_old)):
     print('Phase Reset: Second Run')
     print('Compute phase transition curve (PTC) for single perturbation')
     print('---------------------------------------------------------------------')
-    print('This run name           : {}'.format(this_run_name))
+    print('This run name           : {}/{}'.format(run_new_str, this_run_name))
     print('Previous run name       : {}'.format(run_old_str))
     print('Previous label_solution : {}'.format(this_run_label))
     print('Continuation parameters : {}'.format('theta_old, theta_new, eta, mu_s, T'))
@@ -441,18 +441,10 @@ for run in range(len(label_old)):
     #-------------------------------#
     #     Run AUTO Continuation     #
     #-------------------------------#
-    # Set saved solutions for theta_old
-    SP_points = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
-                 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9]
-    theta_old_stop = [0.0, 2.0]
-    theta_new_stop = [-1.0, 3.0]
-    
-    # Saved points
-    UZR = {'theta_old': SP_points}
     # Continuation parameters
     pcont = ['theta_old', 'theta_new', 'eta', 'mu_s', 'T']
     # Set continuation stop points
-    prange = {'theta_old': theta_old_stop, 'theta_new': theta_new_stop}
+    prange = {'theta_old': [0.0, 2.0]}
 
     # Run continuation
     data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,

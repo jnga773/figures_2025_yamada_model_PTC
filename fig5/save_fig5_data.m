@@ -2,6 +2,25 @@ function save_fig6_data(run_in, filename_in)
   % save_fig6_data(run_in, filename_in)
   %
   % Reads PTC scan data from run_in and saves data to filename_in
+  %
+  % Parameters
+  % ----------
+  % run_names_in : char
+  %    Run name string identifier.
+  % filename_in : char
+  %    Name of output data file to save data to.
+  %
+  % See Also
+  % --------
+  % coco_bd_read, coco_bd_labs, coll_read_solution, ep_read_solution
+
+  %-------------------%
+  %     Arguments     %
+  %-------------------%
+  arguments
+    run_in char
+    filename_in char
+  end
   
   %------------------------%
   %     Read Data: PTCs    %
@@ -81,15 +100,16 @@ function save_fig6_data(run_in, filename_in)
 
     % If both are false, merge the two together with a NaN in between
     if ~lt1_check && ~gt1_check
-      % Check if A_perturb < 0.55
-      if A_perturb < 0.55
-        % Move theta_new down by one
-        theta_new_gt1 = theta_new_gt1 - 1.0;
-      end
-      
       % Append data
       theta_old{i} = [theta_old_gt1, NaN, theta_old_lt1];
       theta_new{i} = [theta_new_gt1, NaN, theta_new_lt1];
+    end
+
+    % Check if theta_new starts in the fundamental domain. If not, shift it
+    if theta_old{i}(1) < 0.0
+      theta_new{i} = theta_new{i} + 1.0;
+    elseif theta_old{i}(1) > 1.0
+      theta_new{i} = theta_new{i} - 1.0;
     end
   end
 

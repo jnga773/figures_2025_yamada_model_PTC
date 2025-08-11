@@ -646,8 +646,7 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 4
-save_fig4_data(run_names.initial_PO_COLL, run_names.PR_PTC_multi, ...
-               '../data_files/fig4_data.mat');
+save_fig4_data(run_names, '../data_files/fig4_data.mat');
 
 %----------------------%
 %     Plot Figures     %

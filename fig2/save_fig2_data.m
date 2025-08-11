@@ -4,6 +4,26 @@ function save_fig2_data(run_in, label_in, filename_in)
   % Reads periodic orbit solution data from COCO solution, calculates the
   % one-dimensional stable manifold of the "central" saddle point 'q', and
   % saves the data to filename_in.
+  %
+  % Parameters
+  % ----------
+  % run_in : char
+  %     The run identifier for the continuation problem.
+  % label_in : double
+  %     The solution label for the continuation problem.
+  %
+  % See Also
+  % --------
+  % coco_bd_read, coco_bd_labs, coll_read_solution, ep_read_solution
+
+  %-------------------%
+  %     Arguments     %
+  %-------------------%
+  arguments
+    run_in char
+    label_in double
+    filename_in char
+  end
 
   %-----------------------------------%
   %     Read Data: Periodic Orbit     %

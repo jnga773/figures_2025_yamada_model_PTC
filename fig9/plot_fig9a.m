@@ -1,10 +1,9 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
 %-------------------------------------------------------------------------%
 % Load data
-load('../data_files/fig2_data.mat', 'Wq_s');
 load('../data_files/fig9_data.mat');
 
 %----------------------%
