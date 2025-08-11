@@ -116,7 +116,7 @@ ax.YAxis.TickLabels = {};
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [0, 1.0];
-ax.YAxis.Limits = [-0.25, 2.0];
+ax.YAxis.Limits = [0, 2.2];
 
 %----------------------%
 %     Figure Stuff     %
