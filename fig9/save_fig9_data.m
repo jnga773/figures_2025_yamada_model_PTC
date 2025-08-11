@@ -186,8 +186,6 @@ function save_fig9_data(run_names_in, filename_in)
 
 end
 
-%===============================================================================%
-
 function x_out = calc_stable_manifold(run_in, label_in)
   % x_out = calc_stable_manifold(run_in, label_in)
   %

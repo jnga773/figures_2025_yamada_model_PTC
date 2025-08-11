@@ -18,6 +18,8 @@ close('all');
 clear;
 clc;
 
+% Add other functions to path
+addpath('./functions/');
 % Add field functions to path
 addpath('./functions/fields/');
 % Add boundary condition functions to path
@@ -104,8 +106,8 @@ bcs_funcs.bcs_Wsq_final = {@bcs_Wsq_final};
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.ode45_PO = 'run01_initial_PO_ode45';
-run_new = run_names.ode45_PO;
+run_names.initial_PO_ode45 = 'run01_initial_PO_ode45';
+run_new = run_names.initial_PO_ode45;
 
 %--------------------------%
 %     Print to Console     %
@@ -131,7 +133,7 @@ data_ode45 = calc_initial_solution_ODE45(x0, p0, funcs.field);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 50);
+prob = coco_set(prob, 'coll', 'NTST', 200);
 
 % Set NAdpat
 prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -185,10 +187,10 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 %     Run Name     %
 %------------------%
 % Current run name
-run_names.initial_PO = 'run02_initial_periodic_orbit';
-run_new = run_names.initial_PO;
+run_names.initial_PO_COLL = 'run02_initial_PO_COLL';
+run_new = run_names.initial_PO_COLL;
 % Which run this continuation continues from
-run_old = run_names.ode45_PO;
+run_old = run_names.initial_PO_ode45;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');
@@ -220,7 +222,7 @@ data_PO = calc_initial_solution_PO(run_old, label_old);
 prob = coco_prob();
 
 % Set NTST mesh 
-prob = coco_set(prob, 'coll', 'NTST', 50);
+prob = coco_set(prob, 'coll', 'NTST', 200);
 
 % Set NAdpat
 prob = coco_set(prob, 'cont', 'NAdapt', 1);
@@ -279,7 +281,7 @@ coco(prob, run_new, [], 1, {'A', 'gamma'});
 run_names.PR_move_theta = 'run03_PR_move_theta';
 run_new = run_names.PR_move_theta;
 % Which run this continuation continues from
-run_old = run_names.initial_PO;
+run_old = run_names.initial_PO_COLL;
 
 % Continuation point
 label_old = coco_bd_labs(coco_bd_read(run_old), 'PO_PT');

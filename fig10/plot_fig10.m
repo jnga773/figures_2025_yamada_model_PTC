@@ -13,8 +13,8 @@ load('../data_files/fig10_data.mat');
 %     Coordinates for 'Hole'     %
 %--------------------------------%
 % I-direction
-intersection.theta_old = 0.51508;
-intersection.A_perturb = 4.08348;
+intersection.theta_old = 0.515081568221902;
+intersection.A_perturb = 4.083495198666827;
 
 %----------------------%
 %     Plot Colours     %
@@ -36,7 +36,7 @@ plot_colours = {'#92b700';    % Green-Yellow
 %-----------------------------------%
 %     Sort Out Single Plot Data     %
 %-----------------------------------%
-plot_A_perturb = [0.1, 0.5, 4.0786, 10, 20];
+plot_A_perturb = [0.1, 0.5, 4.0835, 10, 20];
 
 % Find plotting indices
 plot_idx = zeros(length(plot_A_perturb), 1);

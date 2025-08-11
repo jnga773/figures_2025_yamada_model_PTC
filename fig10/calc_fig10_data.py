@@ -366,7 +366,7 @@ SP_points = concatenate((linspace(0.0, 1.0, 15),
                          linspace(1.0, 10.0, 15),
                          linspace(10.0, 13.0, 15),
                          linspace(13.0, 25.0, 15)))
-SP_points = concatenate((SP_points, [0.1, 0.5, 4.078572, 10, 20]))
+SP_points = concatenate((SP_points, [0.1, 0.5, 4.0835, 10, 20]))
 SP_points = unique(SP_points)
 
 # Set saved points
