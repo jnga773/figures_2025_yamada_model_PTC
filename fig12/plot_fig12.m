@@ -60,7 +60,7 @@ for idx_A = 1 : 3
   y_plot = theta_new{idx_A};
 
   % Plot DTC
-  for offset = -1 : 1
+  for offset = -3 : 3
     plot(ax, x_plot, y_plot+offset, LineStyle='-', Color=DTC_colours{idx_A}, LineWidth=lw);
     plot(ax, x_plot+1, y_plot+offset, LineStyle='-', Color=DTC_colours{idx_A}, LineWidth=lw);
   end

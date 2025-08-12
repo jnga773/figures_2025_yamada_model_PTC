@@ -466,7 +466,7 @@ fprintf(' =====================================================================\
 %     Read Data     %
 %-------------------%
 % Set periodicity
-k = 30;
+k = 35;
 
 % Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
 theta_perturb = 0.0;
@@ -481,8 +481,8 @@ data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
 prob = coco_prob();
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 5e-5);
-prob = coco_set(prob, 'cont', 'h0', 1e-2);
+prob = coco_set(prob, 'cont', 'h_min', 1e-3);
+prob = coco_set(prob, 'cont', 'h0', 5e-2);
 prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive mesh
@@ -781,7 +781,7 @@ save_fig12_data(run_names.PR_DTC_scan, '../data_files/fig12_data.mat');
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-% plot_fig12;
+plot_fig12;
 
 %=========================================================================%
 %                               END OF FILE                               %
