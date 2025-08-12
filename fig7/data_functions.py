@@ -558,9 +558,11 @@ def run_PR_continuation(run_new_str, run_old, label_old, pcont, prange, **kwargs
     reverse: logical
         Check if you want to run the continuation in the opposite direction
         with DS='-'.
+    merge: logical
+        If reverse=true, then merge will determine if the bifurcation matrices
+        are "merged" into a single object or not.
     """
     from auto import run, merge, relabel
-    # from data_functions import save_move_data
 
     #-------------------#
     #     Arguments     #
@@ -574,7 +576,8 @@ def run_PR_continuation(run_new_str, run_old, label_old, pcont, prange, **kwargs
         'NMX'    : 2000,
         'NPR'    : 100,
         'IAD'    : 10,
-        'reverse': False
+        'reverse': False,
+        'merge'  : False
     }
     # Override defaults with any provided kwargs
     options.update(kwargs)
@@ -597,8 +600,9 @@ def run_PR_continuation(run_new_str, run_old, label_old, pcont, prange, **kwargs
     #     Save Data     #
     #-------------------#
     # Append runs and save data
-    run_scan = merge(run_scan)
-    run_scan = relabel(run_scan)
+    if options['reverse'] and options['merge']:
+        run_scan = merge(run_scan)
+        run_scan = relabel(run_scan)
     
     # Save data
     save_move_data(run_scan, '{}'.format(run_new_str))

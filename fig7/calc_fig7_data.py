@@ -423,7 +423,7 @@ for run in range(len(label_old)):
     this_run_label = label_old[run]
 
     # Run string identifier
-    this_run_name = 'sol_' + str(run+1).zfill(3)
+    this_run_name = '{}/sol_{}'.format(run_new_str, str(run+1).zfill(3))
 
     #--------------------------#
     #     Print to Console     #
@@ -448,10 +448,10 @@ for run in range(len(label_old)):
 
     # Run continuation
     data_funcs.run_PR_continuation(this_run_name, run_old, this_run_label,
-                                   pcont, prange, UZR=UZR,
+                                   pcont, prange,
                                    NMX=8000, NPR=100,
                                    DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
-                                   reverse=True)
+                                   reverse=True, merge=False)
 
 #--------------#
 #     Plot     #

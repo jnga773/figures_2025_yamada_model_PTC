@@ -424,7 +424,7 @@ for run in range(len(label_old)):
     this_run_label = label_old[run]
 
     # Run string identifier
-    this_run_name = 'sol_' + str(run+1).zfill(3)
+    this_run_name = '{}/sol_{}'.format(run_new_str, str(run+1).zfill(3))
 
     #--------------------------#
     #     Print to Console     #
