@@ -70,7 +70,7 @@ funcs.field = yamada_symbolic();
 bcs_funcs.bcs_PO = bcs_PO_symbolic();
 
 % Phase Reset Segment 1: Functions
-% func.seg1 = {@func_seg1};
+% funcs.seg1 = {@func_seg1};
 funcs.seg1 = func_seg1_symbolic();
 
 % Phase Reset: Segment 2
