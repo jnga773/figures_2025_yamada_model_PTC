@@ -15,7 +15,7 @@ function bcs_coco_out = bcs_VAR_symbolic()
   %          * u_in(1:3) - Initial point of the perpendicular vector,
   %          * u_in(4:6) - Final point of the perpendicular vector,
   %          * u_in(7)   - Eigenvalue (mu_s),
-  %          * u_in(8:9) - Norm of w (w_norm).
+  %          * u_in(8)   - Norm of w (w_norm).
   %
   % Returns
   % -------
@@ -23,39 +23,50 @@ function bcs_coco_out = bcs_VAR_symbolic()
   %     List of CoCo-ified symbolic functions for the boundary conditions
   %     Jacobian, and Hessian.
 
-  % State-space dimension
-  xdim = 3;
+  %============================================================================%
+  %                          CHANGE THESE PARAMETERS                           %
+  %============================================================================%
+  % Original vector field state-space dimension
+  xdim  = 3;
 
-  %---------------%
-  %     Input     %
-  %---------------%
+  %============================================================================%
+  %                                    INPUT                                   %
+  %============================================================================%
+  %-------------------------------%
+  %     Adjoint-Space Vectors     %
+  %-------------------------------%
   % Initial adjoint perpindicular vector
-  w_init = sym('w_init', [xdim, 1]);
-
+  w_init  = sym('w_init', [xdim, 1]);
   % Final adjoint perpindicular vector
   w_final = sym('w_final', [xdim, 1]);
 
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
   % Adjoint parameters
   syms mu_s w_norm
 
   % Floquet parameters
-  p_flo   = [mu_s; w_norm];
+  p_flo = [mu_s; w_norm];
 
-  % Combined vector
-  uvec    = [w_init;
-             w_final;
-             p_flo];
-
-  %--------------------------%
-  %     Calculate Things     %
-  %--------------------------%
+  %============================================================================%
+  %                         BOUNDARY CONDITION ENCODING                        %
+  %============================================================================%
   % Adjoint boundary conditions
   bcs_adjt_1 = w_final - (mu_s * w_init);
   bcs_adjt_2 = (w_init' * w_init) - w_norm;
 
-  % Boundary condition vector
-  bcs = [bcs_adjt_1;
-         bcs_adjt_2];
+  %============================================================================%
+  %                                   OUTPUT                                   %
+  %============================================================================%
+  %-----------------------%
+  %     Total Vectors     %
+  %-----------------------%
+  % Combined vector
+  u_vec   = [w_init; w_final; p_flo];
+
+  % Boundary conditions vector
+  bcs_vec = [bcs_adjt_1; bcs_adjt_2];
 
   %-----------------%
   %     SymCOCO     %
@@ -64,17 +75,17 @@ function bcs_coco_out = bcs_VAR_symbolic()
   filename_out = './functions/symcoco/F_bcs_VAR';
 
   % COCO Function encoding
-  bcs_coco = sco_sym2funcs(bcs, {uvec}, {'u'}, 'filename', filename_out);
+  bcs_coco = sco_sym2funcs(bcs_vec, {u_vec}, {'u'}, 'filename', filename_out);
 
   % Function to "CoCo-ify" function outputs: [data_in, y_out] = f(prob_in, data_in, u_in)
   cocoify = @(func_in) @(prob_in, data_in, u_in) deal(data_in, func_in(u_in));
 
-  % List of functions
-  func_list = {cocoify(bcs_coco('')), cocoify(bcs_coco('u')), cocoify(bcs_coco({'u', 'u'}))};
-
   %----------------%
   %     Output     %
   %----------------%
+  % List of functions
+  func_list = {cocoify(bcs_coco('')), cocoify(bcs_coco('u')), cocoify(bcs_coco({'u', 'u'}))};
+
   bcs_coco_out = func_list;
 
 end

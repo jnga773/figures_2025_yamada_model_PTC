@@ -1,11 +1,11 @@
-function save_fig6_data(run_in, filename_in)
-  % save_fig6_data(run_in, filename_in)
+function save_fig5_data(run_in, filename_in)
+  % save_fig5_data(run_in, filename_in)
   %
   % Reads PTC scan data from run_in and saves data to filename_in
   %
   % Parameters
   % ----------
-  % run_names_in : char
+  % run_in : struct
   %    Run name string identifier.
   % filename_in : char
   %    Name of output data file to save data to.

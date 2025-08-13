@@ -26,7 +26,7 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %            u_in(4:6)   - w(0) of segment 1,
   %            u_in(7:9)   - x(0) of segment 2,
   %            u_in(10:12) - w(0) of segment 2,
-  %            u_in(13:15) - x(0) of segment 3,
+  %            u_in(13:15)  - x(0) of segment 3,
   %            u_in(16:18) - x(0) of segment 4,
   %            u_in(19:21) - x(1) of segment 1,
   %            u_in(22:24) - w(1) of segment 1,
@@ -34,7 +34,7 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %            u_in(28:30) - w(1) of segment 2,
   %            u_in(31:33) - x(1) of segment 3,
   %            u_in(34:36) - x(1) of segment 4,
-  %            u_in(37:50) - Parameters.
+  %            u_in(37:48) - Parameters.
   %
   % Returns
   % -------
@@ -44,19 +44,26 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %     Function data structure to give dimensions of parameter and state
   %     space.
 
-  % (defined in calc_PR_initial_conditions.m)
-  % Original vector space dimensions
+  %============================================================================%
+  %                         READ FROM data_in STRUCTURE                        %
+  %============================================================================%
+  % These parameters are read from the data_in structure. This is defined as
+  % 'data_EP' in the 'apply_boundary_conditions_PR' function, and is the
+  % function data of the equilibrium point problem (ode_ep2ep).
+  
+  % Original vector field state-space dimension
   xdim   = data_in.xdim;
+  % Original vector field parameter-space dimension
   pdim   = data_in.pdim;
-  % Parameter maps
-  p_maps = data_in.p_maps;
+  % Original vector field function
+  field  = data_in.fhan;
 
   %============================================================================%
-  %                              INPUT PARAMETERS                              %
+  %                                    INPUT                                   %
   %============================================================================%
-  %--------------------------------%
-  %     Input: Initial Vectors     %
-  %--------------------------------%
+  %-------------------------%
+  %     Initial Vectors     %
+  %-------------------------%
   % Segment 1 - x(0)
   x0_seg1       = u_in(1 : xdim);
   % Segment 1 - w(0)
@@ -70,9 +77,9 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   % Segment 4 - x(0)
   x0_seg4       = u_in(5*xdim+1 : 6*xdim);
 
-  %------------------------------%
-  %     Input: Final Vectors     %
-  %------------------------------%
+  %-----------------------%
+  %     Final Vectors     %
+  %-----------------------%
   % Segment 1 - x(1)
   x1_seg1       = u_in(6*xdim+1 : 7*xdim);
   % Segment 1 - w(1)
@@ -86,32 +93,37 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   % Segment 4 - x(1)
   x1_seg4       = u_in(11*xdim+1 : 12*xdim);
 
-  %---------------------------%
-  %     Input: Parameters     %
-  %---------------------------%
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
   % Parameters
   parameters    = u_in(12*xdim+1 : end);
 
   % System parameters
-  p_system      = parameters(1 : pdim);
+  p_sys         = parameters(1 : pdim);
+  % Phase resetting parameters
+  p_PR          = parameters(pdim+1 : end);
 
   % Phase resetting parameters
   % Integer for period
-  % k             = parameters(p_maps.k);
-  % Stable Floquet eigenvalue
-  mu_s          = parameters(p_maps.mu_s);
-  % Distance from pertured segment to \Gamma
-  eta           = parameters(p_maps.eta);
+  k             = p_PR(1);
   % Phase where perturbation starts
-  % theta_old     = parameters(p_maps.theta_old);
+  theta_old     = p_PR(2);
   % Phase where segment comes back to \Gamma
-  % theta_new     = parameters(p_maps.theta_new);
-  % Angle of perturbation
-  theta_perturb = parameters(p_maps.theta_perturb);
-  % Angle of perturbation
-  phi_perturb = parameters(p_maps.phi_perturb);
+  theta_new     = p_PR(3);
+  % Stable Floquet eigenvalue
+  mu_s          = p_PR(4);
+  % Distance from pertured segment to \Gamma
+  eta           = p_PR(5);
   % Size of perturbation
-  A_perturb     = parameters(p_maps.A_perturb);
+  A_perturb     = p_PR(6);
+  % Angle of perturbation
+  theta_perturb = p_PR(7);
+
+  % Perturbation vector
+  d_vec = [cos(theta_perturb * (2.0 * pi));
+           0.0;
+           sin(theta_perturb * (2.0 * pi))];
 
   %============================================================================%
   %                         BOUNDARY CONDITION ENCODING                        %
@@ -127,7 +139,7 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   % Boundary Conditions - Segments 1 and 2
   bcs_seg12_1   = x0_seg1 - x1_seg2;
   bcs_seg12_2   = x1_seg1 - x0_seg2;
-  bcs_seg12_3   = e1 * yamada(x0_seg1, p_system);
+  bcs_seg12_3   = e1 * field(x0_seg1, p_sys);
 
   % Adjoint Boundary Conditions - Segments 1 and 2
   a_bcs_seg12_1 = w0_seg1 - w1_seg2;
@@ -143,17 +155,11 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %-------------------%
   %     Segment 4     %
   %-------------------%
-  % d_vec = [cos(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi));
-  %          cos(phi_perturb * pi)
-  %          sin(theta_perturb * (2.0 * pi)) * sin(phi_perturb * (pi))];
-  d_vec = [cos(theta_perturb * (2.0 * pi));
-           0.0;
-           sin(theta_perturb * (2.0 * pi))];
-
   % Boundary Conditions - Segment 4
   bcs_seg4_1 = x0_seg4 - x0_seg3 - (A_perturb * d_vec);
   bcs_seg4_2 = dot(x1_seg4 - x0_seg2, w0_seg2);
   bcs_seg4_3 = norm(x1_seg4 - x0_seg2) - eta;
+  % bcs_seg4_3 = (norm(x1_seg4 - x0_seg2) ^ 2) - eta;
 
   %============================================================================%
   %                                   OUTPUT                                   %
@@ -161,15 +167,9 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %----------------%
   %     Output     %
   %----------------%
-  y_out = [bcs_seg12_1;
-           bcs_seg12_2;
-           bcs_seg12_3;
-           a_bcs_seg12_1;
-           a_bcs_seg12_2;
-           a_bcs_seg12_3;
+  y_out = [bcs_seg12_1; bcs_seg12_2; bcs_seg12_3;
+           a_bcs_seg12_1; a_bcs_seg12_2; a_bcs_seg12_3;
            bcs_seg3;
-           bcs_seg4_1;
-           bcs_seg4_2;
-           bcs_seg4_3];
+           bcs_seg4_1; bcs_seg4_2; bcs_seg4_3];
 
 end

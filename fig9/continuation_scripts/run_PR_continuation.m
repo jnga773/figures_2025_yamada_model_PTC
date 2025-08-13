@@ -1,9 +1,8 @@
-function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pcont, prange, options)
-  % run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, options)
+function run_PR_continuation(run_new, run_old, label_old, bcs_funcs, pcont, prange, options)
+  % run_PR_continuation(run_new, run_old, label_old, bcs_funcs, pcont, prange, options)
   %
-  % Scan through SP labels from previous run (different values of A_perturb)
-  % and continue in \theta_{old} and \theta_{new}. Each run will save
-  % to the 'data/run10_phase_reset_PTC/' directory.
+  % Run the phase resetting continuation problem, from label_old solution in
+  % run_old, and saves the results in run_new.
   %
   % Parameters
   % ----------
@@ -13,8 +12,6 @@ function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pc
   %     The old run identifier for the sub continuation problem.
   % label_old : integer
   %     The label identifier for the previous continuation problem.
-  % data_PR : struct
-  %     Data structure containing the initial conditions for the trajectory segments.
   % bcs_funcs : list of functions
   %     Structure containing boundary condition functions.
   % pcont : cell
@@ -53,12 +50,11 @@ function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pc
   %-------------------%
   arguments
     run_new
-    run_old
+    run_old char
     label_old double
-    data_PR struct
     bcs_funcs struct
-    pcont cell = {'theta_old', 'theta_new', 'eta', 'mu_s', 'T'};
-    prange cell = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01], []};
+    pcont cell = {'theta_old', 'theta_new', 'eta', 'mu_s'};
+    prange cell = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
     % Optional arguments
     options.SP_parameter string = ''
@@ -83,7 +79,7 @@ function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pc
   prob = coco_prob();
 
   % Set tolerance
-  prob = coco_set(prob, 'corr', 'TOL', options.TOL);
+  % prob = coco_set(prob, 'corr', 'TOL', options.TOL);
 
   % Set step sizes
   prob = coco_set(prob, 'cont', 'h_min', options.h_min);
@@ -99,12 +95,24 @@ function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pc
   % Set norm to int
   prob = coco_set(prob, 'cont', 'norm', inf);
 
-  % Set MaxRes and al_max
-  prob = coco_set(prob, 'cont', 'MaxRes', options.MaxRes);
-  prob = coco_set(prob, 'cont', 'al_max', options.al_max);
+  % % Set MaxRes and al_max
+  % prob = coco_set(prob, 'cont', 'MaxRes', options.MaxRes);
+  % prob = coco_set(prob, 'cont', 'al_max', options.al_max);
 
   % Set frequency of saved solutions
   prob = coco_set(prob, 'cont', 'NPR', options.NPR);
+
+  %-------------------%
+  %     Set NTSTs     %
+  %-------------------%
+  % % Read k value from previous run
+  % k = coco_bd_val(coco_bd_read(run_old), label_old, 'k');
+  % 
+  % % Set NTSTs
+  % prob = coco_set(prob, 'seg1.coll', 'NTST', 25);
+  % prob = coco_set(prob, 'seg2.coll', 'NTST', 25);
+  % prob = coco_set(prob, 'seg3.coll', 'NTST', 25);
+  % prob = coco_set(prob, 'seg4.coll', 'NTST', 40 * k);
 
   %-------------------------------------------%
   %     Continue from Trajectory Segments     %
@@ -118,13 +126,19 @@ function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pc
   % Segment 4
   prob = ode_coll2coll(prob, 'seg4', run_old, label_old);
 
+  %------------------------------------%
+  %     Continue Equilibrium Point     %
+  %------------------------------------%
+  % Add equilibrium point for q inside periodic orbit
+  prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
+
   %------------------------------------------------%
   %     Apply Boundary Conditions and Settings     %
   %------------------------------------------------%
   % Apply all boundary conditions, glue parameters together, and
   % all that other good COCO stuff. Looking the function file
   % if you need to know more ;)
-  prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
+  prob = apply_boundary_conditions_PR(prob, bcs_funcs);
 
   %-------------------------%
   %     Add COCO Events     %
@@ -133,9 +147,9 @@ function run_PR_continuation(run_new, run_old, label_old, data_PR, bcs_funcs, pc
     prob = coco_add_event(prob, 'SP', options.SP_parameter, options.SP_values);
   end
 
-  %-------------------------%
-  %     Add COCO Events     %
-  %-------------------------%
+  %--------------------------%
+  %     Run Continuation     %
+  %--------------------------%
   % Run COCO continuation
   coco(prob, run_new, [], 1, pcont, prange);
 

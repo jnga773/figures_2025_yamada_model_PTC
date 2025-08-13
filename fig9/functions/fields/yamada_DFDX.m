@@ -30,10 +30,10 @@ function J_out = yamada_DFDX(x_in, p_in)
   % Decay time of gain
   gamma = p_in(1, :);
   % Pump current on the gain
-  A = p_in(2, :);
+  A     = p_in(2, :);
   % (Relative) absorption
-  B = p_in(3, :);
-  a = p_in(4, :);
+  B     = p_in(3, :);
+  a     = p_in(4, :);
 
   %----------------%
   %     Output     %

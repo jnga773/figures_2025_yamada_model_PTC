@@ -1,75 +1,91 @@
 function y_out = func_seg2(x_in, p_in)
-  % y_out = func_seg1(u_in, p_in)
+  % y_out = func_seg2(x_in, p_in)
   %
-  % COCO 'ode' toolbox encoding for the vector field corresponding to
-  % segment 2 of the phase resetting curve.
+  % Creates a CoCo-compatible function encoding for the second
+  % segment of the phase-resetting problem.
   %
-  % Segment 2 goes from theta_new to gamma_0.
+  % Segment 2 goes from \gamma_{\vartheta_{n}} to \gamma_{0}.
   %
   % Parameters
   % ----------
-  % x_in : array, float
+  % x_in : array, double
   %     State vector for the periodic orbit (x) and perpendicular
   %     vector (w).
-  % p_in : array, float
+  % p_in : array, double
   %     Array of parameter values
   %
   % Returns
   % -------
-  % y_out : array, float
+  % y_out : array, double
   %     Array of the vector field of the periodic orbit segment
   %     and the corresponding adjoint equation for the perpendicular
   %     vector.
 
-  % Original vector field dimensions (CHANGE THESE)
-  xdim = 3;
-  pdim = 4;
+  %============================================================================%
+  %                                    INPUT                                   %
+  %============================================================================%
+  % Original vector field state-space dimension
+  xdim       = 3;
+  % Original vector field parameter-space dimension
+  pdim       = 4;
   % Original vector field function
   field      = @yamada;
+  % Original vector field state-space Jacobian
   field_DFDX = @yamada_DFDX;
 
-  %--------------------------%
-  %     Input Parameters     %
-  %--------------------------%
+  %============================================================================%
+  %                                    INPUT                                   %
+  %============================================================================%
+  %-------------------------------%
+  %     State-Space Variables     %
+  %-------------------------------%
   % State space variables
-  x_vec        = x_in(1:xdim, :);
-
+  x_vec         = x_in(1:xdim, :);
   % Perpendicular vectors
-  w_vec        = x_in(xdim+1:2*xdim, :);
-
+  w_vec         = x_in(xdim+1:2*xdim, :);
+  
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
   % System parameters
-  p_system     = p_in(1:pdim, :);
+  p_sys         = p_in(1 : pdim, :);
+  % Phase resetting parameters
+  p_PR          = p_in(pdim+1 : end, :);
 
   % Phase resetting parameters
   % Integer for period
-  % k             = p_in(pdim+1, :);
+  % k             = p_PR(1, :);
   % Phase where perturbation starts
-  % theta_old     = p_in(pdim+2, :);
+  % theta_old     = p_PR(2, :);
   % Phase where segment comes back to \Gamma
-  theta_new     = p_in(pdim+3, :);
+  theta_new     = p_PR(3, :);
   % Stable Floquet eigenvalue
-  % mu_s          = p_in(pdim+4, :);
+  % mu_s          = p_PR(4, :);
   % Distance from pertured segment to \Gamma
-  % eta           = p_in(pdim+5, :);
+  % eta           = p_PR(5, :);
   % Size of perturbation
-  % A_perturb     = p_in(pdim+6, :);
+  % A_perturb     = p_PR(6, :);
   % Angle of perturbation
-  % theta_perturb = p_in(pdim+7, :);
-  % Azimuthal angle of perturbation
-  % phi_perturb   = p_in(pdim+8, :);
+  % theta_perturb = p_PR(7, :);
 
-  %--------------------------%
-  %     Calculate Things     %
-  %--------------------------%
+  %============================================================================%
+  %                           VECTOR FIELD ENCODING                            %
+  %============================================================================%
+  %----------------------%
+  %     Vector Field     %
+  %----------------------%
   % Calculate vector field
-  vec_field = field(x_vec, p_system);
+  vec_field = field(x_vec, p_sys);
 
   % Save to array
   vec_eqn = (1 - theta_new) .* vec_field;
-
+  
+  %-----------------------------%
+  %     Variational Problem     %
+  %-----------------------------%
   % Calculate adjoint equations
   % Jacobian at the zero-phase point
-  J = field_DFDX(x_vec, p_system);
+  J = field_DFDX(x_vec, p_sys);
 
   % Cycle through each variable in x1 and calculate
   % adjoint equation components
@@ -84,11 +100,11 @@ function y_out = func_seg2(x_in, p_in)
     adj_eqn(:, :, i) = temp(:, :, i) * w_vec(:, i);    
   end
 
-  %----------------%
-  %     Output     %
-  %----------------%
+  %============================================================================%
+  %                                   OUTPUT                                   %
+  %============================================================================%
   % Vector field
-  y_out(1:xdim, :) = vec_eqn(:, :);
+  y_out(1:xdim, :)        = vec_eqn(:, :);
   % Adjoint equation
   y_out(xdim+1:2*xdim, :) = adj_eqn(:, :);
 

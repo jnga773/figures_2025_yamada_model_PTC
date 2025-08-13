@@ -346,7 +346,7 @@ prob = ode_isol2coll(prob, 'seg2', funcs.seg2{:}, ...
 
 % Add equilibrium point
 prob = ode_isol2ep(prob, 'xpos', funcs.field{:}, ...
-                   data_PR.xpos, data_PR.p0(1:data_PR.pdim));
+                   data_PR.xpos, data_PR.p0(1:pdim));
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -354,7 +354,7 @@ prob = ode_isol2ep(prob, 'xpos', funcs.field{:}, ...
 % Apply all boundary conditions, glue parameters together, and
 % all that other good COCO stuff. Looking the function file
 % if you need to know more ;)
-prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
+prob = apply_boundary_conditions_PR(prob, bcs_funcs);
 
 %-------------------------%
 %     Add COCO Events     %
@@ -418,7 +418,6 @@ epsilon = -1e-3;
 
 % Calculate dem tings
 data_Wsq = calc_initial_solution_Wsq(run_old, label_old, epsilon, funcs);
-data_Wsq.p_maps = data_PR.p_maps;
 
 %----------------------------%
 %     Setup Continuation     %
@@ -467,13 +466,13 @@ prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
 %-------------------------------------------%
 % Set initial guess for the manifold segment
 prob = ode_isol2coll(prob, 'Wsq', funcs.field{:}, ...
-                     data_Wsq.t0, data_Wsq.x0, data_Wsq.p0(1:data_Wsq.pdim));
+                     data_Wsq.t0, data_Wsq.x0, data_Wsq.p0(1:pdim));
 
 %-----------------------------------%
 %     Apply Boundary Conditions     %
 %-----------------------------------%
 % Glue parameters and apply boundary condition
-prob = apply_boundary_conditions_Wsq(prob, data_Wsq, bcs_funcs, data_Wsq.epsilon);
+prob = apply_boundary_conditions_Wsq(prob, bcs_funcs, epsilon);
 
 %------------------------%
 %     Add CoCo Event     %
@@ -575,13 +574,14 @@ prob = ode_coll2coll(prob, 'Wsq', run_old, label_old);
 epsilon_read = chart_bcs.x(data_bcs.eps_idx);
 
 % Glue parameters and apply boundary condition
-prob = apply_boundary_conditions_Wsq(prob, data_Wsq, bcs_funcs, epsilon_read);
+prob = apply_boundary_conditions_Wsq(prob, bcs_funcs, epsilon_read);
 
 %------------------------%
 %     Add CoCo Event     %
 %------------------------%
 % Add saved point for when theta_old crosses over q
 prob = coco_add_event(prob, 'q_PT', 'q_dist', 0.0);
+
 % Add saved points for theta_perturb = 0, 45, and 90 degrees
 SP_points = [0.0, 0.125, 0.25, 1.0, 1.125, 1.25];
 prob = coco_add_event(prob, 'SP', 'theta_perturb', SP_points);
@@ -636,7 +636,6 @@ epsilon = 1e-3;
 
 % Calculate dem tings
 data_Wsq = calc_initial_solution_Wsq(run_old, label_old, epsilon, funcs);
-data_Wsq.p_maps = data_PR.p_maps;
 
 %----------------------------%
 %     Setup Continuation     %
@@ -685,13 +684,13 @@ prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
 %-------------------------------------------%
 % Set initial guess for the manifold segment
 prob = ode_isol2coll(prob, 'Wsq', funcs.field{:}, ...
-                     data_Wsq.t0, data_Wsq.x0, data_Wsq.p0(1:data_Wsq.pdim));
+                     data_Wsq.t0, data_Wsq.x0, data_Wsq.p0(1:pdim));
 
 %-----------------------------------%
 %     Apply Boundary Conditions     %
 %-----------------------------------%
 % Glue parameters and apply boundary condition
-prob = apply_boundary_conditions_Wsq(prob, data_Wsq, bcs_funcs, data_Wsq.epsilon);
+prob = apply_boundary_conditions_Wsq(prob, bcs_funcs, epsilon);
 
 %------------------------%
 %     Add CoCo Event     %
@@ -793,13 +792,14 @@ prob = ode_coll2coll(prob, 'Wsq', run_old, label_old);
 epsilon_read = chart_bcs.x(data_bcs.eps_idx);
 
 % Glue parameters and apply boundary condition
-prob = apply_boundary_conditions_Wsq(prob, data_Wsq, bcs_funcs, epsilon_read);
+prob = apply_boundary_conditions_Wsq(prob, bcs_funcs, epsilon_read);
 
 %------------------------%
 %     Add CoCo Event     %
 %------------------------%
 % Add saved point for when theta_old crosses over q
 prob = coco_add_event(prob, 'q_PT', 'q_dist', 0.0);
+
 % Add saved points for theta_perturb = 0, 45, and 90 degrees
 SP_points = [0.0, 0.125, 0.25, 1.0, 1.125, 1.25];
 prob = coco_add_event(prob, 'SP', 'theta_perturb', SP_points);

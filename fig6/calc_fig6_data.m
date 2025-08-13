@@ -313,7 +313,7 @@ fprintf(' =====================================================================\
 %--------------------------%
 %     Calculate Things     %
 %--------------------------%
-data_adjoint = calc_initial_solution_VAR(run_old, label_old);
+data_VAR = calc_initial_solution_VAR(run_old, label_old);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -339,8 +339,8 @@ prob = coco_set(prob, 'coll', 'MXCL', 'off');
 
 % Add segment as initial solution
 prob = ode_isol2coll(prob, 'adjoint', funcs.VAR{:}, ...
-                     data_adjoint.t0, data_adjoint.x0, ...
-                     data_adjoint.pnames, data_adjoint.p0);
+                     data_VAR.t0, data_VAR.x0, ...
+                     data_VAR.pnames, data_VAR.p0);
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -478,7 +478,7 @@ theta_perturb = 0.0;
 phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
-data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_perturb);
+data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -560,7 +560,7 @@ prob = ode_isol2coll(prob, 'seg4', funcs.seg4{:}, ...
 % Apply all boundary conditions, glue parameters together, and
 % all that other good COCO stuff. Looking the function file
 % if you need to know more ;)
-prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
+prob = apply_boundary_conditions_PR(prob, bcs_funcs);
 
 %-------------------------%
 %     Add COCO Events     %
@@ -634,8 +634,7 @@ parfor (run = 1 : length(label_old), N_threads)
   prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
-  run_PR_continuation(this_run_name, run_old, this_run_label, ...
-                      data_PR, bcs_funcs, ...
+  run_PR_continuation(this_run_name, run_old, this_run_label, bcs_funcs, ...
                       pcont, prange, ...
                       SP_parameter=SP_parameter, SP_values=SP_values);
 

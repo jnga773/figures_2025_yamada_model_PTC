@@ -21,34 +21,40 @@ function bcs_coco_out = bcs_PR_symbolic()
   %     List of CoCo-ified symbolic functions for the boundary conditions
   %     Jacobian, and Hessian.
 
-  % State-space dimension
-  xdim = 3;
+  %============================================================================%
+  %                          CHANGE THESE PARAMETERS                           %
+  %============================================================================%
+  % Original vector field state-space dimension
+  xdim  = 3;
+  % Original vector field parameter-space dimension
+  pdim  = 4;
+  % Original vector field symbolic function
+  field = @yamada_symbolic_field;
 
   %============================================================================%
-  %                              INPUT PARAMETERS                              %
+  %                                    INPUT                                   %
   %============================================================================%
-  %--------------------------------%
-  %     Input: Initial Vectors     %
-  %--------------------------------%
+  %-------------------------%
+  %     Initial Vectors     %
+  %-------------------------%
   % Segment 1 - x(0)
   x0_seg1 = sym('x0_seg1', [xdim, 1]);
   % Segment 2 - x(0)
   x0_seg2 = sym('x0_seg2', [xdim, 1]);
 
-  %------------------------------%
-  %     Input: Final Vectors     %
-  %------------------------------%
+  %-----------------------%
+  %     Final Vectors     %
+  %-----------------------%
   % Segment 1 - x(1)
   x1_seg1 = sym('x1_seg1', [xdim, 1]);
   % Segment 2 - x(1)
   x1_seg2 = sym('x1_seg2', [xdim, 1]);
 
-  %---------------------------%
-  %     Input: Parameters     %
-  %---------------------------%
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
   % System parameters
-  syms gam A B a
-  p_sys = [gam; A; B; a];
+  p_sys = sym('p', [pdim, 1]);
 
   % Phase resetting parameters
   syms theta
@@ -61,7 +67,7 @@ function bcs_coco_out = bcs_PR_symbolic()
   %     Segment 1 and Segment 2     %
   %---------------------------------%
   % Vector field
-  F_vec = yamada_symbolic_field(x0_seg1, p_sys);
+  F_vec = field(x0_seg1, p_sys);
 
   % Boundary Conditions - Segments 1 and 2
   bcs_seg12_1   = x0_seg1 - x1_seg2;
@@ -71,31 +77,34 @@ function bcs_coco_out = bcs_PR_symbolic()
   %============================================================================%
   %                                   OUTPUT                                   %
   %============================================================================%
+  %-----------------------%
+  %     Total Vectors     %
+  %-----------------------%
+  % Combined vector
+  u_vec = [x0_seg1; x0_seg2; x1_seg1; x1_seg2;
+           p_sys; p_PR];
+
+  % Boundary conditions vector
+  bcs_vec = [bcs_seg12_1;  bcs_seg12_2; bcs_seg12_3];
+
   %-----------------%
   %     SymCOCO     %
   %-----------------%
-  % Combined vector
-  uvec = [x0_seg1; x0_seg2; x1_seg1; x1_seg2;
-          p_sys; p_PR];
-
-  % Boundary conditions vector
-  bcs =  [bcs_seg12_1;  bcs_seg12_2; bcs_seg12_3];
-
   % Filename for output functions
   filename_out = './functions/symcoco/F_bcs_PR';
 
   % COCO Function encoding
-  bcs_coco = sco_sym2funcs(bcs, {uvec}, {'u'}, 'filename', filename_out);
+  bcs_coco = sco_sym2funcs(bcs_vec, {u_vec}, {'u'}, 'filename', filename_out);
 
   % Function to "CoCo-ify" function outputs: [data_in, y_out] = f(prob_in, data_in, u_in)
   cocoify = @(func_in) @(prob_in, data_in, u_in) deal(data_in, func_in(u_in));
 
-  % List of functions
-  func_list = {cocoify(bcs_coco('')), cocoify(bcs_coco('u')), cocoify(bcs_coco({'u', 'u'}))};
-
   %----------------%
   %     Output     %
   %----------------%
+  % List of functions
+  func_list = {cocoify(bcs_coco('')), cocoify(bcs_coco('u')), cocoify(bcs_coco({'u', 'u'}))};
+
   bcs_coco_out = func_list;
 
 end

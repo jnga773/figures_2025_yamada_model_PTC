@@ -23,40 +23,55 @@ function bcs_coco_out = bcs_PO_symbolic()
   %     List of CoCo-ified symbolic functions for the boundary conditions
   %     Jacobian, and Hessian.
 
-  % State-space dimension
-  xdim = 3;
+  %============================================================================%
+  %                          CHANGE THESE PARAMETERS                           %
+  %============================================================================%
+  % Original vector field state-space dimension
+  xdim  = 3;
+  % Original vector field parameter-space dimension
+  pdim  = 4;
+  % Original vector field symbolic function
+  field = @yamada_symbolic_field;
 
-  %---------------%
-  %     Input     %
-  %---------------%
+  %============================================================================%
+  %                                    INPUT                                   %
+  %============================================================================%
+  %-----------------------------%
+  %     State-Space Vectors     %
+  %-----------------------------%
   % Initial point of the periodic orbit
   x_init = sym('x', [xdim, 1]);
-
   % Final point of the periodic orbit
   x_final = sym('x_final', [xdim, 1]);
 
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
   % System parameters
-  syms gam A B a
-  p_sys = [gam; A; B; a];
+  p_sys = sym('p', [pdim, 1]);
 
-  % Combined vector
-  uvec = [x_init;
-          x_final;
-          p_sys];
-
-  %--------------------------%
-  %     Calculate Things     %
-  %--------------------------%
+  %============================================================================%
+  %                         BOUNDARY CONDITION ENCODING                        %
+  %============================================================================%
   % Vector field
-  F_vec = yamada_symbolic_field(x_init, p_sys);
+  F_vec = field(x_init, p_sys);
 
   % Periodic boundary conditions
   bcs1 = x_init - x_final;
   % First component of the vector field is zero (phase condition)
   bcs2 = F_vec(1);
 
+  %============================================================================%
+  %                                   OUTPUT                                   %
+  %============================================================================%
+  %-----------------------%
+  %     Total Vectors     %
+  %-----------------------%
+  % Combined vector
+  u_vec   = [x_init; x_final; p_sys];
+  
   % Boundary condition vector
-  bcs = [bcs1; bcs2];
+  bcs_vec = [bcs1; bcs2];
 
   %-----------------%
   %     SymCOCO     %
@@ -65,17 +80,17 @@ function bcs_coco_out = bcs_PO_symbolic()
   filename_out = './functions/symcoco/F_bcs_PO';
 
   % COCO Function encoding
-  bcs_coco = sco_sym2funcs(bcs, {uvec}, {'u'}, 'filename', filename_out);
+  bcs_coco = sco_sym2funcs(bcs_vec, {u_vec}, {'u'}, 'filename', filename_out);
 
   % Function to "CoCo-ify" function outputs: [data_in, y_out] = f(prob_in, data_in, u_in)
   cocoify = @(func_in) @(prob_in, data_in, u_in) deal(data_in, func_in(u_in));
 
-  % List of functions
-  func_list = {cocoify(bcs_coco('')), cocoify(bcs_coco('u')), cocoify(bcs_coco({'u', 'u'}))};
-
   %----------------%
   %     Output     %
   %----------------%
+  % List of functions
+  func_list = {cocoify(bcs_coco('')), cocoify(bcs_coco('u')), cocoify(bcs_coco({'u', 'u'}))};
+
   bcs_coco_out = func_list;
 
 end

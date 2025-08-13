@@ -29,39 +29,36 @@ function prob_out = apply_boundary_conditions_VAR(prob_in, bcs_funcs_in)
   %     Read the Segment Data     %
   %-------------------------------%
   % Read function data and u-vector indices
-  [data, uidx] = coco_get_func_data(prob, 'adjoint.coll', 'data', 'uidx');
+  [data_VAR, uidx_VAR] = coco_get_func_data(prob, 'adjoint.coll', 'data', 'uidx');
+  % Read function data for equilibrium point
+  [data_EP, uidx_EP]   = coco_get_func_data(prob, 'xpos.ep', 'data', 'uidx');
 
   % Read index mappings from data
-  maps = data.coll_seg.maps;
+  maps_VAR = data_VAR.coll_seg.maps;
+  maps_EP  = data_EP.ep_eqn;
 
-  % Dimensions of original structure
-  xdim = 0.5 * data.xdim;
-  pdim = data.pdim - 2;
-
-  % Save dimensions to be called in boundary condition functions
-  dim_data.xdim = xdim;
-  dim_data.pdim = pdim;
+  %-------------------------%
+  %     Glue Parameters     %
+  %-------------------------%
+  % Glue 'EP' and 'VAR' parameters together
+  prob = coco_add_glue(prob, 'glue_par_VAR_EP', ...
+                      uidx_VAR(maps_VAR.p_idx(1:data_EP.pdim)), ...
+                      uidx_EP(maps_EP.p_idx));
 
   %-----------------------------------%
   %     Apply Boundary Conditions     %
   %-----------------------------------%
   % Apply periodic orbit boundary conditions
-  prob = coco_add_func(prob, 'bcs_po', bcs_funcs_in.bcs_PO{:}, dim_data, 'zero', 'uidx', ...
-                       uidx([maps.x0_idx(1:xdim); ...
-                             maps.x1_idx(1:xdim); ...
-                             maps.p_idx(1:pdim)]));
+  prob = coco_add_func(prob, 'bcs_po', bcs_funcs_in.bcs_PO{:}, data_EP, 'zero', 'uidx', ...
+                       uidx_VAR([maps_VAR.x0_idx(1:data_EP.xdim); ...
+                                 maps_VAR.x1_idx(1:data_EP.xdim); ...
+                                 maps_VAR.p_idx(1:data_EP.pdim)]));
 
   % Apply adjoint boundary conditions
-  prob = coco_add_func(prob, 'bcs_adjoint', bcs_funcs_in.bcs_VAR{:}, dim_data, 'zero', 'uidx', ...
-                       uidx([maps.x0_idx(xdim+1:end); ...
-                             maps.x1_idx(xdim+1:end); ...
-                             maps.p_idx(end-1:end)]));
-
-  %--------------------%
-  %     Parameters     %
-  %--------------------%
-  % Add segment period as parameter
-  % prob = coco_add_pars(prob, 'par_T', uidx(maps.T_idx), 'T_seg', 'active');
+  prob = coco_add_func(prob, 'bcs_VAR', bcs_funcs_in.bcs_VAR{:}, data_EP, 'zero', 'uidx', ...
+                       uidx_VAR([maps_VAR.x0_idx(data_EP.xdim+1:end); ...
+                                 maps_VAR.x1_idx(data_EP.xdim+1:end); ...
+                                 maps_VAR.p_idx(end-1:end)]));
 
   %----------------%
   %     Output     %

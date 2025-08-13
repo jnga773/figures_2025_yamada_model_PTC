@@ -1,5 +1,5 @@
-function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_perturb_in, phi_perturb_in)
-  % data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_perturb_in, phi_perturb_in)
+function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_perturb_in)
+  % data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_perturb_in)
   %
   % Reads data from previous run solution and calculates the 
   % initial conditions for the various different trajectory segments.
@@ -14,8 +14,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   %     Integer for the periodicity.
   % theta_perturb_in : float
   %     Angle at which perturbation is applied.
-  % phi_perturb_in : float
-  %     Azimuthal angle at which perturbation is applied.
   %
   % Returns
   % -------
@@ -46,9 +44,8 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   arguments
     run_in char
     label_in double
-    k_in double             = 30;
-    theta_perturb_in double = 0.0;
-    phi_perturb_in double   = 0.5;
+    k_in double             = 25
+    theta_perturb_in double = 0.0
   end
 
   %-----------------------------------------------------------------------%
@@ -115,12 +112,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   A_perturb     = 0.0;
   % Angle at which perturbation is applied?
   theta_perturb = theta_perturb_in;
-  % Azimuthal angle at which perturbation is applied
-  phi_perturb   = phi_perturb_in;
-  % % Perturbation vector components
-  % d_x           = 0.0;
-  % d_y           = 0.0;
-  % d_z           = 0.0;
 
   %---------------------------%
   %     Parameter Indices     %
@@ -136,7 +127,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   p_maps.eta           = pdim + 5;
   p_maps.A_perturb     = pdim + 6;
   p_maps.theta_perturb = pdim + 7;
-  p_maps.phi_perturb   = pdim + 8;
 
   %------------------------%
   %     Set Parameters     %
@@ -152,7 +142,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   p0_out(p_maps.eta)           = eta;
   p0_out(p_maps.A_perturb)     = A_perturb;
   p0_out(p_maps.theta_perturb) = theta_perturb;
-  p0_out(p_maps.phi_perturb)   = phi_perturb;
 
   %-------------------------%
   %     Parameter Names     %
@@ -163,11 +152,10 @@ function data_out = calc_initial_solution_PR(run_in, label_in, k_in, theta_pertu
   pnames_PR{p_maps.k}             = 'k';
   pnames_PR{p_maps.theta_old}     = 'theta_old';
   pnames_PR{p_maps.theta_new}     = 'theta_new';
-  pnames_PR{p_maps.mu_s}          = mu_s_name;
+  pnames_PR{p_maps.mu_s}          = 'mu_s';
   pnames_PR{p_maps.eta}           = 'eta';
   pnames_PR{p_maps.A_perturb}     = 'A_perturb';
   pnames_PR{p_maps.theta_perturb} = 'theta_perturb';
-  pnames_PR{p_maps.phi_perturb}   = 'phi_perturb';
 
   %----------------------------------------------%
   %     Segment Initial Conditions: Periodic     %

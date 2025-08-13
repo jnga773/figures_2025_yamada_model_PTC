@@ -4,47 +4,74 @@ function F_coco_out = func_seg3_symbolic()
   % Creates a CoCo-compatible function encoding for the third
   % segment of the phase-resetting problem.
   %
-  % Segment 3 goes from gamma_0 to theta_old.
+  % Segment 3 goes from \gamma_{\vartheta_{o}} to \gamma_{\vartheta_{n}}.
   %
   % Returns
   % -------
-  % F_coco_out : array, float
-  %     Cell of all of the functions and derivatives.
+  % F_coco_out : cell of function handles
+  %    List of CoCo-encoded symbolic functions for the segment 3 vector field,
+  %    and its Jacobians and Hessians.
 
-  % State space dimension
-  xdim = 3;
+  %============================================================================%
+  %                          CHANGE THESE PARAMETERS                           %
+  %============================================================================%
+  % Original vector field state-space dimension
+  xdim  = 3;
+  % Original vector field parameter-space dimension
+  pdim  = 4;
+  % Original vector field symbolic function
+  field = @yamada_symbolic_field;
 
-  %---------------%
-  %     Input     %
-  %---------------%
+  %============================================================================%
+  %                                    INPUT                                   %
+  %============================================================================%
+  %-------------------------------%
+  %     State-Space Variables     %
+  %-------------------------------%
   % State-space variables
-  xvec = sym('x', [xdim, 1]);
+  x_vec = sym('x', [xdim, 1]);
+  % Adjoint equation variables
+  w_vec = sym('w', [xdim, 1]);
 
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
   % System parameters
-  syms gam A B a
-  p_sys = [gam; A; B; a];
+  p_sys = sym('p', [pdim, 1]);
 
   % Phase resetting parameters
   syms k theta_old theta_new
   syms mu_s eta
-  syms A_perturb theta_perturb phi_perturb
+  syms A_perturb theta_perturb
   p_PR = [k; theta_old; theta_new;
           mu_s; eta;
-          A_perturb; theta_perturb; phi_perturb];
+          A_perturb; theta_perturb];
 
-  % Total vectors
-  uvec = xvec;
-  pvec = [p_sys; p_PR];
-
-  %--------------------------%
-  %     Calculate Things     %
-  %--------------------------%
+  %============================================================================%
+  %                           VECTOR FIELD ENCODING                            %
+  %============================================================================%
+  %----------------------%
+  %     Vector Field     %
+  %----------------------%
   % Vector field
-  F_vec = yamada_symbolic_field(xvec, p_sys);
+  F_vec = field(x_vec, p_sys);
 
-  % Vector equation
+  % Vector field equation
   vec_eqn = (1 - theta_old) * F_vec;
 
+  % Total equation
+  F_seg = vec_eqn;
+
+  %============================================================================%
+  %                                   OUTPUT                                   %
+  %============================================================================%
+  %-----------------------%
+  %     Total Vectors     %
+  %-----------------------%
+  % Total vectors
+  u_vec  = x_vec;
+  p_vec  = [p_sys; p_PR];
+  
   % Total equation
   F_seg = vec_eqn;
 
@@ -55,16 +82,16 @@ function F_coco_out = func_seg3_symbolic()
   filename_out = './functions/symcoco/F_seg3';
 
   % COCO Function encoding
-  F_coco = sco_sym2funcs(F_seg, {uvec, pvec}, {'x', 'p'}, 'filename', filename_out);
+  F_coco = sco_sym2funcs(F_seg, {u_vec, p_vec}, {'x', 'p'}, 'filename', filename_out);
 
+  %----------------%
+  %     Output     %
+  %----------------%
   % List of functions
   func_list = {F_coco(''), ...
                F_coco('x'), F_coco('p'), ...
                F_coco({'x', 'x'}), F_coco({'x', 'p'}), F_coco({'p', 'p'})};
 
-  %----------------%
-  %     Output     %
-  %----------------%
   F_coco_out = func_list;
 
 end

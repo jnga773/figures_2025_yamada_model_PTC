@@ -67,8 +67,8 @@ function data_out = calc_initial_solution_Wsq(run_in, label_in, epsilon_in, func
   %     Output     %
   %----------------%
   % Load PO solution data
-  data_out.xdim = data.xdim;
-  data_out.pdim = data.pdim;
+  data_out.xdim    = data.xdim;
+  data_out.pdim    = data.pdim;
   data_out.x0      = x0_Wsq';
   data_out.t0      = t0;
   data_out.ls      = ls;

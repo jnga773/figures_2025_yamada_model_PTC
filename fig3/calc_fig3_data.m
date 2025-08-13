@@ -313,7 +313,7 @@ fprintf(' =====================================================================\
 %--------------------------%
 %     Calculate Things     %
 %--------------------------%
-data_adjoint = calc_initial_solution_VAR(run_old, label_old);
+data_VAR = calc_initial_solution_VAR(run_old, label_old);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -339,8 +339,11 @@ prob = coco_set(prob, 'coll', 'MXCL', 'off');
 
 % Add segment as initial solution
 prob = ode_isol2coll(prob, 'adjoint', funcs.VAR{:}, ...
-                     data_adjoint.t0, data_adjoint.x0, ...
-                     data_adjoint.pnames, data_adjoint.p0);
+                     data_VAR.t0, data_VAR.x0, ...
+                     data_VAR.pnames, data_VAR.p0);
+
+% Continue equilibrium point
+prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
 
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
@@ -412,6 +415,9 @@ prob = coco_set(prob, 'cont', 'NPR', 25);
 prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
 prob = coco_set(prob, 'cont', 'branch', 'switch');
 
+% Continue equilibrium point
+prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
+
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
 %------------------------------------------------%
@@ -475,10 +481,9 @@ k = 30;
 
 % Set perturbation direction (in units of 2 pi)
 theta_perturb = 0.0;
-phi_perturb = 0.0;
 
 % Set initial conditions from previous solutions
-data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_perturb);
+data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb);
 
 %----------------------------%
 %     Setup Continuation     %
@@ -487,8 +492,8 @@ data_PR = calc_initial_solution_PR(run_old, label_old, k, theta_perturb, phi_per
 prob = coco_prob();
 
 % Set step sizes
-prob = coco_set(prob, 'cont', 'h_min', 5e-5);
-prob = coco_set(prob, 'cont', 'h0', 1e-3);
+prob = coco_set(prob, 'cont', 'h_min', 1e-3);
+prob = coco_set(prob, 'cont', 'h0', 5e-2);
 prob = coco_set(prob, 'cont', 'h_max', 1e0);
 
 % Set adaptive mesh
@@ -554,13 +559,19 @@ prob = ode_isol2coll(prob, 'seg3', funcs.seg3{:}, ...
 prob = ode_isol2coll(prob, 'seg4', funcs.seg4{:}, ...
                      data_PR.t_seg4, data_PR.x_seg4, data_PR.p0);
 
+%------------------------------------%
+%     Continue Equilibrium Point     %
+%------------------------------------%
+% Add equilibrium point for q inside periodic orbit
+prob = ode_ep2ep(prob, 'xpos', run_old, label_old);
+
 %------------------------------------------------%
 %     Apply Boundary Conditions and Settings     %
 %------------------------------------------------%
 % Apply all boundary conditions, glue parameters together, and
 % all that other good COCO stuff. Looking the function file
 % if you need to know more ;)
-prob = apply_boundary_conditions_PR(prob, data_PR, bcs_funcs);
+prob = apply_boundary_conditions_PR(prob, bcs_funcs);
 
 %-------------------------%
 %     Add COCO Events     %
@@ -582,63 +593,6 @@ prange = {[-1e-4, max(SP_values)+0.01], [], ...
 
 % Run COCO continuation
 coco(prob, run_new, [], 1, pcont, prange);
-
-%-------------------------------------------------------------------------%
-%%                Phase Transition Curve (PTC) - Multiple                %%
-%-------------------------------------------------------------------------%
-%------------------%
-%     Run Name     %
-%------------------%
-% Current run name
-run_names.PR_PTC_multi = 'run06_PR_PTC_multi';
-run_new = run_names.PR_PTC_multi;
-% Which run this continuation continues from
-run_old = run_names.PR_perturbation;
-
-% Continuation point
-label_old = coco_bd_labs(coco_bd_read(run_old), 'SP');
-
-%---------------------------------%
-%     Cycle through SP labels     %
-%---------------------------------%
-% Set number of threads
-N_threads = length(label_old);
-parfor (run = 1 : length(label_old), N_threads)
-  % Label for this run
-  this_run_label = label_old(run);
-
-  % Data directory for this run
-  this_run_name = {run_new; sprintf('run_%02d', run)};
-
-  %--------------------------%
-  %     Print to Console     %
-  %--------------------------%
-  fprintf(' =====================================================================\n');
-  fprintf(' Phase Transition Curve: Second Run\n');
-  fprintf(' Calculate PTC\n');
-  fprintf(' ---------------------------------------------------------------------\n');
-  fprintf(' This run name           : {%s, %s}\n', this_run_name{1}, this_run_name{2});
-  fprintf(' Previous run name       : %s\n', run_old);
-  fprintf(' Previous solution label : %d\n', this_run_label);
-  fprintf(' Continuation parameters : %s\n', 'theta_old, theta_new, eta, mu_s');
-  fprintf(' =====================================================================\n');
-
-  % Saved solution points for theta_old
-  SP_parameter = 'theta_old';
-  SP_values    = [0.0, 1.0];
-
-  % Continuation parameters
-  pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
-  % Parameter range for continuation
-  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
-
-  % Run continuation
-  run_PR_continuation(this_run_name, run_old, this_run_label, ...
-                      data_PR, bcs_funcs, ...
-                      pcont, prange, ...
-                      SP_parameter=SP_parameter, SP_values=SP_values);
-
-end
 
 %=========================================================================%
 %%                          SAVE AND PLOT DATA                           %%

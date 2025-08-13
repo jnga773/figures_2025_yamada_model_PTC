@@ -29,42 +29,48 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   %     Function data structure to give dimensions of parameter and state
   %     space.
 
-  % (defined in calc_PR_initial_conditions.m)
-  % Original vector space dimensions
+  %============================================================================%
+  %                         READ FROM data_in STRUCTURE                        %
+  %============================================================================%
+  % These parameters are read from the data_in structure. This is defined as
+  % 'data_EP' in the 'apply_boundary_conditions_PR' function, and is the
+  % function data of the equilibrium point problem (ode_ep2ep).
+  
+  % Original vector field state-space dimension
   xdim   = data_in.xdim;
+  % Original vector field parameter-space dimension
   pdim   = data_in.pdim;
-  % Parameter maps
-  p_maps = data_in.p_maps;
+  % Original vector field function
+  field  = data_in.fhan;
 
   %============================================================================%
-  %                              INPUT PARAMETERS                              %
+  %                                    INPUT                                   %
   %============================================================================%
-  %--------------------------------%
-  %     Input: Initial Vectors     %
-  %--------------------------------%
+  %-------------------------%
+  %     Initial Vectors     %
+  %-------------------------%
   % Segment 1 - x(0)
   x0_seg1       = u_in(1 : xdim);
   % Segment 2 - x(0)
   x0_seg2       = u_in(xdim+1 : 2*xdim);
 
-  %------------------------------%
-  %     Input: Final Vectors     %
-  %------------------------------%
+  %-----------------------%
+  %     Final Vectors     %
+  %-----------------------%
   % Segment 1 - x(1)
   x1_seg1       = u_in(2*xdim+1 : 3*xdim);
   % Segment 2 - x(1)
   x1_seg2       = u_in(3*xdim+1 : 4*xdim);
-  %---------------------------%
-  %     Input: Parameters     %
-  %---------------------------%
+
+  %--------------------%
+  %     Parameters     %
+  %--------------------%
   % Parameters
   parameters    = u_in(4*xdim+1 : end);
-
   % System parameters
-  p_system     = parameters(1 : pdim);
-
+  p_system      = parameters(1 : end-1);
   % Phase resetting parameters
-  theta = parameters(p_maps.theta);
+  theta         = parameters(end);
 
   %============================================================================%
   %                         BOUNDARY CONDITION ENCODING                        %
@@ -80,7 +86,7 @@ function [data_in, y_out] = bcs_PR(prob_in, data_in, u_in)
   % Boundary Conditions - Segments 1 and 2
   bcs_seg12_1   = x0_seg1 - x1_seg2;
   bcs_seg12_2   = x1_seg1 - x0_seg2;
-  bcs_seg12_3   = e1 * yamada(x0_seg1, p_system);
+  bcs_seg12_3   = e1 * field(x0_seg1, p_system);
 
   %============================================================================%
   %                                   OUTPUT                                   %

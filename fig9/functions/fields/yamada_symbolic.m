@@ -33,14 +33,14 @@ function F_coco_out = yamada_symbolic()
   % COCO Function encoding
   F_coco = sco_sym2funcs(F_vec, {xvec, pvec}, {'x', 'p'}, 'filename', filename_out);
 
+  %----------------%
+  %     Output     %
+  %----------------%
   % List of functions
   func_list = {F_coco(''), ...
                F_coco('x'), F_coco('p'), ...
                F_coco({'x', 'x'}), F_coco({'x', 'p'}), F_coco({'p', 'p'})};
-
-  %----------------%
-  %     Output     %
-  %----------------%
+               
   F_coco_out = func_list;
 
 end

@@ -50,7 +50,7 @@ function data_out = calc_initial_solution_PO(run_in, label_in)
   %     Read Data: Equilibrium Points     %
   %---------------------------------------%
   % Read solutions
-  [sol_0, ~] = ep_read_solution('x0', run_in, label_in);
+  [sol_0, ~]   = ep_read_solution('x0', run_in, label_in);
   [sol_pos, ~] = ep_read_solution('xpos', run_in, label_in);
   [sol_neg, ~] = ep_read_solution('xneg', run_in, label_in);
 

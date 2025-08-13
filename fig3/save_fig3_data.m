@@ -27,8 +27,8 @@ function save_fig3_data(run_names_in, filename_in)
   %     Run Names     %
   %-------------------%
   % Periodic orbit run name
-  run_PO  = run_names_in.initial_PO_COLL;
-  run_PTC = run_names_in.PR_PTC_multi;
+  run_PO = run_names_in.initial_PO_COLL;
+  run_PR = run_names_in.PR_perturbation;
 
   %------------------------------------------%
   %     Read Initial Periodic Orbit Data     %
@@ -62,54 +62,39 @@ function save_fig3_data(run_names_in, filename_in)
   % Stationary point
   xpos = sol_pos.x;
 
-  %------------------------%
-  %     Read Data: PTCs    %
-  %------------------------%
-  % Folder name
-  dir_data = sprintf('./data/%s/', run_PR_PTC_multi);
-  % List all directories
-  dirs = dir(dir_data);
-  % Remove ./ and ../
-  dirs = dirs(~ismember({dirs.name}, {'.', '..', '.DS_Store'}));
-  % Sub folder names
-  dir_sub = {dirs.name};
+  %--------------------------------%
+  %     Read Data: Phase Resets    %
+  %--------------------------------%
+  % Bifurcation data
+  bd_PR = coco_bd_read(run_PR);
 
-  % Empty cells
-  A_perturb = cell(1, 2);
-  sol3      = cell(1, 2);
-  sol4      = cell(1, 2);
+  % Get labels
+  label_PR = coco_bd_labs(bd_PR, 'SP');
+
+  % Read perturbation amplitude
+  A_perturb = coco_bd_val(bd_PR, 'SP', 'A_perturb');
+  % Read theta_old phase
+  theta_old = coco_bd_val(bd_PR, 'SP', 'theta_old');
+  theta_old = theta_old(1);
+  % Read periodicity
+  k         = coco_bd_val(bd_PR, 'SP', 'k');
+  k         = k(1);
+
+  % Empty arrays for data
+  sol3 = cell(length(label_PR), 1);
+  sol4 = cell(length(label_PR), 1);
 
   % Cycle through data sub directories
-  for i = 1 : length(dir_sub)
-    % Run name
-    sub_run_name = {run_PR_PTC_multi, dir_sub{i}};
-
-    % Bifurcation data
-    bd_PR = coco_bd_read(sub_run_name);
-
-    % Get labels
-    label_PR = coco_bd_labs(bd_PR, 'SP');
-    label_PR = label_PR(1);
-
-    % Get theta_old values
-    theta_old = coco_bd_val(bd_PR, label_PR, 'theta_old');
-
-    % Get A_perturb value
-    A_perturb_read = coco_bd_val(bd_PR, label_PR, 'A_perturb');
-  
-    % Get periodicity
-    k = coco_bd_val(bd_PR, label_PR, 'k');
-
+  for idx = 1 : length(label_PR)
     % Read segment 3 solution
-    [sol3_read, ~] = coll_read_solution('seg3', sub_run_name, label_PR);
+    [sol3_read, ~] = coll_read_solution('seg3', run_PR, label_PR(idx));
 
     % Read segment 4 solution
-    [sol4_read, ~] = coll_read_solution('seg4', sub_run_name, label_PR);
+    [sol4_read, ~] = coll_read_solution('seg4', run_PR, label_PR(idx));
 
     % Append to arrays
-    A_perturb{i} = A_perturb_read;
-    sol3{i}      = sol3_read;
-    sol4{i}      = sol4_read;
+    sol3{idx} = sol3_read;
+    sol4{idx} = sol4_read;
   end
 
   % Get segment4 state space solution
@@ -168,10 +153,11 @@ function save_fig3_data(run_names_in, filename_in)
   data_out.p              = p;
   data_out.pnames         = pnames;
   data_out.theta_old      = theta_old;
-  data_out.A_perturb_run1 = A_perturb{1};
-  data_out.A_perturb_run2 = A_perturb{2};
-  data_out.k              = k;
+  data_out.A_perturb_run1 = A_perturb(1);
+  data_out.A_perturb_run2 = A_perturb(2);
+  data_out.k              = k(1);
   data_out.T_PO           = T_PO;
+  data_out.theta_old      = theta_old(1);
 
   % Plotting data
   data_out.xbp_PO_plot    = xbp_PO_plot;

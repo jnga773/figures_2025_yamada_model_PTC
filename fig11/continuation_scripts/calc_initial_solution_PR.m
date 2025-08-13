@@ -20,7 +20,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in)
   %         - pdim : Original dimension of parameter space.
   %         - p0 : Initial parameter array.
   %         - pnames : Parameter names.
-  %         - p_maps : Index mapping of each parameter.
   %         - t_seg1 : Initial time solutions for segment 1.
   %         - t_seg2 : Initial time solutions for segment 2.
   %         - t_seg3 : Initial time solutions for segment 3.
@@ -91,30 +90,18 @@ function data_out = calc_initial_solution_PR(run_in, label_in)
   % Phase along the periodic orbit
   theta = 1.0;
 
-  %---------------------------%
-  %     Parameter Indices     %
-  %---------------------------%
-  % This p_maps data structure will be used in each boundary condition
-  % function to ensure the correct parameters are being used.
-
-  % Save the index mapping of each parameter
-  p_maps.theta = pdim + 1;
-
   %------------------------%
   %     Set Parameters     %
   %------------------------%
   % Initial parameter array
-  p0_out = zeros(pdim+length(p_maps), 1);
-  % Put parameters in order
-  p0_out(1:pdim)       = p_system;
-  p0_out(p_maps.theta) = theta;
+  p0_out = [p_system; theta];
 
   %-------------------------%
   %     Parameter Names     %
   %-------------------------%
   % Parameter names
-  pnames_PR               = {pnames_system{1:pdim}};
-  pnames_PR{p_maps.theta} = 'theta';
+  pnames_PR         = {pnames_system{1:pdim}};
+  pnames_PR{pdim+1} = 'theta';
 
   %-----------------------------------------------%
   %     Segment Initial Conditions: Easy Mode     %
@@ -137,7 +124,6 @@ function data_out = calc_initial_solution_PR(run_in, label_in)
   % Parameters
   data_out.p0     = p0_out;
   data_out.pnames = pnames_PR;
-  data_out.p_maps = p_maps;
 
   % Initial time solutions for each segment
   data_out.t_seg1 = t_seg1;
