@@ -472,7 +472,7 @@ fprintf(' =====================================================================\
 %     Read Data     %
 %-------------------%
 % Set periodicity
-k = 35;
+k = 40;
 
 % Set perturbation direction to be d = (1, 0, 1) / sqrt(2)
 theta_perturb = 0.0;
@@ -495,7 +495,7 @@ prob = coco_set(prob, 'cont', 'h_max', 1e0);
 prob = coco_set(prob, 'cont', 'NAdapt', 10);
 
 % Set number of steps
-prob = coco_set(prob, 'cont', 'PtMX', 5000);
+prob = coco_set(prob, 'cont', 'PtMX', [1000, 0]);
 
 % Set number of stored solutions
 prob = coco_set(prob, 'cont', 'NPR', 100);
@@ -517,10 +517,10 @@ prob = coco_set(prob, 'cont', 'norm', inf);
 % where 'k' is an integer. This is the perturbed segment, that may have to
 % orbit the unperturbed periodic orbit many times before "resetting". Hence
 % we have set the NTST for this segment (NTST(4)) as k * 50.
-NTST(1) = 30;
+NTST(1) = 10;
 NTST(2) = 10;
 NTST(3) = 10;
-NTST(4) = 30 * k;
+NTST(4) = 50 * k;
 
 prob = coco_set(prob, 'seg1.coll', 'NTST', NTST(1));
 prob = coco_set(prob, 'seg2.coll', 'NTST', NTST(2));
@@ -730,7 +730,7 @@ dirs_P = {dirs_P.name};
 %-------------------------------------%
 % Set number of threads
 N_threads = length(dirs_P);
-% N_threads = length(dirs_A);
+% N_threads = 0;
 parfor(idx = 1 : length(dirs_P), N_threads)
   % Set run string for this run
   sub_run_name = {run_old, dirs_P{idx}};

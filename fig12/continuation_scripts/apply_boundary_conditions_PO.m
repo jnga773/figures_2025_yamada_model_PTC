@@ -20,14 +20,6 @@ function prob_out = apply_boundary_conditions_PO(prob_in, bcs_PO_in)
   % --------
   % coco_get_func_data, coco_add_glue, coco_add_func, coco_add_pars
 
-  %-------------------%
-  %     Arguments     %
-  %-------------------%
-  arguments
-    prob_in struct
-    bcs_funcs_in struct
-  end
-
   %---------------%
   %     Input     %
   %---------------%

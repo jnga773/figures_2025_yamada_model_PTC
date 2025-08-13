@@ -6,9 +6,9 @@ function run_PR_continuation(run_new, run_old, label_old, bcs_funcs, pcont, pran
   %
   % Parameters
   % ----------
-  % run_new : string
+  % run_new : string or cell of strings
   %     The new run identifier for the main continuation problem.
-  % run_old : string
+  % run_old : string or cell of strings
   %     The old run identifier for the sub continuation problem.
   % label_old : integer
   %     The label identifier for the previous continuation problem.
@@ -50,7 +50,7 @@ function run_PR_continuation(run_new, run_old, label_old, bcs_funcs, pcont, pran
   %-------------------%
   arguments
     run_new
-    run_old char
+    run_old
     label_old double
     bcs_funcs struct
     pcont cell = {'theta_old', 'theta_new', 'eta', 'mu_s'};
