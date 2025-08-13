@@ -73,30 +73,6 @@ def check_runs_MX(bd_list_in):
         # Split bd runs
         bd_gt1 = bd[0]
         bd_lt1 = bd[1]
-        
-        """      Doesn't work anymore lol
-        # # Check final solution of theta_old > 1 if theta_old = 2 or not
-        # sol_gt1_UZ = bd_gt1('UZ')
-        # sol_gt1_UZ = sol_gt1_UZ[-1]
-        
-        # if round(sol_gt1_UZ['theta_old'], 3) > 2.0 or round(sol_gt1_UZ['theta_old'], 3) == 2.0:
-        #     not_MX_gt1.append(idx)
-        # else:
-        #     MX_gt1_check = True
-            
-        # # Check final solution of theta_old < 1 if theta_old = 0 or not
-        # sol_lt1_UZ = bd_lt1('UZ')
-        # sol_lt1_UZ = sol_lt1_UZ[-1]
-        
-        # if round(sol_lt1_UZ['theta_old'], 3) < 0.0 or round(sol_lt1_UZ['theta_old'], 3) == 0.0:
-        #     not_MX_lt1.append(idx)
-        # else:
-        #     MX_lt1_check = True
-        
-        # # If both checks are true, append MX_both
-        # if MX_gt1_check and MX_lt1_check:
-        #     MX_both.append(idx)
-        """
 
         # Get all UZ labels (can be empty)
         list_UZ_gt1 = bd_gt1('UZ')
@@ -126,7 +102,7 @@ def check_runs_MX(bd_list_in):
     #----------------#
     #     Output     #
     #----------------#
-    return MX_both, not_MX_gt1, not_MX_lt1            
+    return MX_both, not_MX_gt1, not_MX_lt1    
 
 #--------------------------------------------------------------------------------------#
 def read_PTC_scan_data(bd_list_in):
