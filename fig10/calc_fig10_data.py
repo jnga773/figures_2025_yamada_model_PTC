@@ -452,7 +452,7 @@ for run in range(len(label_old)):
                                    pcont, prange,
                                    NMX=8000, NPR=100,
                                    DSMIN=1e-3, DS=1e-1, DSMAX=1e0,
-                                   reverse=True)
+                                   reverse=True, merge=False)
 
 #--------------#
 #     Plot     #

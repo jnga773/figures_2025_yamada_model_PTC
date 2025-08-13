@@ -74,43 +74,54 @@ def check_runs_MX(bd_list_in):
         bd_gt1 = bd[0]
         bd_lt1 = bd[1]
         
-        # Check final solution of theta_old > 1 if theta_old = 2 or not
-        sol_gt1_UZ = bd_gt1('UZ')
-        sol_gt1_UZ = sol_gt1_UZ[-1]
+        """      Doesn't work anymore lol
+        # # Check final solution of theta_old > 1 if theta_old = 2 or not
+        # sol_gt1_UZ = bd_gt1('UZ')
+        # sol_gt1_UZ = sol_gt1_UZ[-1]
         
-        if round(sol_gt1_UZ['theta_old'], 3) > 2.0 or round(sol_gt1_UZ['theta_old'], 3) == 2.0:
-            not_MX_gt1.append(idx)
-        else:
-            MX_gt1_check = True
-            
-        # Check final solution of theta_old < 1 if theta_old = 0 or not
-        sol_lt1_UZ = bd_lt1('UZ')
-        sol_lt1_UZ = sol_lt1_UZ[-1]
-        
-        if round(sol_lt1_UZ['theta_old'], 3) < 0.0 or round(sol_lt1_UZ['theta_old'], 3) == 0.0:
-            not_MX_lt1.append(idx)
-        else:
-            MX_lt1_check = True
-        
-        # If both checks are true, append MX_both
-        if MX_gt1_check and MX_lt1_check:
-            MX_both.append(idx)
-        
-        # # Check MX
-        # MX_gt1 = bd_gt1('MX')
-        # MX_lt1 = bd_lt1('MX')
-        
-        # # Check if both branches MX
-        # if MX_gt1 and MX_lt1:
-        #     # Both branches MX so save that label
-        #     MX_both.append(idx)
+        # if round(sol_gt1_UZ['theta_old'], 3) > 2.0 or round(sol_gt1_UZ['theta_old'], 3) == 2.0:
+        #     not_MX_gt1.append(idx)
         # else:
-        #     if not MX_gt1:
-        #         # No MX in the gt1 branch
-        #         not_MX_gt1.append(idx)
-        #     if not MX_lt1:
-        #         # No MX in the lt1 branch
-        #         not_MX_lt1.append(idx)
+        #     MX_gt1_check = True
+            
+        # # Check final solution of theta_old < 1 if theta_old = 0 or not
+        # sol_lt1_UZ = bd_lt1('UZ')
+        # sol_lt1_UZ = sol_lt1_UZ[-1]
+        
+        # if round(sol_lt1_UZ['theta_old'], 3) < 0.0 or round(sol_lt1_UZ['theta_old'], 3) == 0.0:
+        #     not_MX_lt1.append(idx)
+        # else:
+        #     MX_lt1_check = True
+        
+        # # If both checks are true, append MX_both
+        # if MX_gt1_check and MX_lt1_check:
+        #     MX_both.append(idx)
+        """
+
+        # Get all UZ labels (can be empty)
+        list_UZ_gt1 = bd_gt1('UZ')
+        list_UZ_lt1 = bd_lt1('UZ')
+        # Get all MX labels (can be empty)
+        list_MX_gt1 = bd_gt1('MX')
+        list_MX_lt1 = bd_lt1('MX')
+
+        # Check if gt1 branch has MX
+        if list_MX_gt1:
+            MX_gt1_check = True
+        if list_MX_lt1:
+            MX_lt1_check = True
+
+        # Check if both branches MX
+        if MX_gt1_check and MX_lt1_check:
+            # Both branches MX so save that solution to MX_both
+            MX_both.append(idx)
+        else:
+            if not MX_gt1_check:
+                # No MX in gt1 branch
+                not_MX_gt1.append(idx)
+            if not MX_lt1_check:
+                # No MX in lt1 branch
+                not_MX_lt1.append(idx)
                 
     #----------------#
     #     Output     #
