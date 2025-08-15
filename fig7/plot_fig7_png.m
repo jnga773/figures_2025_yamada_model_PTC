@@ -55,7 +55,7 @@ width = 7.8;
 height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=3);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -131,39 +131,39 @@ surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
 surf(ax, X, Y, Z+1.0, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
      FaceAlpha=facealpha, FaceLighting='flat');
 
-% Plot rim
+% % Plot rim
 % [theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'lt1');
 % plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
 %       LineStyle='-', Color='k', LineWidth=2.0);
 % plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim+1, ...
 %       LineStyle='-', Color='k', LineWidth=2.0);
 
-%--------------------------%
-%     Plot: PTC Curves     %
-%--------------------------%
-% Linewidth
-lw = 2.0;
+% %--------------------------%
+% %     Plot: PTC Curves     %
+% %--------------------------%
+% % Linewidth
+% lw = 2.0;
+% % 
+% % Plot all PTCs
+% for idx= 1 : length(A_perturb_specific)
+%   % Plot specific PTCs over the lower surface
+%   plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}, ...
+%         LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
+%   % Plot other side of hole
+%   if idx == 4 || idx == 5
+%     plot3(ax, theta_old_plot{2, idx}, A_perturb_plot{2, idx}, theta_new_plot{2, idx}, ...
+%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
+%   end
 % 
-% Plot all PTCs
-for idx= 1 : length(A_perturb_specific)
-  % Plot specific PTCs over the lower surface
-  plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}, ...
-        LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  % Plot other side of hole
-  if idx == 4 || idx == 5
-    plot3(ax, theta_old_plot{2, idx}, A_perturb_plot{2, idx}, theta_new_plot{2, idx}, ...
-          LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  end
-
-  % Plot specific PTCs over the upper surface
-  if idx <= 3
-    plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}-1, ...
-          LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  else
-    plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}+1, ...
-          LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  end
-end
+%   % Plot specific PTCs over the upper surface
+%   if idx <= 3
+%     plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}-1, ...
+%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
+%   else
+%     plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}+1, ...
+%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
+%   end
+% end
 
 %-------------------%
 %     Hold Axis     %
@@ -221,11 +221,9 @@ grid(ax, 'on');
 %---------------------%
 view(315, 15);
 
-% filename_out = '../pdf/fig7_G_PTC_full.png';
-% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
-
-% filename_out = '../pdf/fig7_G_PTC_surface.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdf/fig7_G_PTC_surface_rasta.png';
+exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+% export_fig(fig, filename_out, '-transparent', '-png', '-nocrop', '-r1000');
 
 %-------------------------------------------------------------------------%
 %%                               FUNCTION                                %%
