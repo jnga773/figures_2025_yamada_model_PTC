@@ -14,11 +14,11 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
   A_perturb_read = data_in.A_perturb;
 
   % Empty arrays for max data length, and max and min theta_old
-  data_lengths  = [];
-  max_theta_olds = [];
-  max_theta_news = [];
-  min_theta_olds = [];
-  min_theta_news = [];
+  data_lengths          = zeros(1, length(theta_old_read));
+  array_theta_old_start = zeros(1, length(theta_old_read));
+  array_theta_old_end   = zeros(1, length(theta_old_read));
+  array_theta_new_start = zeros(1, length(theta_old_read));
+  array_theta_new_end   = zeros(1, length(theta_old_read));
   
   % Cycle through runs
   for idx = 1 : length(theta_old_read)
@@ -26,21 +26,28 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
     [theta_old_sort, theta_new_sort] = sort_data(theta_old_read{idx}, theta_new_read{idx});
 
     % Get data lengths
-    data_lengths = [data_lengths, length(theta_old_sort)];
-
-    % Get end values
-    min_theta_olds = [min_theta_olds, theta_old_sort(1)];
-    min_theta_news = [min_theta_news, theta_new_sort(1)];
-    max_theta_olds = [max_theta_olds, theta_old_sort(end)];
-    max_theta_news = [max_theta_news, theta_new_sort(end)];
+    data_lengths(idx)          = length(theta_old_sort);
+    % Get theta_old end points
+    array_theta_old_start(idx) = theta_old_sort(1);
+    array_theta_old_end(idx)   = theta_old_sort(end);
+    % Get theta_new end points
+    array_theta_new_start(idx) = theta_new_sort(1);
+    array_theta_new_end(idx)   = theta_new_sort(end);
 
   end
 
-  % Find the max and min theta_old values
-  [theta_old_min, theta_old_min_idx] = min(min_theta_olds);
-  [theta_old_max, theta_old_max_idx] = max(max_theta_olds);
-  [theta_new_min, theta_new_min_idx] = min(min_theta_news);
-  [theta_new_max, theta_new_max_idx] = max(min_theta_news);
+  % Find min and max theta_old values
+  [theta_old_start, ~] = min(array_theta_old_start);
+  [theta_old_end, ~]   = max(array_theta_old_end);
+
+  % Find min and max theta_new_values
+  if strcmp(MX_check, 'gt1')
+    [theta_new_start, ~] = min(array_theta_new_start);
+    [theta_new_end, ~]   = max(array_theta_new_end);
+  elseif strcmp(MX_check, 'lt1')
+    [theta_new_start, ~] = max(array_theta_new_start);
+    [theta_new_end, ~]   = min(array_theta_new_end);
+  end
 
   % Find the data array with the maximum length
   [~, max_idx] = max(data_lengths);
@@ -49,7 +56,7 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
   theta_old_max_length = theta_old_read{max_idx};
 
   % Append min amd max values either side
-  theta_old_max_length = [theta_old_min, theta_old_max_length, theta_old_max];
+  theta_old_max_length = [theta_old_start, theta_old_max_length, theta_old_end];
 
   % Output data
   theta_old_out = [];
@@ -65,18 +72,18 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
 
     if isempty(MX_check)
       % Append min and max values either side
-      theta_old_temp = [theta_old_min, theta_old_temp, theta_old_max];
+      theta_old_temp = [theta_old_start, theta_old_temp, theta_old_end];
       theta_new_temp = [theta_new_temp(1), theta_new_temp, theta_new_temp(end)];
 
     elseif strcmp(MX_check, 'lt1')
       % Append max value at the end
-      theta_old_temp = [theta_old_temp, theta_old_max];
-      theta_new_temp = [theta_new_temp, theta_new_temp(end)];
+      theta_old_temp = [theta_old_temp, theta_old_end];
+      theta_new_temp = [theta_new_temp, array_theta_new_end(idx)];
 
     elseif strcmp(MX_check, 'gt1')
       % Append min value at the start
-      theta_old_temp = [theta_old_min, theta_old_temp];
-      theta_new_temp = [theta_new_temp(1), theta_new_temp];
+      theta_old_temp = [theta_old_start, theta_old_temp];
+      theta_new_temp = [array_theta_new_start(idx), theta_new_temp];
     end
 
     % Get unique indices
@@ -97,27 +104,27 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
       nan_idx = isnan(theta_new_interp);
 
       % If 'lt1' data, check for NaNs in theta_old < theta_old_min(idx)
-      lt1_idx = theta_old_max_length < min_theta_olds(idx);
+      lt1_idx = theta_old_max_length < array_theta_old_start(idx);
 
       % Change values of theta_old_interp to min value
-      theta_old_interp(nan_idx(lt1_idx)) = min_theta_olds(idx);
+      theta_old_interp(nan_idx(lt1_idx)) = array_theta_old_start(idx);
 
       % Set NaNs of lt1_idx to min val
-      theta_new_interp(nan_idx(lt1_idx)) = min_theta_news(idx);
+      theta_new_interp(nan_idx(lt1_idx)) = theta_new_start;
 
     elseif strcmp(MX_check, 'gt1')
       % If 'gt1' data, check for NaNs in theta_old > theta_old_max(idx)
-      gt1_idx = theta_old_max_length > max_theta_olds(idx);
+      gt1_idx = theta_old_max_length > array_theta_old_end(idx);
 
       % Change values of theta_old_interp to min value
-      theta_old_interp(gt1_idx) = max_theta_olds(idx);
+      theta_old_interp(gt1_idx) = array_theta_old_end(idx);
 
       % Set NaNs of lt1_idx to min val
-      theta_new_interp(gt1_idx) = max_theta_news(idx);
+      theta_new_interp(gt1_idx) = theta_new_end;
 
-      % Find nans
-      nan_idx = isnan(theta_new_interp);
-      theta_new_interp(nan_idx) = min_theta_news(idx);
+      % % Find nans
+      % nan_idx = isnan(theta_new_interp);
+      % theta_new_interp(nan_idx) = array_theta_new_start(idx);
 
     end
 
@@ -129,16 +136,3 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
   end
 end
 
-function [theta_old_out, theta_new_out] = sort_data(theta_old_in, theta_new_in)
-  % 
-  %
-  % Sorts the data so it's all even and nice, just in cases
-
-  % Get sorted indices
-  [~, sort_idx] = sort(theta_old_in);
-
-  % Sort it
-  theta_old_out = theta_old_in(sort_idx);
-  theta_new_out = theta_new_in(sort_idx);
-
-end

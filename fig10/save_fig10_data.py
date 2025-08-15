@@ -506,9 +506,6 @@ def save_PTC_scan(run_str_in, filename_in):
     # Initial read data
     param, theta_old_read, theta_new_read, A_perturb_read = read_PTC_scan_data(bd_list)
     
-    # Get array of double MX
-    MX_both, not_MX_gt1, not_MX_lt1 = check_runs_MX(bd_list)
-    
     #-------------------#
     #     Sort Data     #
     #-------------------#
