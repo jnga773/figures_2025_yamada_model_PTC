@@ -60,7 +60,7 @@ width = 7.8;
 height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=3);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -97,51 +97,51 @@ facealpha = 0.75;
 %     Plot: Before Hole     %
 %---------------------------%
 % Surface: Before hole
-[X, Y, Z] = pad_data(data_before_hole);
-surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
-     FaceAlpha=facealpha, FaceLighting='flat');
-surf(ax, X, Y, Z-1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
-     FaceAlpha=facealpha, FaceLighting='flat');
+% [X, Y, Z] = pad_data(data_before_hole);
+% surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+%      FaceAlpha=facealpha, FaceLighting='flat');
+% surf(ax, X, Y, Z-1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+%      FaceAlpha=facealpha, FaceLighting='flat');
 
 %--------------------------%
 %     Plot: After Hole     %
 %--------------------------%
 % Surface: After hole
-[X, Y, Z] = pad_data(data_after_hole);
-surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
-     FaceAlpha=facealpha, FaceLighting='flat');
-surf(ax, X, Y, Z+1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
-     FaceAlpha=facealpha, FaceLighting='flat');
+% [X, Y, Z] = pad_data(data_after_hole);
+% surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+%      FaceAlpha=facealpha, FaceLighting='flat');
+% surf(ax, X, Y, Z+1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+%      FaceAlpha=facealpha, FaceLighting='flat');
 
 %------------------------%
 %     Plot: Hole LHS     %
 %------------------------%
 % Surface: Hole (theta_old > 1)
 [X, Y, Z] = pad_data(data_hole_gt1, 'gt1');
-surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
-     FaceAlpha=facealpha, FaceLighting='flat');
+% surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+%      FaceAlpha=facealpha, FaceLighting='flat');
 
 % Plot rim
 [theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'gt1');
 plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
-      LineStyle=':', Color='k', LineWidth=2.0);
+      LineStyle='-', Color='k', LineWidth=2.0);
 
 %------------------------%
 %     Plot: Hole RHS     %
 %------------------------%
 % Surface: Hole (theta_old < 1)
 [X, Y, Z] = pad_data(data_hole_lt1, 'lt1');
-surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
-     FaceAlpha=facealpha, FaceLighting='flat');
-surf(ax, X, Y, Z+1.0, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
-     FaceAlpha=facealpha, FaceLighting='flat');
+% surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+%      FaceAlpha=facealpha, FaceLighting='flat');
+% surf(ax, X, Y, Z+1.0, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
+%      FaceAlpha=facealpha, FaceLighting='flat');
 
 % Plot rim
 [theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'lt1');
 plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
-      LineStyle=':', Color='k', LineWidth=2.0);
+      LineStyle='-', Color='k', LineWidth=2.0);
 plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim+1, ...
-      LineStyle=':', Color='k', LineWidth=2.0);
+      LineStyle='-', Color='k', LineWidth=2.0);
 
 %--------------------------%
 %     Plot: PTC Curves     %
@@ -217,10 +217,10 @@ ax.ZAxis.TickLabels = {};
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
-box(ax, 'on');
-grid(ax, 'on');
+% box(ax, 'on');
+% grid(ax, 'on');
 
-% axis(ax, 'off');
+axis(ax, 'off');
 
 %---------------------%
 %     Save Figure     %
@@ -228,11 +228,8 @@ grid(ax, 'on');
 % view(315, 15);
 view(300, 15);
 
-% filename_out = '../pdf/fig10_I_PTC_surface.png';
-% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
-
-% filename_out = '../pdf/fig10_I_PTC_surface.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../pdf/fig10_I_PTC_surface.pdf';
+exportgraphics(fig, filename_out, ContentType='vector');
 
 %-------------------------------------------------------------------------%
 %%                               FUNCTION                                %%

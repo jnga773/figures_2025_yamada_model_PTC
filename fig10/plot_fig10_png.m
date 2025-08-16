@@ -4,10 +4,10 @@ clear all; close all; clc;
 %%                             Read Data                                 %%
 %-------------------------------------------------------------------------%
 %-------------------%
-%     Read Data     % . 
+%     Read Data     %
 %-------------------%
 % Load big PTC scan data
-load('../data_files/fig7_data.mat');
+load('../data_files/fig10_data.mat');
 
 % Shift data_hole_lt1 start data point
 data_hole_lt1 = fix_gap(data_before_hole, data_hole_lt1);
@@ -15,30 +15,35 @@ data_hole_lt1 = fix_gap(data_before_hole, data_hole_lt1);
 %--------------------------------%
 %     Coordinates for 'Hole'     %
 %--------------------------------%
-% G-direction
-intersection.theta_old = 0.326074664455562;
-intersection.A_perturb = 0.543525459141593;
+% I-direction
+intersection.theta_old = 0.515081568221902;
+intersection.A_perturb = 4.083495198666827;
 
 %----------------------%
 %     Plot Colours     %
 %----------------------%
 % Plot colours
+% plot_colours = {'#92b700';    % Green-Yellow
+%                 '#e6b400';    % Yellow
+%                 '#eb5e00';    % Orange
+%                 '#d62728';    % Red
+%                 '#e377c2';    % Pink
+%                 '#bf42f5';    % Purple
+%                 '#1f9ece'};   % Cyan
 plot_colours = {'#92b700';    % Green-Yellow
                 '#e6b400';    % Yellow
-                '#eb5e00';    % Orange
                 '#d62728';    % Red
                 '#e377c2';    % Pink
-                '#bf42f5';    % Purple
-                '#1f9ece'};   % Cyan
+                '#bf42f5'};   % Purple
 
 %-----------------------------------%
 %     Sort Out Single Plot Data     %
 %-----------------------------------%
-A_perturb_specific = [0.05, 0.1, 0.15, 0.5435, 1.0, 1.5, 2.0];
+A_perturb_specific = [0.1, 0.5, 4.0835, 10, 20];
 
 % Find specific curves
 [theta_old_plot, A_perturb_plot, theta_new_plot] = ...
-    find_PTC_curves('../data_files/fig7_data.mat', A_perturb_specific);
+    find_PTC_curves('../data_files/fig10_data.mat', A_perturb_specific);
 
 %-------------------------------------------------------------------------%
 %%                             Plot Data                                 %%
@@ -47,7 +52,7 @@ A_perturb_specific = [0.05, 0.1, 0.15, 0.5435, 1.0, 1.5, 2.0];
 %     Figure Settings     %
 %-------------------------%
 fig = figure(1); clf;
-fig.Name = 'PTC Scans: Gain';
+fig.Name = 'PTC Scans: Intensity';
 ax  = axes;
 
 % Axis dimensions
@@ -55,7 +60,7 @@ width = 7.8;
 height = 6.0;
 
 % Set figure size
-set_figure_dimensions(width, height, scale=3);
+set_figure_dimensions(width, height, scale=1);
 
 % Set axis linewidth
 ax.LineWidth = 0.8;
@@ -69,9 +74,9 @@ hold(ax, 'on');
 %     Plot: Stable Manifold Intersection Pole     %
 %-------------------------------------------------%
 plot3(ax, [intersection.theta_old, intersection.theta_old], ...
-     [intersection.A_perturb, intersection.A_perturb], ...
-     [-5, 5], ...
-     Color='k', LineWidth=2.5, LineStyle='-');
+      [intersection.A_perturb, intersection.A_perturb], ...
+      [-5, 5], ...
+      Color='k', LineWidth=2.5, LineStyle='-');
 
 %--------------------------%
 %     Surface Settings     %
@@ -83,11 +88,10 @@ cmap = colormap(scale_colour_map(2.0));
 shading(ax, 'interp');
 
 % % Lighting
-% light(ax, Style='infinite', Position=[intersection.theta_old, intersection.A_perturb, 20]);
+% light(XX, Style='infinite', Position=[intersection.theta_old, intersection.A_perturb, 20]);
 
 % Facealpha
-% facealpha = 0.75;
-facealpha = 1.0;
+facealpha = 0.75;
 
 %---------------------------%
 %     Plot: Before Hole     %
@@ -117,10 +121,10 @@ surf(ax, X, Y, Z+1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
 surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
      FaceAlpha=facealpha, FaceLighting='flat');
 
-% Plot rim
-[theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'gt1');
-plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
-      LineStyle='-', Color='k', LineWidth=2.0);
+% % Plot rim
+% [theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'gt1');
+% plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
+%       LineStyle=':', Color='k', LineWidth=2.0);
 
 %------------------------%
 %     Plot: Hole RHS     %
@@ -132,39 +136,40 @@ surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
 surf(ax, X, Y, Z+1.0, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
      FaceAlpha=facealpha, FaceLighting='flat');
 
-% Plot rim
-[theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'lt1');
-plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
-      LineStyle='-', Color='k', LineWidth=2.0);
-plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim+1, ...
-      LineStyle='-', Color='k', LineWidth=2.0);
+% % Plot rim
+% [theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'lt1');
+% plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
+%       LineStyle=':', Color='k', LineWidth=2.0);
+% plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim+1, ...
+%       LineStyle=':', Color='k', LineWidth=2.0);
 
 %--------------------------%
 %     Plot: PTC Curves     %
 %--------------------------%
-% Linewidth
-lw = 2.0;
+% % Linewidth
+% lw = 2.0;
+% % 
+% % Plot all PTCs
+% for idx= 1 : length(A_perturb_specific)
+%   % Plot specific PTCs over the lower surface
+%   plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}, ...
+%         LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
 % 
-% Plot all PTCs
-for idx= 1 : length(A_perturb_specific)
-  % Plot specific PTCs over the lower surface
-  plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}, ...
-        LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  % Plot other side of hole
-  if idx == 4 || idx == 5
-    plot3(ax, theta_old_plot{2, idx}, A_perturb_plot{2, idx}, theta_new_plot{2, idx}, ...
-          LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  end
-
-  % Plot specific PTCs over the upper surface
-  if idx <= 3
-    plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}-1, ...
-          LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  else
-    plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}+1, ...
-          LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-  end
-end
+%   % Plot other side of hole
+%   if idx == 3 || idx == 4
+%     plot3(ax, theta_old_plot{2, idx}, A_perturb_plot{2, idx}, theta_new_plot{2, idx}, ...
+%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
+%   end
+% 
+%   % Plot specific PTCs over the upper surface
+%   if idx <= 2
+%     plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}-1, ...
+%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
+%   else
+%     plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}+1, ...
+%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
+%   end
+% end
 
 %-------------------%
 %     Hold Axis     %
@@ -175,7 +180,7 @@ hold(ax, 'off');
 %     Axis Limits     %
 %---------------------%
 ax.XAxis.Limits = [0.0, 1.0];
-ax.YAxis.Limits = [0.0, 2.0];
+ax.YAxis.Limits = [0.0, 25.0];
 ax.ZAxis.Limits = [0.0, 3.25];
 
 %--------------------%
@@ -187,9 +192,9 @@ ax.XAxis.MinorTick = 'on';
 ax.XAxis.MinorTickValues = 0.0 : 0.25 : 1.0;
 
 % Y-Axis
-ax.YAxis.TickValues = 0.0 : 1.0 : 2.0;
+ax.YAxis.TickValues = 0.0 : 5.0 : 25.0;
 ax.YAxis.MinorTick = 'on';
-ax.YAxis.MinorTickValues = 0.0 : 0.5 : 2.0;
+ax.YAxis.MinorTickValues = 0.0 : 2.5 : 25.0;
 
 % Z-Axis
 ax.ZAxis.TickValues = 0.0 : 0.5 : 3.0;
@@ -200,9 +205,9 @@ ax.ZAxis.MinorTickValues = 0.0 : 0.25 : 3.0;
 %     Axis and Tick Labels     %
 %------------------------------%
 % % Axis labels
-% xlabel(ax, '$\theta_{\mathrm{o}}$');
-% ylabel(ax, '$A_{\mathrm{p}}$');
-% zlabel(ax, '$\theta_{\mathrm{n}}$');
+% xlabel(XX, '$\theta_{\mathrm{o}}$');
+% ylabel(XX, '$A_{\mathrm{p}}$');
+% zlabel(XX, '$\theta_{\mathrm{n}}$');
 
 % Turn off all axis labels
 ax.XAxis.TickLabels = {};
@@ -220,12 +225,13 @@ grid(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-view(315, 15);
+% view(315, 15);
+view(300, 15);
 
-filename_out = '../pdf/fig7_G_PTC_full.png';
+filename_out = '../pdf/fig10_I_PTC_surface_rasta.png';
 exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
-% filename_out = '../pdf/fig7_G_PTC_surface.pdf';
+% filename_out = '../pdf/fig10_I_PTC_surface.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');
 
 %-------------------------------------------------------------------------%

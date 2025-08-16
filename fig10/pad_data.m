@@ -53,9 +53,9 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
     if isempty(MX_check)
       theta_old_interp = linspace(0.0, 1.0, N_mesh);
     elseif strcmp(MX_check, 'lt1')
-      theta_old_interp = linspace(theta_old_read(1), 1.0, round(0.5 * N_mesh));
+      theta_old_interp = linspace(theta_old_read(1), 1.0, N_mesh);
     elseif strcmp(MX_check, 'gt1')
-      theta_old_interp = linspace(0.0, theta_old_read(end), round(0.5 * N_mesh));
+      theta_old_interp = linspace(0.0, theta_old_read(end), N_mesh);
     end
 
     % Get unique indices
@@ -71,11 +71,11 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
     % if idx ~= 1 || idx ~= length(theta_old_in)
        if strcmp(MX_check, 'lt1')
         % Set first value to max
-        % theta_new_interp(1)   = theta_new_start;
-        theta_new_interp(1)   = array_theta_new_start(idx);
+        theta_new_interp(1)   = theta_new_start;
+        % theta_new_interp(1)   = array_theta_new_start(idx);
        elseif strcmp(MX_check, 'gt1')
-        % theta_new_interp(end) = theta_new_end;
-        theta_new_interp(end) = array_theta_new_end(idx);
+        theta_new_interp(end) = theta_new_end;
+        % theta_new_interp(end) = array_theta_new_end(idx);
       end
     % end
 
@@ -87,3 +87,16 @@ function [theta_old_out, A_perturb_out, theta_new_out] = pad_data(data_in, MX_ch
   end
 end
 
+function [theta_old_out, theta_new_out] = sort_data(theta_old_in, theta_new_in)
+  % 
+  %
+  % Sorts the data so it's all even and nice, just in cases
+
+  % Get sorted indices
+  [~, sort_idx] = sort(theta_old_in);
+
+  % Sort it
+  theta_old_out = theta_old_in(sort_idx);
+  theta_new_out = theta_new_in(sort_idx);
+
+end
