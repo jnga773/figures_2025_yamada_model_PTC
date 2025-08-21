@@ -32,8 +32,8 @@ ax = gca();
 % Axis dimensions
 % width = 8.0;
 % height = 5.0;
-width = 7.8;
-height = 8.0;
+width = 3.0;
+height = 3.0;
 
 % Set figure size
 set_figure_dimensions(width, height, scale=1);
@@ -63,31 +63,13 @@ DTC_A_perturb = [0.1, 0.724237, 10.0];
 theta = 0 : 0.01 : 2 * pi;
 circle = [cos(theta); sin(theta)];
 
+% Plot
 for idx = 1 : length(DTC_A_perturb)
-  % Plot DTC 1
+  % Plot DTC
   DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(idx) * circle);
   plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
        Color=DTC_colours{idx});
 end
-
-% % Plot DTC 1
-% DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(2) * circle);
-% plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
-%      Color=DTC_colours{1});
-
-% % Plot DTC 2
-% DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(2) * circle);
-% plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
-%      Color=DTC_colours{2});
-
-% % Plot DTC 3
-% DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(3) * circle);
-% idx1 = DTC_plot(2, :) >= 0.0;
-% idx2 = DTC_plot(2, :) < 0.0;
-% plot(ax, DTC_plot(1, DTC_plot(2, :) >= 0), DTC_plot(2, DTC_plot(2, :) >= 0), LineWidth=2.0, LineStyle='-', ...
-%      Color=DTC_colours{idx});
-% plot(ax, DTC_plot(1, DTC_plot(2, :) < 0), DTC_plot(2, DTC_plot(2, :) < 0), LineWidth=2.0, LineStyle='-', ...
-%      Color=[hex2rgb(DTC_colours{idx}), 0.5]);
 
 %-------------------------------------------%
 %     Plot: Periodic Orbit and Manifold     %
@@ -116,8 +98,8 @@ daspect([1, 1, 1]);
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [-10.0, 12.0];
-ax.YAxis.Limits = [-2.0, 12.0];
+ax.XAxis.Limits = [0.4, 2.0];
+ax.YAxis.Limits = [0.6, 2.4];
 
 %------------------------------%
 %     Axis Ticks: Settings     %
@@ -131,12 +113,12 @@ ax.YAxis.MinorTick = 'on';
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
-ax.XAxis.TickValues = -12 : 3 : 12;
-ax.XAxis.MinorTickValues = -12 : 1 : 12;
+ax.XAxis.TickValues = [];
+ax.XAxis.MinorTickValues = [];
 
 % Y-Axis
-ax.YAxis.TickValues = -12 : 3 : 12;
-ax.YAxis.MinorTickValues = -12 : 1 : 12;
+ax.YAxis.TickValues = [];
+ax.YAxis.MinorTickValues = [];
 
 %------------------------------%
 %     Axis and Tick Labels     %
@@ -157,5 +139,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = './fig12a.pdf';
+filename_out = './fig12a_inset.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');
