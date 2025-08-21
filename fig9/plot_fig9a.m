@@ -9,17 +9,20 @@ load('../data_files/fig9_data.mat');
 %----------------------%
 %     Plot Colours     %
 %----------------------%
-% Default colour order
-colours = colororder();
+% Matplotlib colours
+colours = {'#1f77b4';  % blue
+           '#ff7f0e';  % orange
+           '#2ca02c';  % green
+           '#d62728';  % red
+           '#9467bd';  % purple
+           '#8c564b';  % brown
+           '#e377c2';  % pink
+           '#7f7f7f';  % gray
+           '#bcbd22';  % yellow-green
+           '#17becf'   % cyan
+           };
 
 % Plot colours
-% plot_colours = {'#92b700';    % Green-Yellow
-%                 '#e6b400';    % Yellow
-%                 '#eb5e00';    % Orange
-%                 '#d62728';    % Red
-%                 '#e377c2';    % Pink
-%                 '#bf42f5';    % Purple
-%                 '#1f9ece'};   % Cyan
 plot_colours = {'#92b700';    % Green-Yellow
                 '#e6b400';    % Yellow
                 '#d62728';    % Red
@@ -55,12 +58,12 @@ hold(ax, 'on');
 %--------------%
 % Plot original periodic orbit
 plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
-      Color=colours(3, :), ...
+      Color=colours{3}, ...
       LineWidth=2.0);
 
 % Plot stable manifold
 plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
-      Color=colours(1, :), ...
+      Color=colours{1}, ...
       LineWidth=2.0);
 
 % Plot equilibrium point
@@ -147,5 +150,5 @@ view(45, 6.0);
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig9a_phase_portrait.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = './fig9a_phase_portrait.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

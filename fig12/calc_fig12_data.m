@@ -793,7 +793,10 @@ save_fig12_data(run_names.PR_DTC_scan, '../data_files/fig12_data.mat');
 %     Plot Figures     %
 %----------------------%
 % Run plotting scripts
-plot_fig12;
+plot_fig12a;
+plot_fig12b;
+plot_fig12c;
+plot_fig12d;
 
 %=========================================================================%
 %                               END OF FILE                               %

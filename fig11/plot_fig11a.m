@@ -7,8 +7,18 @@ load('../data_files/fig11_data.mat');
 %----------------------%
 %     Plot Colours     %
 %----------------------%
-% Default colour order
-colours = colororder();
+% Matplotlib colours
+colours = {'#1f77b4';  % blue
+           '#ff7f0e';  % orange
+           '#2ca02c';  % green
+           '#d62728';  % red
+           '#9467bd';  % purple
+           '#8c564b';  % brown
+           '#e377c2';  % pink
+           '#7f7f7f';  % gray
+           '#bcbd22';  % yellow-green
+           '#17becf'   % cyan
+           };
 
 %-------------------%
 %     Sort Data     %
@@ -88,16 +98,16 @@ hold(ax, 'on');
 % Linewidth
 lw = 2.0;
 % Special colour
-special_colour = colours(7, :);
+special_colour = colours{7};
 % Alpha transparency
 alpha = 1.0;
 
 % Plot original periodic orbit
 plot3(ax, xbp_PO1(:, 1), xbp_PO1(:, 2), xbp_PO1(:, 3), ...
-      Color=[colours(3, 1:3), alpha], ...
+      Color=[hex2rgb(colours{3}), alpha], ...
       LineWidth=lw);
 plot3(ax, xbp_PO2(:, 1), xbp_PO2(:, 2), xbp_PO2(:, 3), ...
-      Color=[colours(3, 1:3), alpha], ...
+      Color=[hex2rgb(colours{3}), alpha], ...
       LineWidth=lw);
 
 % Plot highlighted sections along \Gamma and W^{s}(q)
@@ -109,15 +119,15 @@ plot3(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), xbp_gamma(:, 3), ...
 %-------------------------------%
 % Plot original stable manifold
 plot3(ax, Wqs1(:, 1), Wqs1(:, 2), Wqs1(:, 3), ...
-      Color=[colours(1, 1:3), alpha], ...
+      Color=[hex2rgb(colours{1}), alpha], ...
       LineWidth=lw);
 plot3(ax, Wqs2(:, 1), Wqs2(:, 2), Wqs2(:, 3), ...
-      Color=[colours(1, 1:3), alpha], ...
+      Color=[hex2rgb(colours{1}), alpha], ...
       LineWidth=lw);
 
 % Plot highlighted sections along \Gamma and W^{s}(q)
 plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
-      Color=colours(10, :), LineWidth=lw, LineStyle='-');
+      Color=colours{10}, LineWidth=lw, LineStyle='-');
 
 %---------------------------------%
 %     Plot: Equilibrium Point     %
@@ -238,13 +248,12 @@ grid(ax, 'off');
 axis(ax, 'off');
 
 % 3D plot view
-% view_angle = [340, 8.5];
 view_angle = [330, 4.5];
 view(ax, view_angle);
-view(ax_inset, view_angle);
+view(ax_inset, ax.View);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig11a.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = './fig11a.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

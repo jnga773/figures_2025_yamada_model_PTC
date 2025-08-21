@@ -9,14 +9,20 @@ load('../data_files/fig9_data.mat');
 %----------------------%
 %     Plot Colours     %
 %----------------------%
+% Matplotlib colours
+colours = {'#1f77b4';  % blue
+           '#ff7f0e';  % orange
+           '#2ca02c';  % green
+           '#d62728';  % red
+           '#9467bd';  % purple
+           '#8c564b';  % brown
+           '#e377c2';  % pink
+           '#7f7f7f';  % gray
+           '#bcbd22';  % yellow-green
+           '#17becf'   % cyan
+           };
+
 % Plot colours
-% plot_colours = {'#92b700';    % Green-Yellow
-%                 '#e6b400';    % Yellow
-%                 '#eb5e00';    % Orange
-%                 '#d62728';    % Red
-%                 '#e377c2';    % Pink
-%                 '#bf42f5';    % Purple
-%                 '#1f9ece'};   % Cyan
 plot_colours = {'#92b700';    % Green-Yellow
                 '#e6b400';    % Yellow
                 '#d62728';    % Red
@@ -26,9 +32,6 @@ plot_colours = {'#92b700';    % Green-Yellow
 %-------------------------------------------------------------------------%
 %%                               Plot Data                               %%
 %-------------------------------------------------------------------------%
-% Default colour order (matplotlib)
-colours = colororder();
-
 % Setup figure
 fig = figure(2); clf;
 fig.Name = 'PTCs';
@@ -53,12 +56,12 @@ hold(ax, 'on');
 %     Plot: Other Things     %
 %----------------------------%
 % Shade fundamental domain
-patch([0, 1, 1, 0], [0, 0, 1, 1], colours(3, :), ...
+patch([0, 1, 1, 0], [0, 0, 1, 1], colours{3}, ...
       FaceAlpha=0.2, EdgeColor='none');
 
 % Plot diagonal lines
 plot(ax, [0, 1], [0, 1], LineStyle='-', LineWidth=1.5, ...
-     Color=colours(3, :));
+     Color=colours{3});
 
 % Grey lines at theta_old = 0 and 0.3
 xline(ax, 0.51508, LineStyle='-', LineWidth=1, ...
@@ -127,5 +130,5 @@ box(ax, 'on');
 %      Save Figure     %
 %----------------------%
 % Filename
-filename_out = '../pdf/fig9b_I_PTCs.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = '../fig9b_I_PTCs.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

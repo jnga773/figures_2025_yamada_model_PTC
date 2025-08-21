@@ -23,13 +23,6 @@ intersection.A_perturb = 4.083495198666827;
 %     Plot Colours     %
 %----------------------%
 % Plot colours
-% plot_colours = {'#92b700';    % Green-Yellow
-%                 '#e6b400';    % Yellow
-%                 '#eb5e00';    % Orange
-%                 '#d62728';    % Red
-%                 '#e377c2';    % Pink
-%                 '#bf42f5';    % Purple
-%                 '#1f9ece'};   % Cyan
 plot_colours = {'#92b700';    % Green-Yellow
                 '#e6b400';    % Yellow
                 '#d62728';    % Red
@@ -228,8 +221,8 @@ grid(ax, 'on');
 % view(315, 15);
 view(300, 15);
 
-filename_out = '../pdf/fig10_I_PTC_surface.png';
-exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
+filename_out = './fig10_I_PTC_surface.png';
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
 %-------------------------------------------------------------------------%
 %%                               FUNCTION                                %%

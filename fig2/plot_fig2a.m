@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %-------------------------------------------------------------------------%
 %                         Read Periodic Orbit Data                        %
@@ -15,13 +15,26 @@ tbp = tbp_PO / T_PO;
 xbp_plot = [xbp_PO(1:end-1, :); xbp_PO];
 tbp_plot = [tbp(1:end-1); 1 + tbp];
 
+%----------------------%
+%     Plot Colours     %
+%----------------------%
+% Matplotlib colours
+colours = {'#1f77b4';  % blue
+           '#ff7f0e';  % orange
+           '#2ca02c';  % green
+           '#d62728';  % red
+           '#9467bd';  % purple
+           '#8c564b';  % brown
+           '#e377c2';  % pink
+           '#7f7f7f';  % gray
+           '#bcbd22';  % yellow-green
+           '#17becf'   % cyan
+           };
+
 %%
 %-------------------------------------------------------------------------%
 %                          Plot: Temporal Trace                           %
 %-------------------------------------------------------------------------%
-% Default line colours
-colours = colororder();
-
 % Setup figure
 fig = figure(1); clf;
 fig.Name = 'Temporal Trace of Periodic Orbit';
@@ -46,17 +59,17 @@ hold(ax, 'on');
 % Plot: Gain
 plot(ax, tbp_plot, xbp_plot(:, 1), ...
      LineStyle=':', LineWidth=1.5, ...
-     Color=colours(1, :));
+     Color=colours{1});
 
 % Plot: Absorption
 plot(ax, tbp_plot, xbp_plot(:, 2), ...
      LineStyle='--', LineWidth=1.5, ...
-     Color=colours(2, :));
+     Color=colours{2});
 
 % Plot: Intensity
 plot(ax, tbp_plot, xbp_plot(:, 3), ...
      LineStyle='-', LineWidth=1.5, ...
-     Color=colours(3, :));
+     Color=colours{3});
 
 % Hold axes
 hold(ax, 'off');
@@ -101,5 +114,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig2a_periodic_orbit_temporal_trace.pdf';
+filename_out = './fig2a_periodic_orbit_temporal_trace.pdf';
 % exportgraphics(fig, filename_out, ContentType='vector');

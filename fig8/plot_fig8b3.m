@@ -15,13 +15,26 @@ fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
 fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
 fprintf('theta_old = %.4f\n', theta_old);
 
+%----------------------%
+%     Plot Colours     %
+%----------------------%
+% Matplotlib colours
+colours = {'#1f77b4';  % blue
+           '#ff7f0e';  % orange
+           '#2ca02c';  % green
+           '#d62728';  % red
+           '#9467bd';  % purple
+           '#8c564b';  % brown
+           '#e377c2';  % pink
+           '#7f7f7f';  % gray
+           '#bcbd22';  % yellow-green
+           '#17becf'   % cyan
+           };
+
 %%
 %-------------------------------------------------------------------------%
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
-% Default line colours
-colours = colororder();
-
 % Setup figure
 fig = figure(7); clf;
 fig.Name = 'Phase Reset in time: Intensity';
@@ -44,7 +57,7 @@ ax.LineWidth = 0.8;
 hold(ax, 'on');
 
 % Plot unerperturbed orbit
-plot(ax, tbp_PO_plot, xbp_PO_plot, Color=[colours(3, :)], LineWidth=1.0);
+plot(ax, tbp_PO_plot, xbp_PO_plot, Color=[colours{3}], LineWidth=1.0);
 
 % Plot segment 4
 plot(ax, tbp4_run2, xbp4_run2(:, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
@@ -97,5 +110,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig8b3_zoom.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = './fig8b3_zoom.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

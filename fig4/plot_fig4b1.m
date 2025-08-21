@@ -1,4 +1,4 @@
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %%
 %-------------------------------------------------------------------------%
@@ -15,13 +15,26 @@ fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
 fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
 fprintf('theta_old = %.4f\n', theta_old);
 
+%----------------------%
+%     Plot Colours     %
+%----------------------%
+% Matplotlib colours
+colours = {'#1f77b4';  % blue
+           '#ff7f0e';  % orange
+           '#2ca02c';  % green
+           '#d62728';  % red
+           '#9467bd';  % purple
+           '#8c564b';  % brown
+           '#e377c2';  % pink
+           '#7f7f7f';  % gray
+           '#bcbd22';  % yellow-green
+           '#17becf'   % cyan
+           };
+
 %%
 %-------------------------------------------------------------------------%
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
-% Default line colours
-colours = colororder();
-
 % Setup figure
 fig = figure(5); clf;
 fig.Name = 'Phase Reset Phase Portrait (2D)';
@@ -45,7 +58,7 @@ hold(ax, 'on');
 
 % Plot original periodic orbit
 plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), ...
-     Color=colours(3, :), ...
+     Color=colours{3}, ...
      LineWidth=2.0);
 
 % Plot segment 4
@@ -61,7 +74,7 @@ plot(ax, xpos(1), xpos(3), ...
 % Plot theta_old point on gamma
 plot(ax, xbp3_run2(1, 1), xbp3_run2(1, 3), ...
      Marker='o', MarkerSize=4, ...
-     MarkerFaceColor=colours(3, :), MarkerEdgeColor='k');
+     MarkerFaceColor=colours{3}, MarkerEdgeColor='k');
      
 % Plot start point of segment 4
 plot(ax, xbp4_run2(1, 1), xbp4_run2(1, 3), ...
@@ -115,5 +128,5 @@ box(ax, 'on');
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = '../pdf/fig4b1_portrait2.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = './fig4b1_portrait2.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');

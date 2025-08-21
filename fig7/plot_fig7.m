@@ -222,11 +222,8 @@ grid(ax, 'on');
 %---------------------%
 view(315, 15);
 
-filename_out = '../pdf/fig7_G_PTC_full.png';
-exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
-
-% filename_out = '../pdf/fig7_G_PTC_surface.pdf';
-% exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = './fig7_G_PTC_full.png';
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
 %-------------------------------------------------------------------------%
 %%                               FUNCTION                                %%

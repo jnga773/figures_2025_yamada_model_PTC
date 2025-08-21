@@ -116,11 +116,6 @@ surf(ax, X, Y, Z+1, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
 surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
      FaceAlpha=facealpha, FaceLighting='flat');
 
-% % Plot rim
-% [theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'gt1');
-% plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
-%       LineStyle='-', Color='k', LineWidth=2.0);
-
 %------------------------%
 %     Plot: Hole RHS     %
 %------------------------%
@@ -130,40 +125,6 @@ surf(ax, X, Y, Z, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
      FaceAlpha=facealpha, FaceLighting='flat');
 surf(ax, X, Y, Z+1.0, EdgeColor='none', FaceColor='interp', MeshStyle='row', ...
      FaceAlpha=facealpha, FaceLighting='flat');
-
-% % Plot rim
-% [theta_old_rim, A_perturb_rim, theta_new_rim] = find_rim_data(X, Y, Z, 'lt1');
-% plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim, ...
-%       LineStyle='-', Color='k', LineWidth=2.0);
-% plot3(ax, theta_old_rim, A_perturb_rim, theta_new_rim+1, ...
-%       LineStyle='-', Color='k', LineWidth=2.0);
-
-% %--------------------------%
-% %     Plot: PTC Curves     %
-% %--------------------------%
-% % Linewidth
-% lw = 2.0;
-% % 
-% % Plot all PTCs
-% for idx= 1 : length(A_perturb_specific)
-%   % Plot specific PTCs over the lower surface
-%   plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}, ...
-%         LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-%   % Plot other side of hole
-%   if idx == 4 || idx == 5
-%     plot3(ax, theta_old_plot{2, idx}, A_perturb_plot{2, idx}, theta_new_plot{2, idx}, ...
-%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-%   end
-% 
-%   % Plot specific PTCs over the upper surface
-%   if idx <= 3
-%     plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}-1, ...
-%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-%   else
-%     plot3(ax, theta_old_plot{1, idx}, A_perturb_plot{1, idx}, theta_new_plot{1, idx}+1, ...
-%           LineWidth=lw, LineStyle='-', Color=plot_colours{idx});
-%   end
-% end
 
 %-------------------%
 %     Hold Axis     %
@@ -221,9 +182,8 @@ grid(ax, 'on');
 %---------------------%
 view(315, 15);
 
-filename_out = '../pdf/fig7_G_PTC_surface_rasta.png';
-exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
-% export_fig(fig, filename_out, '-transparent', '-png', '-nocrop', '-r1000');
+filename_out = './fig7_G_PTC_surface_rasta.png';
+% exportgraphics(fig, filename_out, ContentType='image', Resolution=1000);
 
 %-------------------------------------------------------------------------%
 %%                               FUNCTION                                %%

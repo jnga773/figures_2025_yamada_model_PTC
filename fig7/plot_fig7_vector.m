@@ -221,8 +221,8 @@ axis(ax, 'off');
 %---------------------%
 view(315, 15);
 
-filename_out = '../pdf/fig7_G_PTC_surface_vectors.pdf';
-exportgraphics(fig, filename_out, ContentType='vector');
+filename_out = './fig7_G_PTC_surface_vectors.pdf';
+% exportgraphics(fig, filename_out, ContentType='vector');
 
 %-------------------------------------------------------------------------%
 %%                               FUNCTION                                %%
