@@ -18,18 +18,10 @@ tbp_plot = [tbp(1:end-1); 1 + tbp];
 %----------------------%
 %     Plot Colours     %
 %----------------------%
-% Matplotlib colours
-colours = {'#1f77b4';  % blue
-           '#ff7f0e';  % orange
-           '#2ca02c';  % green
-           '#d62728';  % red
-           '#9467bd';  % purple
-           '#8c564b';  % brown
-           '#e377c2';  % pink
-           '#7f7f7f';  % gray
-           '#bcbd22';  % yellow-green
-           '#17becf'   % cyan
-           };
+% Plot colours
+colour_G = '#1f77b4';
+colour_Q = '#ff7f0e';
+colour_I = '#2ca02c';
 
 %%
 %-------------------------------------------------------------------------%
@@ -59,17 +51,17 @@ hold(ax, 'on');
 % Plot: Gain
 plot(ax, tbp_plot, xbp_plot(:, 1), ...
      LineStyle=':', LineWidth=1.5, ...
-     Color=colours{1});
+     Color=colour_G);
 
 % Plot: Absorption
 plot(ax, tbp_plot, xbp_plot(:, 2), ...
      LineStyle='--', LineWidth=1.5, ...
-     Color=colours{2});
+     Color=colour_Q);
 
 % Plot: Intensity
 plot(ax, tbp_plot, xbp_plot(:, 3), ...
      LineStyle='-', LineWidth=1.5, ...
-     Color=colours{3});
+     Color=colour_I);
 
 % Hold axes
 hold(ax, 'off');

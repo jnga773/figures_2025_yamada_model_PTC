@@ -9,18 +9,10 @@ load('../data_files/fig9_data.mat');
 %----------------------%
 %     Plot Colours     %
 %----------------------%
-% Matplotlib colours
-colours = {'#1f77b4';  % blue
-           '#ff7f0e';  % orange
-           '#2ca02c';  % green
-           '#d62728';  % red
-           '#9467bd';  % purple
-           '#8c564b';  % brown
-           '#e377c2';  % pink
-           '#7f7f7f';  % gray
-           '#bcbd22';  % yellow-green
-           '#17becf'   % cyan
-           };
+% Periodic orbit colour
+colour_PO    = '#2ca02c';
+% Stable manifold colour
+colour_Wsq   = '#1f77b4';
 
 % Plot colours
 plot_colours = {'#92b700';    % Green-Yellow
@@ -58,13 +50,11 @@ hold(ax, 'on');
 %--------------%
 % Plot original periodic orbit
 plot3(ax, xbp_PO(:, 1), xbp_PO(:, 2), xbp_PO(:, 3), ...
-      Color=colours{3}, ...
-      LineWidth=2.0);
+      Color=colour_PO, LineWidth=2.0);
 
 % Plot stable manifold
 plot3(ax, Wq_s(:, 1), Wq_s(:, 2), Wq_s(:, 3), ...
-      Color=colours{1}, ...
-      LineWidth=2.0);
+      Color=colours_Wsq, LineWidth=2.0);
 
 % Plot equilibrium point
 plot3(ax, xpos(1), xpos(2), xpos(3), ...
@@ -78,7 +68,6 @@ lw = 1.0;
 
 % Plot all PTCs
 for idx = 1 : length(A_perturb)
-
   fprintf('A_p = %.3f\n', A_perturb(idx));
 
   % Plot

@@ -13,18 +13,8 @@ plot_idx = 4:7;
 %----------------------%
 %     Plot Colours     %
 %----------------------%
-% Matplotlib colours
-colours = {'#1f77b4';  % blue
-           '#ff7f0e';  % orange
-           '#2ca02c';  % green
-           '#d62728';  % red
-           '#9467bd';  % purple
-           '#8c564b';  % brown
-           '#e377c2';  % pink
-           '#7f7f7f';  % gray
-           '#bcbd22';  % yellow-green
-           '#17becf'   % cyan
-           };
+% Periodic orbit colour
+colour_PO    = '#2ca02c';
            
 % Plot colours
 plot_colours = {'#92b700';    % Green-Yellow
@@ -62,12 +52,12 @@ hold(ax, 'on');
 %     Plot: Other Things     %
 %----------------------------%
 % Shade fundamental domain
-patch([0, 1, 1, 0], [0, 0, 1, 1], colours{3}, ...
+patch([0, 1, 1, 0], [0, 0, 1, 1], colour_PO, ...
       FaceAlpha=0.2, EdgeColor='none');
 
 % Plot diagonal lines
 plot(ax, [0, 1], [0, 1], LineStyle='-', LineWidth=1.5, ...
-     Color=colours{3});
+     Color=colour_PO);
 
 % Grey lines at theta_old = 0 and 0.3
 xline(ax, 0.32601, LineStyle='-', LineWidth=1, ...

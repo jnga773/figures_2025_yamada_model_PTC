@@ -18,18 +18,10 @@ fprintf('theta_old = %.4f\n', theta_old);
 %----------------------%
 %     Plot Colours     %
 %----------------------%
-% Matplotlib colours
-colours = {'#1f77b4';  % blue
-           '#ff7f0e';  % orange
-           '#2ca02c';  % green
-           '#d62728';  % red
-           '#9467bd';  % purple
-           '#8c564b';  % brown
-           '#e377c2';  % pink
-           '#7f7f7f';  % gray
-           '#bcbd22';  % yellow-green
-           '#17becf'   % cyan
-           };
+% Periodic orbit colour
+colour_PO = '#2ca02c';
+% Perturbed orbit colour
+colour_PR  = '#00000080';
 
 %%
 %-------------------------------------------------------------------------%
@@ -58,13 +50,11 @@ hold(ax, 'on');
 
 % Plot original periodic orbit
 plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), ...
-     Color=colours{3}, ...
-     LineWidth=2.0);
+     Color=colours_PO, LineWidth=2.0);
 
 % Plot segment 4
 plot(ax, xbp4_run1(:, 1), xbp4_run1(:, 3), ...
-     Color=[0.0, 0.0, 0.0, 0.5], ...
-     LineWidth=1.0);
+     Color=colour_PR, LineWidth=0.5);
 
 % Plot equilibrium point
 plot(ax, xpos(1), xpos(3), ...
@@ -74,8 +64,8 @@ plot(ax, xpos(1), xpos(3), ...
 % Plot theta_old point on gamma
 plot(ax, xbp3_run1(1, 1), xbp3_run1(1, 3), ...
      Marker='o', MarkerSize=4, ...
-     MarkerFaceColor=colours{3}, MarkerEdgeColor='k');
-     
+     MarkerFaceColor=colour_PO, MarkerEdgeColor='k');
+
 % Plot start point of segment 4
 plot(ax, xbp4_run1(1, 1), xbp4_run1(1, 3), ...
      Marker='o', MarkerSize=4, ...

@@ -51,15 +51,13 @@ Wqs2 = Wq_s(idxs2, :);
 %                         Plot: 3D Phase Portrait                         %
 %-------------------------------------------------------------------------%
 % Setup figure
-fig = figure(1); clf;
+fig = figure(3); clf;
 fig.Name = 'Periodic Orbit Phase Portrait (3D)';
 ax = gca();
 
 % Axis dimensions
-% width = 8.0;
-% height = 5.0;
-width = 15.0;
-height = 5.0;
+width = 3.5;
+height = 2.0;
 
 % Set figure size
 set_figure_dimensions(width, height, scale=1);
@@ -79,57 +77,46 @@ hold(ax, 'on');
 lw = 2.0;
 
 % Plot original periodic orbit
-plot3(ax, xbp_PO1(:, 1), xbp_PO1(:, 2), xbp_PO1(:, 3), ...
-      Color=colour_PO_transparent, LineWidth=lw);
-plot3(ax, xbp_PO2(:, 1), xbp_PO2(:, 2), xbp_PO2(:, 3), ...
-      Color=colour_PO_transparent, LineWidth=lw);
+plot(ax, xbp_PO1(:, 1), xbp_PO1(:, 2), ...
+     Color=colour_PO_transparent, LineWidth=lw);
+plot(ax, xbp_PO2(:, 1), xbp_PO2(:, 2), ...
+     Color=colour_PO_transparent, LineWidth=lw);
 
 % Plot highlighted sections along \Gamma and W^{s}(q)
-plot3(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), xbp_gamma(:, 3), ...
-      Color=colour_PO, LineWidth=lw, LineStyle='-');
+plot(ax, xbp_gamma(:, 1), xbp_gamma(:, 2), ...
+     Color=colour_PO, LineWidth=lw, LineStyle='-');
 
 %-------------------------------%
 %     Plot: Stable Manifold     %
 %-------------------------------%
 % Plot original stable manifold
-plot3(ax, Wqs1(:, 1), Wqs1(:, 2), Wqs1(:, 3), ...
-      Color=colour_Wsq_transparent, LineWidth=lw);
-plot3(ax, Wqs2(:, 1), Wqs2(:, 2), Wqs2(:, 3), ...
-      Color=colour_Wsq_transparent, LineWidth=lw);
+plot(ax, Wqs1(:, 1), Wqs1(:, 2), ...
+     Color=colour_Wsq_transparent, LineWidth=lw);
+plot(ax, Wqs2(:, 1), Wqs2(:, 2), ...
+     Color=colour_Wsq_transparent, LineWidth=lw);
 
 % Plot highlighted sections along \Gamma and W^{s}(q)
-plot3(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), xbp_Wsq(:, 3), ...
-      Color=colour_Wsq, LineWidth=lw, LineStyle='-');
+plot(ax, xbp_Wsq(:, 1), xbp_Wsq(:, 2), ...
+     Color=colour_Wsq, LineWidth=lw, LineStyle='-');
 
 %---------------------------------%
 %     Plot: Equilibrium Point     %
 %---------------------------------%
 % Plot equilibrium point
-plot3(ax, xpos(1), xpos(2), xpos(3), ...
-      Marker='o', MarkerSize=4, ...
-      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
+plot(ax, xpos(1), xpos(2), ...
+     Marker='o', MarkerSize=4, ...
+     MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 %-----------------------%
 %     Plot: Surface     %
 %-----------------------%
-% Create surface plots
-G_surf = [xbp_gamma(:, 1), xbp_Wsq(:, 1)];
-Q_surf = [xbp_gamma(:, 2), xbp_Wsq(:, 2)];
-I_surf = [xbp_gamma(:, 3), xbp_Wsq(:, 3)];
-
-% Plot surface
-surf(ax, G_surf, Q_surf, I_surf, ...
-     EdgeColor='none', FaceColor=colour_special, FaceAlpha=0.25);
-
 % Plot specific lines for theta_perturb = 0, 0.125, 0.25
-% for idx = 1 : length(theta_old_SP)
-for idx = 1 : 2
+for idx = [1, 2]
   % plotting vector
-  % xplot = [xbp_gamma(idx, :); xbp_Wsq(idx, :)];
   xplot = [xbp_gamma_SP(idx, :); xbp_Wsq_SP(idx, :)];
 
-  plot3(ax, xplot(:, 1), xplot(:, 2), xplot(:, 3), ...
-        Color=colour_special, LineWidth=lw, LineStyle='-');
+  plot(ax, xplot(:, 1), xplot(:, 2), ...
+       Color=colour_special, LineWidth=lw, LineStyle='-');
 end
 
 %-------------------%
@@ -137,86 +124,42 @@ end
 %-------------------%
 hold(ax, 'off');
 
-%---------------------%
-%     Axis Limits     %
-%---------------------%
-% ax.XAxis.Limits = [0.0, 7.0];
-% ax.YAxis.Limits = [0.0, 4.0];
-% ax.ZAxis.Limits = [0.0, 20];
-ax.XAxis.Limits = [0.8, 5.0];
-ax.YAxis.Limits = [-1, 4];
-ax.ZAxis.Limits = [0.0, 16.1];
-
 %--------------------%
 %     Axis Ticks     %
 %--------------------%
 % X-Axis
+ax.XAxis.TickDirection = 'in';
 ax.XAxis.TickValues = [];
-% Y-Axis
-ax.YAxis.TickValues = [];
+
 % Z-Axis
-ax.ZAxis.TickValues = [];
+ax.YAxis.TickDirection = 'in';
+ax.YAxis.TickValues = [];
+
+%---------------------%
+%     Axis Limits     %
+%---------------------%
+ax.XAxis.Limits = [0.75, 3.0];
+ax.YAxis.Limits = [0.0, 2.0];
 
 %------------------------------%
 %     Axis and Tick Labels     %
 %------------------------------%
 % Axis labels
 % xlabel(ax, '$G$');
-% ylabel(ax, '$Q$');
-% zlabel(ax, '$I$');
+% ylabel(ax, '$I$');
 
 % Turn off all tick labels
 ax.XAxis.TickLabels = {};
 ax.YAxis.TickLabels = {};
-ax.ZAxis.TickLabels = {};
-
-%-----------------------%
-%     Plot: Compass     %
-%-----------------------%
-% Add inset axis for orientation compax
-ax_inset = axes(Parent=fig, Position=[0.6, 0.6, 0.2, 0.2]);
-
-% Set data aspect ratio
-daspect(ax_inset, [1 1 1])
-
-% Coordinates for arrows
-x_arrow = [[0, 1]; [0, 0]; [0, 0]];
-y_arrow = [[0, 0]; [0, 1]; [0, 0]];
-z_arrow = [[0, 0]; [0, 0]; [0, 1]];
-
-% Hold axis
-hold(ax_inset, 'on');
-
-% Draw arrows
-plot3(ax_inset, x_arrow(1, :), x_arrow(2, :), x_arrow(3, :), ...
-      Color='k', LineWidth=ax.LineWidth);
-plot3(ax_inset, y_arrow(1, :), y_arrow(2, :), y_arrow(3, :), ...
-      Color='k', LineWidth=ax.LineWidth);
-plot3(ax_inset, z_arrow(1, :), z_arrow(2, :), z_arrow(3, :), ...
-      Color='k', LineWidth=ax.LineWidth);
-
-% Turn off hold
-hold(ax_inset, 'off');
-
-% Turn off axis
-box(ax_inset, 'off');
-grid(ax_inset, 'off');
-axis(ax_inset, 'off');
 
 %----------------------%
 %     Figure Stuff     %
 %----------------------%
-box(ax, 'off');
+box(ax, 'on');
 grid(ax, 'off');
-axis(ax, 'off');
-
-% 3D plot view
-view_angle = [330, 4.5];
-view(ax, view_angle);
-view(ax_inset, ax.View);
 
 %---------------------%
 %     Save Figure     %
 %---------------------%
-filename_out = './fig11a.pdf';
+filename_out = './fig11a_inset2.pdf';
 exportgraphics(fig, filename_out, ContentType='vector');

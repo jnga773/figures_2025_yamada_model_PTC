@@ -18,18 +18,10 @@ fprintf('theta_old = %.4f\n', theta_old);
 %----------------------%
 %     Plot Colours     %
 %----------------------%
-% Matplotlib colours
-colours = {'#1f77b4';  % blue
-           '#ff7f0e';  % orange
-           '#2ca02c';  % green
-           '#d62728';  % red
-           '#9467bd';  % purple
-           '#8c564b';  % brown
-           '#e377c2';  % pink
-           '#7f7f7f';  % gray
-           '#bcbd22';  % yellow-green
-           '#17becf'   % cyan
-           };
+% Periodic orbit colour
+colour_PO  = '#2ca02c';
+% Perturbed orbit colour
+colour_PR  = '#00000080';
 
 %%
 %-------------------------------------------------------------------------%
@@ -57,10 +49,12 @@ ax.LineWidth = 0.8;
 hold(ax, 'on');
 
 % Plot unerperturbed orbit
-plot(ax, tbp_PO_plot, xbp_PO_plot, Color=[colours{3}], LineWidth=1.0);
+plot(ax, tbp_PO_plot, xbp_PO_plot, ...
+     Color=colour_PO, LineWidth=1.0);
 
 % Plot segment 4
-plot(ax, tbp4_run1, xbp4_run1(:, 3), Color=[0.0, 0.0, 0.0, 0.5], LineWidth=1.0);
+plot(ax, tbp4_run1, xbp4_run1(:, 3), ...
+     Color=colour_PR, LineWidth=1.0);
 
 % Hold axes
 hold(ax, 'off');
