@@ -2,7 +2,7 @@
 %-------------------------------------------------------------------------%
 %                                Read Data                                %
 %-------------------------------------------------------------------------%
-load('../data_files/fig11_data.mat');
+load('../data_files/fig11_data.mat', 'xbp_gamma_SP', 'xbp_Wsq_SP');
 
 %----------------------%
 %     Plot Colours     %
@@ -19,6 +19,28 @@ colours = {'#1f77b4';  % blue
            '#bcbd22';  % yellow-green
            '#17becf'   % cyan
            };
+
+%--------------------------%
+%     Calculate Things     %
+%--------------------------%
+% Data points
+gamma_plot = xbp_gamma_SP(3, :);
+Wsq_plot   = xbp_Wsq_SP(3, :);
+
+% DTC colours
+DTC_colours = {colours{9}, colours{4}, colours{5}};
+% A_perturb values
+DTC_A_perturb = [0.1, 0.724237, 10.0];
+
+% Create circle data to plot DTC range
+theta = 0.0 : 0.001 : 1.0;
+circle = [cos(theta * (2 * pi)); sin(theta * (2 * pi))];
+
+% Create DTC circles
+DTC_circles = cell(1, length(DTC_A_perturb));
+for idx = 1 : length(DTC_A_perturb)
+  DTC_circles{idx} = [gamma_plot(1); gamma_plot(3)] + DTC_A_perturb(idx) * circle;
+end
 
 %%
 %-------------------------------------------------------------------------%
@@ -55,53 +77,45 @@ patch(ax, [-20, 20, 20, -20], [-20, -20, 0, 0], 'k', ...
 %--------------------%
 %     Plot: DTCs     %
 %--------------------%
-% DTC colours
-DTC_colours = {colours{9}, colours{4}, colours{5}};
-% A_perturb values
-DTC_A_perturb = [0.1, 0.724237, 10.0];
-% plot theta
-theta = 0 : 0.01 : 2 * pi;
-circle = [cos(theta); sin(theta)];
-
 for idx = 1 : length(DTC_A_perturb)
-  % Plot DTC 1
-  DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(idx) * circle);
-  plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
-       Color=DTC_colours{idx});
+  DTC_plot = DTC_circles{idx};
+
+  if idx == 3
+    % Grey out section for A_perturb = 10
+    idx1 = DTC_plot(2, :) < 0.0;
+
+    % Plot DTC
+    plot(ax, DTC_plot(1, idx1), DTC_plot(2, idx1), LineWidth=2.0, LineStyle=':', ...
+         Color=DTC_colours{idx});
+
+    % Regular plot otherwise
+    idx2 = DTC_plot(2, :) >= 0.0;
+    % Find where there is a big difference
+    DTC_plot = DTC_plot(:, idx2);
+    [~, max_idx] = max(diff(DTC_plot(1, :)));
+
+    % Plot DTC
+    plot(ax, DTC_plot(1, 1:max_idx), DTC_plot(2, 1:max_idx), LineWidth=2.0, LineStyle='-', ...
+         Color=DTC_colours{idx});
+    plot(ax, DTC_plot(1, max_idx+1:end), DTC_plot(2, max_idx+1:end), LineWidth=2.0, LineStyle='-', ...
+         Color=DTC_colours{idx});
+
+  else
+    % Plot DTC
+    plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
+         Color=DTC_colours{idx});
+  end
 end
-
-% % Plot DTC 1
-% DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(2) * circle);
-% plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
-%      Color=DTC_colours{1});
-
-% % Plot DTC 2
-% DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(2) * circle);
-% plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
-%      Color=DTC_colours{2});
-
-% % Plot DTC 3
-% DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(3) * circle);
-% idx1 = DTC_plot(2, :) >= 0.0;
-% idx2 = DTC_plot(2, :) < 0.0;
-% plot(ax, DTC_plot(1, DTC_plot(2, :) >= 0), DTC_plot(2, DTC_plot(2, :) >= 0), LineWidth=2.0, LineStyle='-', ...
-%      Color=DTC_colours{idx});
-% plot(ax, DTC_plot(1, DTC_plot(2, :) < 0), DTC_plot(2, DTC_plot(2, :) < 0), LineWidth=2.0, LineStyle='-', ...
-%      Color=[hex2rgb(DTC_colours{idx}), 0.5]);
 
 %-------------------------------------------%
 %     Plot: Periodic Orbit and Manifold     %
 %-------------------------------------------%
-% Data points
-gamma_plot = xbp_gamma_SP(3, :);
-Wsq_plot   = xbp_Wsq_SP(3, :);
-
 % Plot gamma_theta_old point
-plot(ax, gamma_plot(1), gamma_plot(3), Marker='o', MarkerSize=5, ...
-     MarkerEdgeColor='k', MarkerFaceColor=colours{3}, LineWidth=1.0);
+plot(ax, gamma_plot(1), gamma_plot(3), Marker='o', MarkerSize=4, ...
+     MarkerEdgeColor='k', MarkerFaceColor=colours{3}, LineWidth=0.8);
 % Plot Wsq point
-plot(ax, Wsq_plot(1), Wsq_plot(3), Marker='o', MarkerSize=5, ...
-     MarkerEdgeColor='k', MarkerFaceColor=colours{1}, LineWidth=1.0);
+plot(ax, Wsq_plot(1), Wsq_plot(3), Marker='o', MarkerSize=4, ...
+     MarkerEdgeColor='k', MarkerFaceColor=colours{1}, LineWidth=0.8);
 
 %-------------------%
 %     Hold Axis     %
@@ -132,11 +146,11 @@ ax.YAxis.MinorTick = 'on';
 %--------------------%
 % X-Axis
 ax.XAxis.TickValues = -12 : 3 : 12;
-ax.XAxis.MinorTickValues = -12 : 1 : 12;
+ax.XAxis.MinorTickValues = -12 : 1.5 : 12;
 
 % Y-Axis
 ax.YAxis.TickValues = -12 : 3 : 12;
-ax.YAxis.MinorTickValues = -12 : 1 : 12;
+ax.YAxis.MinorTickValues = -12 : 1.5 : 12;
 
 %------------------------------%
 %     Axis and Tick Labels     %

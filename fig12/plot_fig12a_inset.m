@@ -20,6 +20,28 @@ colours = {'#1f77b4';  % blue
            '#17becf'   % cyan
            };
 
+%--------------------------%
+%     Calculate Things     %
+%--------------------------%
+% Data points
+gamma_plot = xbp_gamma_SP(3, :);
+Wsq_plot   = xbp_Wsq_SP(3, :);
+
+% DTC colours
+DTC_colours = {colours{9}, colours{4}, colours{5}};
+% A_perturb values
+DTC_A_perturb = [0.1, 0.724237, 10.0];
+
+% Create circle data to plot DTC range
+theta = 0.0 : 0.001 : 1.0;
+circle = [cos(theta * (2 * pi)); sin(theta * (2 * pi))];
+
+% Create DTC circles
+DTC_circles = cell(1, length(DTC_A_perturb));
+for idx = 1 : length(DTC_A_perturb)
+  DTC_circles{idx} = [gamma_plot(1); gamma_plot(3)] + DTC_A_perturb(idx) * circle;
+end
+
 %%
 %-------------------------------------------------------------------------%
 %                         Plot: 3D Phase Portrait                         %
@@ -55,18 +77,10 @@ patch(ax, [-20, 20, 20, -20], [-20, -20, 0, 0], 'k', ...
 %--------------------%
 %     Plot: DTCs     %
 %--------------------%
-% DTC colours
-DTC_colours = {colours{9}, colours{4}, colours{5}};
-% A_perturb values
-DTC_A_perturb = [0.1, 0.724237, 10.0];
-% plot theta
-theta = 0 : 0.01 : 2 * pi;
-circle = [cos(theta); sin(theta)];
+for idx = 1 : 2
+  DTC_plot = DTC_circles{idx};
 
-% Plot
-for idx = 1 : length(DTC_A_perturb)
   % Plot DTC
-  DTC_plot = [gamma_plot(1); gamma_plot(3)] + (DTC_A_perturb(idx) * circle);
   plot(ax, DTC_plot(1, :), DTC_plot(2, :), LineWidth=2.0, LineStyle='-', ...
        Color=DTC_colours{idx});
 end
@@ -98,8 +112,13 @@ daspect([1, 1, 1]);
 %---------------------%
 %     Axis Limits     %
 %---------------------%
-ax.XAxis.Limits = [0.4, 2.0];
-ax.YAxis.Limits = [0.6, 2.4];
+% ax.XAxis.Limits = [0.4, 2.0];
+% ax.YAxis.Limits = [0.6, 2.4];
+
+ax.XAxis.Limits = [gamma_plot(1) - DTC_A_perturb(2) - 0.05, ...
+                   gamma_plot(1) + DTC_A_perturb(2) + 0.05];
+ax.YAxis.Limits = [gamma_plot(3) - DTC_A_perturb(2) - 0.05, ...
+                   gamma_plot(3) + DTC_A_perturb(2) + 0.05];
 
 %------------------------------%
 %     Axis Ticks: Settings     %

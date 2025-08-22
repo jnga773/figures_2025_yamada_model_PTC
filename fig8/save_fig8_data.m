@@ -1,20 +1,46 @@
-function save_fig8_data(run_PO_in, run_PR_PTC_multi_in, filename_in)
-  % save_fig8_data(run_PO_in, run_PTC_multi_in, filename_in)
+function save_fig8_data(run_names_in, filename_in)
+  % save_fig8_data(run_names_in, filename_in)
   %
-  % Reads PTC scan data from run_PO_in and run_PR_PTC_multi_in and
+  % Reads PTC scan data from run_PO and run_PR_PTC_multi and
   % saves data to filename_in.
+  %
+  % Parameters
+  % ----------
+  % run_names_in : struct
+  %    List of all run name variables.
+  % filename_in : char
+  %    Name of output data file to save data to.
+  %
+  % See Also
+  % --------
+  % coco_bd_read, coco_bd_labs, coll_read_solution, ep_read_solution
+
+  %-------------------%
+  %     Arguments     %
+  %-------------------%
+  arguments
+    run_names_in struct
+    filename_in char
+  end
+
+  %-------------------%
+  %     Run Names     %
+  %-------------------%
+  % Periodic orbit run name
+  run_PO = run_names_in.initial_PO_COLL;
+  run_PR = run_names_in.PR_PTC_multi;
 
   %------------------------------------------%
   %     Read Initial Periodic Orbit Data     %
   %------------------------------------------%
   % Bifurcation data
-  bd_PO = coco_bd_read(run_PO_in);
+  bd_PO = coco_bd_read(run_PO);
 
   % Get solution label
   label_PO = coco_bd_labs(bd_PO, 'PO_PT');
 
   % Read 'initial_PO' COLL data
-  [sol_PO, data_PO] = coll_read_solution('initial_PO', run_PO_in, label_PO);
+  [sol_PO, data_PO] = coll_read_solution('initial_PO', run_PO, label_PO);
 
   % State space solution
   xbp_PO = sol_PO.xbp;
@@ -31,7 +57,7 @@ function save_fig8_data(run_PO_in, run_PR_PTC_multi_in, filename_in)
   %     Read Data: Stationary Point     %
   %-------------------------------------%
   % Read 'xpos' EP data
-  [sol_pos, ~] = ep_read_solution('xpos', run_PO_in, label_PO);
+  [sol_pos, ~] = ep_read_solution('xpos', run_PO, label_PO);
 
   % Stationary point
   xpos = sol_pos.x;
@@ -40,7 +66,7 @@ function save_fig8_data(run_PO_in, run_PR_PTC_multi_in, filename_in)
   %     Read Data: PTCs    %
   %------------------------%
   % Folder name
-  dir_data = sprintf('./data/%s/', run_PR_PTC_multi_in);
+  dir_data = sprintf('./data/%s/', run_PR);
   % List all directories
   dirs = dir(dir_data);
   % Remove ./ and ../
@@ -56,7 +82,7 @@ function save_fig8_data(run_PO_in, run_PR_PTC_multi_in, filename_in)
   % Cycle through data sub directories
   for i = 1 : length(dir_sub)
     % Run name
-    sub_run_name = {run_PR_PTC_multi_in, dir_sub{i}};
+    sub_run_name = {run_PR, dir_sub{i}};
 
     % Bifurcation data
     bd_PR = coco_bd_read(sub_run_name);

@@ -641,7 +641,7 @@ parfor (run = 1 : length(label_old), N_threads)
   % Continuation parameters
   pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
   % Parameter range for continuation
-  prange = {[0.0, 2.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
+  prange = {[0.0, 1.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
   run_PR_continuation(this_run_name, run_old, this_run_label, bcs_funcs, ...
@@ -657,8 +657,7 @@ end
 %     Save Data     %
 %-------------------%
 % Save data for Figure 8
-save_fig8_data(run_names.initial_PO_COLL, run_names.PR_PTC_multi, ...
-               '../data_files/fig8_data.mat');
+save_fig8_data(run_names, '../data_files/fig8_data.mat');
 
 %----------------------%
 %     Plot Figures     %
