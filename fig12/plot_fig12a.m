@@ -2,15 +2,20 @@
 %-------------------------------------------------------------------------%
 %                                Read Data                                %
 %-------------------------------------------------------------------------%
+load('../data_files/fig2_data.mat', 'xbp_PO', 'Wq_s');
 load('../data_files/fig11_data.mat', 'xbp_gamma_SP', 'xbp_Wsq_SP');
 
 %----------------------%
 %     Plot Colours     %
 %----------------------%
 % Periodic orbit colour
-colour_PO   = '#2ca02c';
+colour_PO  = '#2ca02c';
 % Stable manifold colour
-colour_Wsq  = '#1f77b4';
+colour_Wsq = '#1f77b4';
+
+% Transparent versions
+colour_PO_transparent  = [hex2rgb(colour_PO), 0.4];
+colour_Wsq_transparent = [hex2rgb(colour_Wsq), 0.4];
 
 % Plot colours
 DTC_colours = {'#bcbd22';
@@ -69,6 +74,22 @@ hold(ax, 'on');
 patch(ax, [-20, 20, 20, -20], [-20, -20, 0, 0], 'k', ...
       FaceAlpha=0.2, EdgeColor='none');
 
+%-------------------------------------------%
+%     Plot: Periodic Orbit and Manifold     %
+%-------------------------------------------%
+% Plot gamma_theta_old point
+plot(ax, gamma_plot(1), gamma_plot(3), Marker='o', MarkerSize=4, ...
+     MarkerEdgeColor='k', MarkerFaceColor=colour_PO, LineWidth=0.8);
+% Plot Wsq point
+plot(ax, Wsq_plot(1), Wsq_plot(3), Marker='o', MarkerSize=4, ...
+     MarkerEdgeColor='k', MarkerFaceColor=colour_Wsq, LineWidth=0.8);
+
+% % Plot 2d periodic orbit data
+% plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), ...
+%      Color=colour_PO_transparent, LineStyle='-');
+% plot(ax, Wq_s(:, 1), Wq_s(:, 3), ...
+%      Color=colour_Wsq_transparent, LineStyle='-');
+
 %--------------------%
 %     Plot: DTCs     %
 %--------------------%
@@ -101,16 +122,6 @@ for idx = 1 : length(DTC_A_perturb)
          Color=DTC_colours{idx});
   end
 end
-
-%-------------------------------------------%
-%     Plot: Periodic Orbit and Manifold     %
-%-------------------------------------------%
-% Plot gamma_theta_old point
-plot(ax, gamma_plot(1), gamma_plot(3), Marker='o', MarkerSize=4, ...
-     MarkerEdgeColor='k', MarkerFaceColor=colour_PO, LineWidth=0.8);
-% Plot Wsq point
-plot(ax, Wsq_plot(1), Wsq_plot(3), Marker='o', MarkerSize=4, ...
-     MarkerEdgeColor='k', MarkerFaceColor=colours_Wsq, LineWidth=0.8);
 
 %-------------------%
 %     Hold Axis     %

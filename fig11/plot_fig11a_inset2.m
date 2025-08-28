@@ -13,8 +13,8 @@ colour_PO = '#2ca02c';
 colour_Wsq = '#1f77b4';
 
 % Transparent versions
-colour_PO_transparent  = [hex2rgb(colour_PO), 0.4];
-colour_Wsq_transparent = [hex2rgb(colour_Wsq), 0.4];
+colour_PO_transparent  = [hex2rgb(colour_PO), 0.2];
+colour_Wsq_transparent = [hex2rgb(colour_Wsq), 0.2];
 
 % Highlight colour
 colour_special = '#e377c2';
