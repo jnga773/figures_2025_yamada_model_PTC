@@ -338,7 +338,7 @@ prob = coco_set(prob, 'cont', 'NAdapt', 1);
 prob = coco_set(prob, 'coll', 'MXCL', 'off');
 
 % Add segment as initial solution
-prob = ode_isol2coll(prob, 'adjoint', funcs.VAR{:}, ...
+prob = ode_isol2coll(prob, 'VAR', funcs.VAR{:}, ...
                      data_VAR.t0, data_VAR.x0, ...
                      data_VAR.pnames, data_VAR.p0);
 
@@ -411,8 +411,8 @@ prob = coco_set(prob, 'cont', 'PtMX', [0, PtMX]);
 prob = coco_set(prob, 'cont', 'NPR', 25);
 
 % Continue coll from previous branching point
-% prob = ode_BP2coll(prob, 'adjoint', run_old, label_old);
-prob = ode_coll2coll(prob, 'adjoint', run_old, label_old);
+% prob = ode_BP2coll(prob, 'VAR', run_old, label_old);
+prob = ode_coll2coll(prob, 'VAR', run_old, label_old);
 prob = coco_set(prob, 'cont', 'branch', 'switch');
 
 % Continue equilibrium point
