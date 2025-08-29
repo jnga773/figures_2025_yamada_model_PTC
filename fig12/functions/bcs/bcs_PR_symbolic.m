@@ -20,7 +20,7 @@ function bcs_coco_out = bcs_PR_segs_symbolic()
   %            u_in(4:6)   - w(0) of segment 1,
   %            u_in(7:9)   - x(0) of segment 2,
   %            u_in(10:12) - w(0) of segment 2,
-  %            u_in(13:15)  - x(0) of segment 3,
+  %            u_in(13:15) - x(0) of segment 3,
   %            u_in(16:18) - x(0) of segment 4,
   %            u_in(19:21) - x(1) of segment 1,
   %            u_in(22:24) - w(1) of segment 1,
@@ -28,7 +28,7 @@ function bcs_coco_out = bcs_PR_segs_symbolic()
   %            u_in(28:30) - w(1) of segment 2,
   %            u_in(31:33) - x(1) of segment 3,
   %            u_in(34:36) - x(1) of segment 4,
-  %            u_in(37:48) - Parameters.
+  %            u_in(37:47) - Parameters.
   %
   % Returns
   % -------
@@ -96,9 +96,9 @@ function bcs_coco_out = bcs_PR_segs_symbolic()
           A_perturb; theta_perturb];
 
   % Perturbation vector
-  d_vec = [cos(theta_perturb * (2.0 * pi));
+  d_vec = [cos(theta_perturb * (2 * pi));
            0.0;
-           sin(theta_perturb * (2.0 * pi))];
+           sin(theta_perturb * (2 * pi))];
 
   % Multiply by perturbation amplitude
   d_perturb = A_perturb * d_vec;

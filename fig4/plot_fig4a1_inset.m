@@ -11,9 +11,11 @@ load('../data_files/fig4_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
+fprintf('theta_old    = %.4f\n', theta_old);
 fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('theta_new(1) = %.4f\n', theta_new_run1);
 fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
-fprintf('theta_old = %.4f\n', theta_old);
+fprintf('theta_new(2) = %.4f\n', theta_new_run2);
 
 %----------------------%
 %     Plot Colours     %
@@ -21,7 +23,7 @@ fprintf('theta_old = %.4f\n', theta_old);
 % Periodic orbit colour
 colour_PO = '#2ca02c';
 % Perturbed orbit colour
-colour_PR  = '#00000080';
+colour_PR  = [0.0, 0.0, 0.0, 0.5];
 
 %%
 %-------------------------------------------------------------------------%
@@ -50,7 +52,7 @@ hold(ax, 'on');
 
 % Plot original periodic orbit
 plot(ax, xbp_PO(:, 1), xbp_PO(:, 3), ...
-     Color=colours_PO, LineWidth=2.0);
+     Color=colour_PO, LineWidth=2.0);
 
 % Plot segment 4
 plot(ax, xbp4_run1(:, 1), xbp4_run1(:, 3), ...

@@ -68,7 +68,7 @@ funcs.field = yamada_symbolic();
 funcs.VAR = VAR_symbolic();
 
 % Phase Reset Segment 1: Functions
-% func.seg1 = {@func_seg1};
+% funcs.seg1 = {@func_seg1};
 funcs.seg1 = func_seg1_symbolic();
 
 % Phase Reset: Segment 2
@@ -577,7 +577,7 @@ prob = apply_boundary_conditions_PR(prob, bcs_funcs);
 %     Add COCO Events     %
 %-------------------------%
 % Array of values for special event
-SP_values = [0.5, 15.0];
+SP_values = [0.5, 25.0];
 
 % When the parameter we want (from param) equals a value in A_vec
 prob = coco_add_event(prob, 'SP', 'A_perturb', SP_values);
@@ -641,7 +641,7 @@ parfor (run = 1 : length(label_old), N_threads)
   % Continuation parameters
   pcont = {'theta_old', 'theta_new', 'eta', 'mu_s'};
   % Parameter range for continuation
-  prange = {[0.0, 1.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
+  prange = {[0.5, 1.0], [], [-1e-4, 1e-2], [0.99, 1.01]};
 
   % Run continuation
   run_PR_continuation(this_run_name, run_old, this_run_label, bcs_funcs, ...

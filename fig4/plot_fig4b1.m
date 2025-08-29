@@ -11,9 +11,11 @@ load('../data_files/fig4_data.mat');
 %     Read Parameters     %
 %-------------------------%
 % Print parameters to console
+fprintf('theta_old    = %.4f\n', theta_old);
 fprintf('A_perturb(1) = %.4f\n', A_perturb_run1);
+fprintf('theta_new(1) = %.4f\n', theta_new_run1);
 fprintf('A_perturb(2) = %.4f\n', A_perturb_run2);
-fprintf('theta_old = %.4f\n', theta_old);
+fprintf('theta_new(2) = %.4f\n', theta_new_run2);
 
 %----------------------%
 %     Plot Colours     %
@@ -21,7 +23,7 @@ fprintf('theta_old = %.4f\n', theta_old);
 % Periodic orbit colour
 colour_PO  = '#2ca02c';
 % Perturbed orbit colour
-colour_PR  = '#00000080';
+colour_PR  = [0.0, 0.0, 0.0, 0.5];
 
 %%
 %-------------------------------------------------------------------------%
@@ -62,7 +64,7 @@ plot(ax, xpos(1), xpos(3), ...
      MarkerFaceColor='r', MarkerEdgecolor='k', LineWidth=0.25);
 
 % Plot theta_old point on gamma
-plot(ax, xbp_PO(1, 1), xbp_PO(1, 3), ...
+plot(ax, xbp3_run2(1, 1), xbp3_run2(1, 3), ...
      Marker='o', MarkerSize=4, ...
      MarkerFaceColor=colour_PO, MarkerEdgeColor='k');
      

@@ -76,6 +76,7 @@ function save_fig4_data(run_names_in, filename_in)
 
   % Empty cells
   A_perturb = cell(1, 2);
+  theta_new = cell(1, 2);
   sol3      = cell(1, 2);
   sol4      = cell(1, 2);
 
@@ -93,7 +94,8 @@ function save_fig4_data(run_names_in, filename_in)
 
     % Get theta_old values
     theta_old = coco_bd_val(bd_PR, label_PR, 'theta_old');
-
+    % Get theta_new values
+    theta_new_read = coco_bd_val(bd_PR, label_PR, 'theta_new');
     % Get A_perturb value
     A_perturb_read = coco_bd_val(bd_PR, label_PR, 'A_perturb');
   
@@ -107,6 +109,7 @@ function save_fig4_data(run_names_in, filename_in)
     [sol4_read, ~] = coll_read_solution('seg4', sub_run_name, label_PR);
 
     % Append to arrays
+    theta_new{i} = theta_new_read;
     A_perturb{i} = A_perturb_read;
     sol3{i}      = sol3_read;
     sol4{i}      = sol4_read;
@@ -167,11 +170,14 @@ function save_fig4_data(run_names_in, filename_in)
   % Parameters
   data_out.p              = p;
   data_out.pnames         = pnames;
+  data_out.k              = k;
+  data_out.T_PO           = T_PO;
+
   data_out.theta_old      = theta_old;
   data_out.A_perturb_run1 = A_perturb{1};
   data_out.A_perturb_run2 = A_perturb{2};
-  data_out.k              = k;
-  data_out.T_PO           = T_PO;
+  data_out.theta_new_run1 = theta_new{1};
+  data_out.theta_new_run2 = theta_new{2};
 
   % Plotting data
   data_out.xbp_PO_plot    = xbp_PO_plot;

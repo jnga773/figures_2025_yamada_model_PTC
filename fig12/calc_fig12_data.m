@@ -68,7 +68,7 @@ funcs.field = yamada_symbolic();
 funcs.VAR = VAR_symbolic();
 
 % Phase Reset Segment 1: Functions
-% func.seg1 = {@func_seg1};
+% funcs.seg1 = {@func_seg1};
 funcs.seg1 = func_seg1_symbolic();
 
 % Phase Reset: Segment 2

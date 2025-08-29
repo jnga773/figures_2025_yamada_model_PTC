@@ -73,6 +73,8 @@ function save_fig3_data(run_names_in, filename_in)
 
   % Read perturbation amplitude
   A_perturb = coco_bd_val(bd_PR, 'SP', 'A_perturb');
+  % Read theta_new phase
+  theta_new = coco_bd_val(bd_PR, 'SP', 'theta_new');
   % Read theta_old phase
   theta_old = coco_bd_val(bd_PR, 'SP', 'theta_old');
   theta_old = theta_old(1);
@@ -153,11 +155,14 @@ function save_fig3_data(run_names_in, filename_in)
   data_out.p              = p;
   data_out.pnames         = pnames;
   data_out.theta_old      = theta_old;
-  data_out.A_perturb_run1 = A_perturb(1);
-  data_out.A_perturb_run2 = A_perturb(2);
   data_out.k              = k(1);
   data_out.T_PO           = T_PO;
-  data_out.theta_old      = theta_old(1);
+
+  data_out.theta_old      = theta_old;
+  data_out.A_perturb_run1 = A_perturb(1);
+  data_out.A_perturb_run2 = A_perturb(2);
+  data_out.theta_new_run1 = theta_new(1);
+  data_out.theta_new_run2 = theta_new(2);
 
   % Plotting data
   data_out.xbp_PO_plot    = xbp_PO_plot;

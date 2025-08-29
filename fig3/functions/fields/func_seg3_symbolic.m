@@ -28,10 +28,8 @@ function F_coco_out = func_seg3_symbolic()
   %-------------------------------%
   %     State-Space Variables     %
   %-------------------------------%
-  % State-space variables
+  % State-space variable
   x_vec = sym('x', [xdim, 1]);
-  % Adjoint equation variables
-  w_vec = sym('w', [xdim, 1]);
 
   %--------------------%
   %     Parameters     %
@@ -42,13 +40,12 @@ function F_coco_out = func_seg3_symbolic()
   % Phase resetting parameters
   syms k theta_old theta_new
   syms mu_s eta
-  % Peturbation vector
-  d_perturb = sym('d', [xdim, 1]);
+  syms A_perturb theta_perturb
   
   % All phase resetting parameters
   p_PR = [k; theta_old; theta_new;
           mu_s; eta;
-          d_perturb];
+          A_perturb; theta_perturb];
 
   %============================================================================%
   %                           VECTOR FIELD ENCODING                            %

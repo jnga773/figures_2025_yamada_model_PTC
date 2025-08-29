@@ -43,7 +43,7 @@ function y_out = func_seg2(x_in, p_in)
   x_vec         = x_in(1:xdim, :);
   % Perpendicular vectors
   w_vec         = x_in(xdim+1:2*xdim, :);
-  
+
   %--------------------%
   %     Parameters     %
   %--------------------%
